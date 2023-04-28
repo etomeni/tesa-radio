@@ -1,0 +1,7 @@
+{
+  "name": "tesa-radio",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
