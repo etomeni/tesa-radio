@@ -1,27 +1,138 @@
-#container {
-  text-align: center;
-
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+ion-header {
+  // --background: transparent;
+  ion-toolbar {
+    --background: transparent;
+  }
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
+ion-footer {
+  // --background: transparent;
+  ion-toolbar {
+    --background: transparent;
+
+    ion-searchbar {
+      padding: 10px;
+    }
+  }
 }
+  
+ion-content {
+  --background:
+    linear-gradient(
+    rgba(0, 0, 0, 0.75), 
+    #000000bf
+    ),
+    url("/assets/images/radiomic.png") 
+    no-repeat center center / cover;
+  // --background-size: cover;
+  // --background-repeat: no-repeat;
+  // --background-position: center center;
+  --margin: 0;
+  --padding: 0;
+  
+  // #container {
+  //   text-align: center;
+  
+  //   position: absolute;
+  //   left: 0;
+  //   right: 0;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  // }
 
-#container p {
-  font-size: 16px;
-  line-height: 22px;
+  // .condense-header {
+  //   background: rgba(0, 0, 0, 0.272);
+  //   ion-toolbar {
+  //       --background: transparent;
+  //   }
+  // }
 
-  color: #8c8c8c;
+  ion-card {
+    margin: 15px 5px;
+  }
 
-  margin: 0;
-}
+  section.radioContainer {
+    margin-bottom: 15px;
 
-#container a {
-  text-decoration: none;
+    main {
+      max-height: 200px; 
+      overflow: hidden;
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 15px;
+
+      .holdingContainer {
+        display: flex; 
+        justify-content: center;
+        align-items: center;
+  
+        .tesacolor {
+          border: 20px solid #de2341;
+          border-radius: 100%;
+  
+          .transparent {
+            border: 15px solid transparent;
+            border-radius: 100%;
+            -webkit-animation: none;
+            animation: none;
+  
+            .whitecolor {
+              border: 10px solid #FFF;
+              border-radius: 100%;
+  
+              -webkit-animation: none;
+              animation: none;
+  
+              ion-icon {
+                &.radio-BTN {
+                  color: #FFF;
+                  font-size: 50px;
+                  font-weight: bolder;
+                  padding: 7.5px;
+                
+                  -webkit-animation: none;
+                  animation: none;
+                }
+  
+                &.loader {
+                  animation: spin 0.5s linear infinite;
+                }
+                
+              }
+            }
+  
+          }
+        }
+  
+      }
+    }
+
+  }
+
+  section.top-shows,
+  section.top-podcasts {
+    // margin-bottom: 15px;
+
+    h3 {
+      margin: 0; 
+      padding-left: 10px;
+      color: var(--primary);
+    }
+
+    ion-card {
+      margin: 15px 5px;
+
+      img {
+        width: 100%;
+        max-height: 100px;
+      }
+      
+      ion-card-header {
+        padding: 15px 10px;
+      }
+    }
+  }
+
+
+
 }

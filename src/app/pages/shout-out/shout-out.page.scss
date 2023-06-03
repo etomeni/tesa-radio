@@ -1,0 +1,75 @@
+
+ion-header {
+    --background: #ffffff00;
+    ion-toolbar {
+      --background: transparent;
+    }
+}
+
+ion-footer {
+    // --background: transparent;
+    ion-toolbar {
+      --background: transparent;
+      text-align: center;
+    }
+}
+    
+
+ion-content {
+    --background:
+        linear-gradient(
+        #000000bf, 
+        #000000bf
+        ),
+        url("/assets/images/shoutOut.jpg") 
+        no-repeat center center / cover;
+    // --background-size: cover;
+    // --background-repeat: no-repeat;
+    // --background-position: center center;
+    --margin: 0;
+    --padding: 0;
+
+    .condense-header {
+        background: rgba(0, 0, 0, 0.272);
+        ion-toolbar {
+            --background: transparent;
+        }
+    }
+
+    section.main {
+        ion-list {
+            background: none;
+            ion-item {
+                --background: rgba(205, 205, 205, 0.366);
+                margin-bottom: 10px;
+                ion-label {
+                    color: #0f0f0f;
+                    h3 {
+                        font-weight: bolder;
+                    }
+                    p {
+                        color: #191919;
+                    }
+
+                }
+                img {
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+
+    section.emptyContentContainer {
+        display: flex; 
+        justify-content: center; 
+        align-content: center;
+
+        p {
+            margin: 0;
+            font-weight: bolder;
+            font-size: x-large;
+        }
+    }
+
+
+}

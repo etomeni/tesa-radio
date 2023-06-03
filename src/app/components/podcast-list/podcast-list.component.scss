@@ -1,0 +1,76 @@
+ion-list {
+    background: unset;
+    ion-item {
+        --background: transparent;
+
+        ion-range {
+            flex-grow: 1;
+            --knob-size: 10px;
+            --bar-border-radius: 5px;
+            --knob-background: var(--primary);
+            --bar-background-active: var(--primary);
+            --bar-height: 1px;
+            --height: 1px;
+
+            margin: 0;
+            padding: 0;
+        }
+
+        ion-card-header {
+            // font-size: small !important;
+            padding-top: 10px;
+            padding-bottom: 10px;
+
+            ion-card-title,
+            ion-card-subtitle {
+                font-size: small;
+            }
+        }
+
+        ion-card-content {
+            padding-bottom: 0;
+            section {
+                margin-top: 10px;
+                .playPause {
+                    display: flex;
+                    align-items: center;
+                    
+                    .iconText {
+                        padding: 7px;
+                        border-radius: 15px;
+                        color: var(--primary);
+                        background: #d0d0d05b;
+                        margin-right: 7px;
+
+                        &:hover {
+                            color: var(--white);
+                            background: var(--primary);
+                        }
+                    }
+
+                    .timingAudioWave {
+                        flex-grow: 1;
+                        display: flex;
+                        justify-content: space-between; 
+                        align-items: center;
+
+                        .waveform {
+                            flex-grow: 1;
+                            margin-right: 7px;
+                            margin-left: 7px;
+                        }
+                    }
+
+                    .visible {
+                        visibility: visible;
+                    }
+
+                    .hidden {
+                        visibility: hidden;
+                    }
+
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,48 @@
+<ion-list lines="full" *ngIf="audioService.podcasts.length">
+  <ion-item *ngFor="let podcast of audioService.podcasts; let i=index">
+    <ion-label class="ion-text-wrap">
+      <ion-card-header>
+        <ion-card-subtitle> {{ podcast.createdAt | date:'mediumDate' }} </ion-card-subtitle>
+        <ion-card-title> {{ podcast.title }} </ion-card-title>
+      </ion-card-header>
+      
+      <ion-card-content>
+        {{ podcast.description }}
+
+        <section>
+          <div class="playPause">
+            <div class="iconText" (click)="playPause(i, podcast.id, podcast.isPlaying ? 'pause' : 'play')">
+              <ion-icon [name]="podcast.isPlaying ? 'pause' : 'play'"></ion-icon>
+              {{ podcast.isPlaying ? "pause" : "play" }}
+            </div>
+
+            <div class="totalDuration" *ngIf="!podcast.isPlaying">
+              {{ podcast.durationSummary || displayAudioTime(podcast.audio.duration) }}
+            </div>
+
+            <div class="timingAudioWave " [ngClass]="podcast.isPlaying ? ' visible ' : ' hidden '">
+              <ion-range
+                min="0" max="100"
+                aria-label="seek"
+                [value]="podcast.seekAudioRangeValue"
+                color="danger"
+                (ionChange)="audioService.seekAudioRangeChange($event, podcast.id, 'podcast')"
+              >
+                <div slot="start" style="margin: 0 10px 0 0;"> {{ podcast.currentTime }} </div>
+                <div slot="end" style="margin: 0 0 0 10px;"> {{ podcast.duration }} </div>
+              </ion-range>
+            </div>
+
+          </div>
+        </section>
+      </ion-card-content>
+    </ion-label>
+  </ion-item>
+</ion-list>
+
+<section class="emptyContentContainer" *ngIf="!audioService.podcasts.length">
+  <div>
+    <img src="assets/images/empty.gif" alt="empty content" width="100%">
+    <p>No Published podcast Yet!</p>
+  </div>
+</section>

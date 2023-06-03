@@ -1,20 +1,151 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <ion-title>
-      Blank
+      <span style="color: #de2341;">Tesa </span> <span style="color: white;">Radio</span>
     </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+  <ion-header class="condense-header" collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
+      <ion-title size="large">
+        <span style="color: #de2341;">Tesa </span> <span style="color: white;">Radio</span>
+      </ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <!-- Do ReFresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <section class="radioContainer">
+    <main>
+      <div class="holdingContainer">
+        <div class="tesacolor">
+          <div class="transparent">
+            <div class="whitecolor">
+              <!-- <ion-icon [name]="currentlyPlayingAudio.isPlaying ? 'pause' : 'play'" class="radio-BTN" *ngIf="!loadingReadyState" (click)="playPauseRadio(currentlyPlayingAudio.isPlaying ? 'pause' : 'play')"></ion-icon> -->
+              <ion-icon [name]="audioService.radio.isPlaying ? 'pause' : 'play'" class="radio-BTN" *ngIf="!audioService.radio.loadingState" (click)="playPauseRadio(audioService.radio.isPlaying ? 'pause' : 'play')"></ion-icon>
+  
+              <ion-icon name="refresh-circle" class="radio-BTN loader" *ngIf="audioService.radio.loadingState"></ion-icon>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="radioWaveForm" id="radioWaveForm"></div>
+  </section>
+
+  <div class="main">
+    <!-- top shows -->
+    <section class="top-shows" *ngIf="suggestedShows.length">
+      <h3>Suggested Shows</h3>
+      <swiper-container [modules]="swiperModules" [breakpoints]="swiperBreakPoints" [slidesPerView]="2.4" [loop]="true">
+        <swiper-slide *ngFor="let suggestedShow of suggestedShows; let i=index">
+          <ion-card [routerLink]="'/shows/'+suggestedShow.id || suggestedShow._id" [queryParams]="suggestedShow">
+            <img alt="show Image" [src]="suggestedShow.image || 'assets/images/imgPlaceholder.png' " />
+            <ion-card-header>
+              <ion-card-subtitle>{{ suggestedShow.title }}</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        </swiper-slide>
+      </swiper-container>
+    </section>
+    
+    <!-- top podcasts -->
+    <section class="top-podcasts"  *ngIf="suggestedPodcasts.length">
+      <h3>Suggested Podcasts</h3>
+      <swiper-container [modules]="swiperModules" [breakpoints]="swiperBreakPoints" [loop]="true">
+        <swiper-slide *ngFor="let suggestedPodcast of suggestedPodcasts; let i=index">
+          <ion-card [routerLink]="'/podcasts/'+suggestedPodcast.id || suggestedPodcast._id" [queryParams]="suggestedPodcast">
+            <img alt="show Image" [src]="suggestedPodcast.image || 'assets/images/imgPlaceholder.png' " />
+            <ion-card-header>
+              <ion-card-subtitle>{{ suggestedPodcast.title }}</ion-card-subtitle>
+            </ion-card-header>
+          </ion-card>
+        </swiper-slide>
+      </swiper-container>
+    </section>
   </div>
+  
+
+  <aside style="display: flex; justify-content: center;" *ngIf="!suggestedPodcasts.length">
+    <swiper-container [modules]="swiperModules" [slidesPerView]="2.4" [loop]="true">
+      
+      <swiper-slide>
+        <ion-card>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 70px; margin: 0; padding: 0;"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+      </swiper-slide>
+      
+      <swiper-slide>
+        <ion-card>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 70px; margin: 0; padding: 0;"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+      </swiper-slide>
+      
+      <swiper-slide>
+        <ion-card>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 70px; margin: 0; padding: 0;"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+      </swiper-slide>
+
+    </swiper-container>
+  </aside>
+
+  <aside style="display: flex; justify-content: center;"  *ngIf="!suggestedShows.length">
+    <swiper-container [modules]="swiperModules" [slidesPerView]="2.4" [loop]="true">
+      
+      <swiper-slide>
+        <ion-card>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 70px; margin: 0; padding: 0;"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+      </swiper-slide>
+      
+      <swiper-slide>
+        <ion-card>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 70px; margin: 0; padding: 0;"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+      </swiper-slide>
+      
+      <swiper-slide>
+        <ion-card>
+          <ion-skeleton-text [animated]="true" style="width: 100%; height: 70px; margin: 0; padding: 0;"></ion-skeleton-text>
+          <ion-card-header>
+            <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+          </ion-card-header>
+        </ion-card>
+      </swiper-slide>
+
+    </swiper-container>
+  </aside>
 </ion-content>
+
+<!-- tesa bot -->
+<ion-footer [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-searchbar animated="true" placeholder="Tesa Bot - Ask Anything..." (ionFocus)="searchInput()" autocorrect="on"></ion-searchbar>
+  </ion-toolbar>
+</ion-footer>

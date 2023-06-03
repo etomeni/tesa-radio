@@ -1,0 +1,280 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="backBTNarrow">
+  		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+		</ion-buttons>
+
+    <ion-title>Show Details</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+</ion-header>
+
+<ion-header [translucent]="false" class="ion-no-border">
+  <div class="view-types">
+    <ion-icon name="grid" class="{{ viewType ? 'active' : '' }}" (click)="viewType = !viewType"></ion-icon>
+    <ion-icon name="list" class="{{ viewType ? '' : 'active' }}" (click)="viewType = !viewType"></ion-icon>
+  </div>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-header class="condense-header" collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Show Details</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <!-- Do ReFresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <section class="main"  *ngIf="!loadingStatus">
+    <ion-grid  *ngIf="audioService.shows.length">
+      <ion-row class="full-view" *ngIf="viewType">
+        
+        <ion-col 
+          size-xs="12" size-sm="6" size-md="6" size-lg="4" size-xl="3"
+          *ngFor="let showDetail of audioService.shows; let i=index"
+        >
+          <ion-card>
+            <img [src]="showDetail.image" alt="Show image" height="150px" width="100%">
+            <ion-card-header>
+              <ion-card-subtitle style="color: black;">
+                {{ showDetail.title }}
+              </ion-card-subtitle>
+            </ion-card-header>
+  
+            <ion-card-content>
+              {{ showDetail.description }}
+  
+              <ion-item lines="none" class="ion-no-padding">
+                <ion-button fill="outline" mode="md" slot="start">
+                  <ion-label id="sPlayBTN" (click)="playPause(i, showDetail.id, showDetail.isPlaying ? 'pause' : 'play')">
+                    <ion-icon slot="start" [name]="showDetail.isPlaying ? 'pause' : 'play'"></ion-icon>
+                    {{ showDetail.isPlaying ? 'pause' : 'play' }}
+                  </ion-label>
+                </ion-button>
+  
+                <ion-label>
+                  
+                  <ion-range
+                    min="0" max="100"
+                    aria-label="seek"
+                    [value]="showDetail.seekAudioRangeValue"
+                    color="danger"
+                    (ionChange)="audioService.seekAudioRangeChange($event, showDetail.id, 'shows')"
+                  >
+                    <div slot="start" style="margin: 0 10px 0 0;"> {{ showDetail.currentTime }} </div>
+                    <div slot="end" style="margin: 0 0 0 10px;"> {{ showDetail.duration }} </div>
+                  </ion-range>
+                  
+                  <!-- <div [class]="'showsWaveformId-'+showDetail.id" [id]="'showsWaveformId-'+showDetail.id"></div> -->
+                </ion-label>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+  
+      </ion-row>
+  
+      <ion-row class="list-view" *ngIf="!viewType">
+        <ion-col size="12">
+          <ion-list lines="none">
+            
+            <ion-item button detail="false" *ngFor="let showDetail of audioService.shows; let i=index">
+              <ion-thumbnail slot="start">
+                <img alt="show image" [src]="showDetail.image" />
+              </ion-thumbnail>
+  
+              <ion-label class="ion-text-wrap">
+                <h3>{{ showDetail.title }}</h3>
+                <p style="margin: 0 0 7px;">{{ showDetail.description }}</p>
+  
+                <div class="playPauseBtnWave">
+                  <span (click)="playPause(i, showDetail.id, showDetail.isPlaying ? 'pause' : 'play')">
+                    <ion-icon [name]="showDetail.isPlaying ? 'pause' : 'play'"></ion-icon>
+                  </span>
+
+                  <ion-range
+                    min="0" max="100"
+                    aria-label="seek"
+                    [value]="showDetail.seekAudioRangeValue"
+                    color="danger"
+                    (ionChange)="audioService.seekAudioRangeChange($event, showDetail.id, 'shows')"
+                  >
+                    <div slot="start" style="margin: 0 10px 0 0;"> {{ showDetail.currentTime }} </div>
+                    <div slot="end" style="margin: 0 0 0 10px;"> {{ showDetail.duration }} </div>
+                  </ion-range>
+  
+                  <!-- <div [class]="'showsWaveformId-'+showDetail.id" [id]="'showsWaveformId-'+showDetail.id"></div> -->
+                </div>
+              </ion-label>
+            </ion-item>
+  
+          </ion-list>
+        </ion-col>
+      </ion-row>
+
+
+      <ion-row>
+        <ion-col size="12">
+          <ion-infinite-scroll (ionInfinite)="loadMoreData($event)">
+            <ion-infinite-scroll-content loadingText="Loading more content, please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+
+    <section class="emptyContentContainer" *ngIf="!audioService.shows.length">
+      <div>
+        <img src="assets/images/empty.gif" alt="empty content" width="100%">
+        <p>No Published Show Yet!</p>
+      </div>
+    </section>
+  </section>
+
+
+  <!-- Loading Sections -->
+  <div *ngIf="loadingStatus">
+    <section class="loadingSection">
+      <ion-img src="assets/lottie/animation_500_lhcdnv18.gif"></ion-img>
+    </section>
+  
+    <ion-grid>
+      <ion-row class="skeleton-full-view" *ngIf="viewType">
+        <ion-col size-xs="12" size-sm="6" size-md="6" size-lg="4" size-xl="3">
+          <ion-card>
+            <ion-thumbnail>
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+  
+            <ion-card-header>
+              <ion-card-subtitle>
+                  <ion-skeleton-text [animated]="true" style="width: 90%"></ion-skeleton-text>
+              </ion-card-subtitle>
+            </ion-card-header>
+  
+            <ion-card-content>
+              <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+  
+              <ion-item lines="none" class="ion-no-padding">
+                <ion-button fill="clear" color="light" mode="md" slot="start">
+                  <ion-skeleton-text [animated]="true" style="width: 30%"></ion-skeleton-text>
+                </ion-button>
+  
+                <ion-label>
+                  <ion-skeleton-text [animated]="true" style="width: 70%"></ion-skeleton-text>
+                </ion-label>
+                
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+  
+        <ion-col size-xs="12" size-sm="6" size-md="6" size-lg="4" size-xl="3">
+          <ion-card>
+            <ion-thumbnail>
+              <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+            </ion-thumbnail>
+  
+            <ion-card-header>
+              <ion-card-subtitle>
+                  <ion-skeleton-text [animated]="true" style="width: 90%"></ion-skeleton-text>
+              </ion-card-subtitle>
+            </ion-card-header>
+  
+            <ion-card-content>
+              <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+  
+              <ion-item lines="none" class="ion-no-padding">
+                <ion-button fill="clear" color="light" mode="md" slot="start">
+                  <ion-skeleton-text [animated]="true" style="width: 30%"></ion-skeleton-text>
+                </ion-button>
+  
+                <ion-label>
+                  <ion-skeleton-text [animated]="true" style="width: 70%"></ion-skeleton-text>
+                </ion-label>
+                
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+        
+      <ion-row class="skeleton-list-view" *ngIf="!viewType">
+        <ion-col size="12">
+          <ion-list lines="none">
+            
+            <ion-item button detail="false">
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-thumbnail>
+              
+              <ion-label class="ion-text-wrap">
+                <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-label>
+            </ion-item>
+            
+            <ion-item button detail="false">
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-thumbnail>
+              
+              <ion-label class="ion-text-wrap">
+                <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-label>
+            </ion-item>
+            
+            <ion-item button detail="false">
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-thumbnail>
+              
+              <ion-label class="ion-text-wrap">
+                <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-label>
+            </ion-item>
+            
+            <ion-item button detail="false">
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-thumbnail>
+              
+              <ion-label class="ion-text-wrap">
+                <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-label>
+            </ion-item>
+            
+            <ion-item button detail="false">
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-thumbnail>
+              
+              <ion-label class="ion-text-wrap">
+                <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+                <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+              </ion-label>
+            </ion-item>
+            
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+</ion-content>

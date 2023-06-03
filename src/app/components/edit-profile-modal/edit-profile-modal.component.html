@@ -1,0 +1,68 @@
+<ion-content class="ion-padding">
+
+  <form #editProfileForm="ngForm" (ngSubmit)="onSubmitEditProfile(editProfileForm.value)">
+    <h3>Edit Profile</h3>
+    <div data-info="name input">
+      <ion-item lines="none">
+        <ion-input 
+          mode="md" 
+          required 
+          minlength="3" 
+          type="text" 
+
+          label="Full name(s) *" 
+          labelPlacement="floating" 
+          placeholder="Enter your Full name(s)"
+
+          [errorText]="name.hasError('required') ? 'Please enter your full name(s).' : name.hasError('minlength') ? 'The entered characters are too short for a person\'s full name.' : ''"
+
+          id="name-input" 
+          name="name"
+          #name="ngModel"
+          ngModel
+          aria-label="name" aria-describedby="name-Help name"
+        ></ion-input>
+      </ion-item>
+    </div>
+                
+    <div data-info="phoneNumber input">
+      <ion-item lines="none">
+        <ion-input 
+          mode="md" 
+          required 
+          id="phoneNumber-input" 
+          minlength="10"
+          type="tel" 
+
+          label="Phone Number *" 
+          labelPlacement="floating" 
+          placeholder="Enter your mobile phone number"
+
+          [errorText]="phoneNumber.hasError('required') ? 'Please Enter your mobile phone number.' : phoneNumber.hasError('minlength') ? 'Incorrect phone number address.' : ''"
+
+          name="phoneNumber"
+          #phoneNumber="ngModel"
+          ngModel
+          aria-label="phoneNumber" aria-describedby="phoneNumber-Help phoneNumber"
+        ></ion-input>
+      </ion-item>
+    </div>
+          
+    <!-- <div class="errorContainer" *ngIf="error.status"> -->
+    <div class="responseContainer {{ modalResponse.status ? 'successMsg' : 'errorMsg' }}" *ngIf="modalResponse.display">
+      <p>
+        {{ modalResponse.message }}
+      </p>
+    </div>
+
+    <ion-button (click)="cancel()" [disabled]="modalFormSubmitted" mode="md" style="--background: var(--tertiary);">Cancel</ion-button>
+
+    <ion-button block type="submit" [strong]="true" [disabled]="editProfileForm.invalid || modalFormSubmitted" mode="md" style="--background: var(--primary);">
+      Submit <i *ngIf="modalFormSubmitted" class="loader"></i>
+    </ion-button>
+
+  </form>
+  
+
+
+</ion-content>

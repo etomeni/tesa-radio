@@ -1,0 +1,102 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+  		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+		</ion-buttons>
+
+    <ion-title>Settings</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense" class="condense-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+      </ion-buttons>
+
+      <ion-title size="large">Settings</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <ion-list lines="none">
+    <ion-item button detail="false" detail-icon="pencil-outline">
+      <ion-icon name="person-outline" slot="start"></ion-icon>
+
+      <ion-label>
+        Sunday Etom Eni
+      </ion-label>
+
+      <ion-button id="open-editProfile-modal" (click)="openEditProfileModal()" fill="clear" expand="block">
+        <ion-icon class="edit-pen" name="pencil-outline"></ion-icon>
+      </ion-button>
+      <!-- <ion-icon class="edit-pen" name="pencil-outline"></ion-icon> -->
+    </ion-item>
+
+    <ion-item button detail="false" detail-icon="pencil-outline">
+      <ion-icon name="call-outline" slot="start"></ion-icon>
+
+      <ion-label>
+        +2348108786933
+      </ion-label>
+
+      <ion-button id="open-editProfile-modal" (click)="openEditProfileModal()" fill="clear" expand="block">
+        <ion-icon class="edit-pen" name="pencil-outline"></ion-icon>
+      </ion-button>
+      <!-- <ion-icon class="edit-pen" name="pencil-outline" slot="end"></ion-icon> -->
+    </ion-item>
+  
+    <ion-item button detail="false" detail-icon="pencil-outline">
+      <ion-icon name="key-outline" slot="start"></ion-icon>
+
+      <ion-label>
+        Change Password
+      </ion-label>
+
+
+      <ion-button id="open-changePassword-modal" (click)="openChangePasswordModal()" fill="clear" expand="block">
+        <ion-icon class="edit-pen" name="pencil-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  
+    <ion-item button (click)="deleteAccount()" detail="true">
+      <ion-icon name="trash-outline" slot="start"></ion-icon>
+
+      <ion-label>
+        Delete Account
+      </ion-label>
+    </ion-item>
+  
+    <ion-item button detail="false">
+      <ion-icon name="rocket-outline" slot="start"></ion-icon>
+
+      <ion-label>
+        Update App
+      </ion-label>
+
+      <ion-note slot="end">2.1.4</ion-note>
+    </ion-item>
+  
+    <ion-item button detail="true">
+      <ion-icon name="star-outline" slot="start"></ion-icon>
+
+      <ion-label>
+        Rate This App
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="logout-BTN">
+    <ion-button mode="md" (click)="logOut()" class="ion-no-border">
+      Log Out
+      <ion-icon name="log-out-outline" slot="end"></ion-icon>
+    </ion-button>
+  </div>
+
+</ion-content>

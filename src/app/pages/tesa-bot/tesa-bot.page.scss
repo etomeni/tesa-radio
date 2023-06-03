@@ -1,0 +1,18 @@
+ion-header {
+    // --background: transparent;
+    ion-toolbar {
+      --background: transparent;
+    }
+}
+  
+ion-footer {
+    // --background: transparent;
+    ion-toolbar {
+      --background: transparent;
+  
+      ion-searchbar {
+        padding: 10px;
+      }
+    }
+}
+   

@@ -1,0 +1,138 @@
+ion-header {
+    // --background: transparent;
+    ion-toolbar {
+      --background: transparent;
+    }
+}
+
+ion-footer {
+    --background: transparent;
+    ion-toolbar {
+        --background: transparent;
+    }
+}
+
+ion-content {
+    font-weight: bold;
+    --background:
+        linear-gradient(
+        #0000008e,
+        #0000008e
+        ),
+        url("/assets/images/contact.jpeg")
+        no-repeat center center / cover;
+    // --background-size: cover;
+    // --background-repeat: no-repeat;
+    // --background-position: center center;
+    --margin: 0;
+    --padding: 0;
+
+    .colorRed {
+        color: #de2341;
+    }
+    .error {
+        color: #de2341;
+        font-size: small;
+    }
+    
+    ion-icon.colorRed {
+        font-size: 25px;
+        color: #de2341;
+    }
+
+    ion-col {
+        padding: auto 0;
+    }
+
+    .socialMediaPlatforms {
+        ion-icon {
+            margin-right: 7px;
+            font-size: x-large;
+
+            &.facebook {
+                color: #3b5998;
+            }
+
+            &.twitter {
+                color: #00acee;
+            }
+            
+            &.linkedin {
+                color: #0072b1;
+            }
+
+            &.instagram {
+                color: #d62976;
+                // background: linear-gradient(#feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+                background: -webkit-linear-gradient(#feda75, #fa7e1e, #d62976, #962fbf, #4f5bd5);
+
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+        }
+    }
+
+    form {
+        background: rgba(255, 255, 255, 0.75);
+        border-radius: 10px;
+
+        ion-item {
+            --background: transparent;
+
+            ion-label {
+                --color: #444444;
+            }
+
+            ion-textarea,
+            ion-input {
+                --placeholder-color: #444444;
+                --color: #252525;
+            }
+        }
+
+
+        .responseContainer {
+            margin-top: 15px;
+            font-size: small;
+            text-align: center; 
+            border-radius: 10px;
+
+            &.errorMsg {
+                background-color: var(--error-bg); 
+                color: var(--error); 
+                border: 1px solid var(--error-border);
+            }
+
+            &.successMsg {
+                background-color: var(--success-bg); 
+                color: var(--success); 
+                border: 1px solid var(--success-border);
+            }
+
+            p {
+                padding: 15px 10px;
+                margin: 0;
+            }
+        }
+
+        ion-button.submitBtn {
+            --background: var(--primary);
+            margin: 10px 25%;
+        }
+    }
+    
+    .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid #de2341; /* Blue */
+        border-bottom: 16px solid #de2341; /* Blue */
+        border-radius: 50%;
+        animation: spin 0.3s linear infinite;
+        margin-left: 10px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+}

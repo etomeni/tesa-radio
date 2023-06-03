@@ -1,0 +1,147 @@
+<ion-grid>
+  
+  <ion-row>
+    <ion-col size="12">
+      <section class="title">
+        <h3>
+          Send a <span> shout out message </span> to that special someone today!
+        </h3>
+      </section>
+    </ion-col>
+
+    <ion-col size="12">
+      <form #newShoutOutForm="ngForm" (ngSubmit)="onSubmit(newShoutOutForm.value)">
+
+        <div data-info="senderName input">
+          <ion-item lines="none" class="formStart">
+            <ion-input 
+              mode="md" 
+              required 
+              minlength="3" 
+              type="text" 
+              autocomplete="name"
+
+              label="Full name(s) *" 
+              labelPlacement="floating" 
+              placeholder="Enter your Full name(s)"
+
+              [errorText]="senderName.hasError('required') ? 'Please enter your full name(s).' : senderName.hasError('minlength') ? 'The entered characters are too short for a person\'s full name.' : ''"
+
+              id="senderName" 
+              name="senderName"
+              #senderName="ngModel"
+              ngModel
+              aria-label="senderName" aria-describedby="senderName-Help senderName"
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <div data-info="senderEmail input">
+          <ion-item lines="none" class="formStart">
+            <ion-input 
+              mode="md" 
+              required 
+              id="senderEmail" 
+              minlength="5" 
+              type="email" 
+              autocomplete="email"
+              email
+
+              label="E-Mail *" 
+              labelPlacement="floating" 
+              placeholder="Enter your email address"
+
+              [errorText]="senderEmail.hasError('required') ? 'Please Enter your Email address.' : senderEmail.hasError('minlength') || senderEmail.hasError('email') ? 'Incorrect Email address.' : ''"
+
+              name="senderEmail"
+              #senderEmail="ngModel"
+              ngModel
+              aria-label="senderEmail" aria-describedby="senderEmail-Help senderEmail"
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <div data-info="recipient-name input">
+          <ion-item lines="none" class="formStart">
+            <ion-input 
+              mode="md" 
+              required 
+              minlength="3" 
+              type="text" 
+
+              label="Recipient Full name(s) *" 
+              labelPlacement="floating" 
+              placeholder="Enter the recipient full name(s)"
+
+              [errorText]="recipientName.hasError('required') ? 'Please enter the recipient full name(s).' : recipientName.hasError('minlength') ? 'The entered characters are too short for a person\'s full name.' : ''"
+
+              id="recipientName-input" 
+              name="recipientName"
+              #recipientName="ngModel"
+              ngModel
+              aria-label="recipientName" aria-describedby="recipientName-Help recipientName"
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <div data-info="recipient-email input">
+          <ion-item lines="none" class="formStart">
+            <ion-input 
+              mode="md" 
+              id="recipientEmail-input" 
+              minlength="5" 
+              type="email" 
+              email
+
+              label="Recipient E-Mail" 
+              labelPlacement="floating" 
+              placeholder="Enter the recipient email address"
+
+              [errorText]="recipientEmail.hasError('required') ? 'Please enter the recipient Email address.' : recipientEmail.hasError('minlength') || recipientEmail.hasError('email') ? 'Please enter the recipient correct Email address.' : ''"
+
+              name="recipientEmail"
+              #recipientEmail="ngModel"
+              ngModel
+              aria-label="recipientEmail" aria-describedby="recipientEmail-Help recipientEmail"
+            ></ion-input>
+          </ion-item>
+        </div>
+
+        <div data-info="shoutOutMessage input">
+          <ion-item lines="none" class="formStart">
+            <ion-textarea 
+              mode="md" 
+              required 
+              minlength="10"
+              class="messageText"
+
+              label="Shout Out Message *" 
+              labelPlacement="floating" 
+              placeholder="Enter your shout out message to that special someone here..."
+
+              [errorText]="shoutOutMessage.hasError('required') ? 'Please enter the shout out Message.' : shoutOutMessage.hasError('minlength') ? 'Your message is too short, please drop a comprehensive message.' : ''"
+
+              id="shoutOutMessage-input" 
+              name="shoutOutMessage"
+              #shoutOutMessage="ngModel"
+              ngModel
+              aria-label="shoutOutMessage" aria-describedby="shoutOutMessage-Help shoutOutMessage"
+            ></ion-textarea>
+          </ion-item>
+        </div>
+
+
+        <div class="responseContainer {{ response.status ? 'successMsg' : 'errorMsg' }}" *ngIf="response.display">
+          <p>
+            {{ response.message }}
+          </p>
+        </div>
+
+        <ion-button class="submitBtn" block type="submit" [disabled]="newShoutOutForm.invalid" mode="md">
+          Send Message <i *ngIf="submitted" class="loader"></i>
+        </ion-button>
+      </form>
+    </ion-col>
+  </ion-row>
+
+</ion-grid>

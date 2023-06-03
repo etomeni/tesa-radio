@@ -1,0 +1,54 @@
+ion-header {
+    // --background: transparent;
+    ion-toolbar {
+      --background: transparent;
+    }
+}
+
+ion-content {
+    font-family: lato;
+
+    --background:
+        linear-gradient(
+        #000000bf, 
+        #000000bf
+        ),
+        url("/assets/images/podcast.jpg") 
+        no-repeat right center / cover;
+    // --background-size: cover;
+    // --background-repeat: no-repeat;
+    // --background-position: center center;
+    --margin: 0;
+    --padding: 0;
+
+    .condense-header {
+        // background: rgba(0, 0, 0, 0.272);
+
+        height: 120px;
+        background: #de23424d;
+        box-shadow: 0px 1px 10px #de234275;
+        padding-top: 30px;
+        color: white;
+
+        .divide-line {
+            color: white;
+            font-weight: 500;
+            font-size: 30px;
+            
+        }
+
+        ion-toolbar {
+            --background: transparent;
+        }
+    }
+
+    .our-story,
+    .about-text {
+        line-height: 30px;
+        font-size: x-large;
+    }
+
+     .colorRed {
+        color: #de2341;
+    }
+}

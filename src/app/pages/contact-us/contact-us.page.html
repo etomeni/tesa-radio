@@ -1,0 +1,188 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="backBTNarrow">
+  		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+		</ion-buttons>
+
+    <ion-title>Contact Us</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Contact Us</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <ion-grid style="color: white;">
+    <ion-row class="ion-text-center">
+      <ion-col >
+        <h1>Get In <span class="colorRed"> Touch </span> With <span class="colorRed">Us</span>!</h1>
+        <p>Drop a Message, we're waiting for your response</p>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <div class="ion-text-center">
+          <ion-icon name="location" class="colorRed"></ion-icon>
+          <div> {{ contactDetails.address }} </div>
+        </div>
+      </ion-col>
+
+      <ion-col size="6">
+        <div class="ion-text-center">
+          <ion-icon name="call" class="colorRed"></ion-icon>
+          <div> {{ contactDetails.phoneNumber }} </div>
+        </div>
+      </ion-col>
+
+      <ion-col size="6">
+        <div class="ion-text-center">
+          <ion-icon name="mail" class="colorRed"></ion-icon>
+          <div> {{ contactDetails.emailAddress }} </div>
+        </div>
+      </ion-col>
+
+      <ion-col size="12" class="socialMediaPlatforms">
+        <div class="ion-text-center">
+          <ion-icon name="logo-facebook" class="facebook"></ion-icon>
+          <ion-icon name="logo-twitter" class="twitter"></ion-icon>
+          <ion-icon name="logo-linkedin" class="linkedin"></ion-icon>
+          <ion-icon name="logo-instagram" class="instagram"></ion-icon>
+          <span>@Tesamedia</span>
+        </div>
+      </ion-col>
+
+      <!-- <ion-col size="6">
+        <div class="ion-text-center">
+          <ion-icon name="logo-instagram" style="margin-right: 5px; color: #E4405F;"></ion-icon>
+          <span>@tesaradio</span>
+        </div>
+      </ion-col> -->
+
+    </ion-row>
+
+    <ion-row>
+      <ion-col size="12">
+        <form #contactForm="ngForm" (ngSubmit)="onSubmit(contactForm.value)">
+
+          <div data-info="name input">
+            <ion-item lines="none" class="formStart">
+              <ion-input 
+                mode="md" 
+                required 
+                minlength="3" 
+                type="text" 
+                autocomplete="name"
+
+                label="Full name(s) *" 
+                labelPlacement="floating" 
+                placeholder="Enter your Full name(s)"
+
+                [errorText]="name.hasError('required') ? 'Please enter your full name(s).' : name.hasError('minlength') ? 'The entered characters are too short for a person\'s full name.' : ''"
+
+                id="name-input" 
+                name="name"
+                #name="ngModel"
+                ngModel
+                aria-label="name" aria-describedby="name-Help name"
+              ></ion-input>
+            </ion-item>
+          </div>
+
+          <div data-info="email input">
+            <ion-item lines="none" class="formStart">
+              <ion-input 
+                mode="md" 
+                required 
+                id="email-input" 
+                minlength="5" 
+                type="email" 
+                autocomplete="email"
+                email
+
+                label="E-Mail *" 
+                labelPlacement="floating" 
+                placeholder="Enter your email address"
+
+                [errorText]="email.hasError('required') ? 'Please Enter your Email address.' : email.hasError('minlength') || email.hasError('email') ? 'Incorrect Email address.' : ''"
+
+                name="email"
+                #email="ngModel"
+                ngModel
+                aria-label="email" aria-describedby="email-Help email"
+              ></ion-input>
+            </ion-item>
+          </div>
+
+          <div data-info="phoneNumber input">
+            <ion-item lines="none" class="formStart">
+              <ion-input 
+                mode="md" 
+                required 
+                id="phoneNumber-input" 
+                minlength="10"
+                type="tel" 
+
+                label="Phone Number *" 
+                labelPlacement="floating" 
+                placeholder="Enter your mobile phone number"
+
+                [errorText]="phoneNumber.hasError('required') ? 'Please Enter your mobile phone number.' : phoneNumber.hasError('minlength') ? 'Incorrect phone number address.' : ''"
+
+                name="phoneNumber"
+                #phoneNumber="ngModel"
+                ngModel
+                aria-label="phoneNumber" aria-describedby="phoneNumber-Help phoneNumber"
+              ></ion-input>
+
+            </ion-item>
+          </div>
+
+          <div data-info="message input">
+            <ion-item lines="none" class="formStart">
+              <ion-textarea 
+                mode="md" 
+                required 
+                minlength="10"
+                class="messageText"
+
+                label="Message *" 
+                labelPlacement="floating" 
+                placeholder="Send us your feedback, we're waiting to receive them..."
+
+                [errorText]="message.hasError('required') ? 'Please Enter your Message.' : message.hasError('minlength') ? 'Your message is too short, please drop a comprehensive message.' : ''"
+
+                id="message-input" 
+                name="message"
+                #message="ngModel"
+                ngModel
+                aria-label="message" aria-describedby="message-Help message"
+              ></ion-textarea>
+            </ion-item>
+          </div>
+
+          <div class="responseContainer {{ response.status ? 'successMsg' : 'errorMsg' }}" *ngIf="response.display">
+            <p>
+              {{ response.message }}
+            </p>
+          </div>
+
+          <ion-button class="submitBtn" block type="submit" [disabled]="contactForm.invalid" mode="md">
+            Send Message <i *ngIf="submitted" class="loader"></i>
+          </ion-button>
+        </form>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+  
+</ion-content>

@@ -1,0 +1,148 @@
+<ion-header [translucent]="true" class="ion-no-border authHeaderGlobalStyle">
+  <ion-toolbar>
+		<ion-buttons slot="start" class="backBTNarrow">
+  		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+		</ion-buttons>
+
+    <ion-title>
+      <span style="color: var(--primary);"> Signup </span>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" class="authGlobalStyle">
+  <ion-header class="condense-header" collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        Signup
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <main>
+    <form #signupForm="ngForm" (ngSubmit)="onSubmitSignup(signupForm.value)">
+      <div data-info="name input">
+        <ion-item lines="none" class="formStart">
+          <ion-input 
+            mode="md" 
+            required 
+            minlength="3" 
+            type="text" 
+            autocomplete="name"
+
+            label="Full name(s) *" 
+            labelPlacement="floating" 
+            placeholder="Enter your Full name(s)"
+
+            [errorText]="name.hasError('required') ? 'Please enter your full name(s).' : name.hasError('minlength') ? 'The entered characters are too short for a person\'s full name.' : ''"
+
+            id="name-input" 
+            name="name"
+            #name="ngModel"
+            ngModel
+            aria-label="name" aria-describedby="name-Help name"
+          ></ion-input>
+        </ion-item>
+      </div>
+            
+      <div data-info="email input">
+        <ion-item lines="none" class="formStart">
+          <ion-input 
+            mode="md" 
+            required 
+            id="email-input" 
+            minlength="5" 
+            type="email" 
+            autocomplete="email"
+            email
+
+            label="E-Mail *" 
+            labelPlacement="floating" 
+            placeholder="Enter your email address"
+
+            [errorText]="email.hasError('required') ? 'Please Enter your Email address.' : email.hasError('minlength') || email.hasError('email') ? 'Incorrect Email address.' : ''"
+
+            name="email"
+            #email="ngModel"
+            ngModel
+            aria-label="email" aria-describedby="email-Help email"
+          ></ion-input>
+        </ion-item>
+      </div>
+            
+      <div data-info="phoneNumber input">
+        <ion-item lines="none" class="formStart">
+          <ion-input 
+            mode="md" 
+            required 
+            id="phoneNumber-input" 
+            minlength="10"
+            type="tel" 
+
+            label="Phone Number *" 
+            labelPlacement="floating" 
+            placeholder="Enter your mobile phone number"
+
+            [errorText]="phoneNumber.hasError('required') ? 'Please Enter your mobile phone number.' : phoneNumber.hasError('minlength') ? 'Incorrect phone number address.' : ''"
+
+            name="phoneNumber"
+            #phoneNumber="ngModel"
+            ngModel
+            aria-label="phoneNumber" aria-describedby="phoneNumber-Help phoneNumber"
+          ></ion-input>
+
+        </ion-item>
+      </div>
+            
+      <div data-info="password input">
+        <ion-item lines="none" class="formEnd">
+          <ion-input 
+            mode="md" 
+            required 
+            id="password-input"
+            minlength="6" 
+            type="password"
+            autocomplete="password" 
+
+            label="Password *" 
+            labelPlacement="floating" 
+            placeholder="Enter your password"
+
+            [errorText]="password.hasError('required') ? 'Please enter your password.' : password.hasError('minlength') ? 'Incorrect password.' : ''"
+            
+            name="password"
+            #password="ngModel"
+            ngModel
+            aria-label="password" aria-describedby="password-Help password"
+          ></ion-input>
+
+        </ion-item>
+      </div>
+
+      <!-- <div class="errorContainer" *ngIf="error.status"> -->
+      <div class="responseContainer {{ response.status ? 'successMsg' : 'errorMsg' }}" *ngIf="response.display">
+        <p>
+          {{ response.message }}
+        </p>
+      </div>
+
+
+      <div class="bottom-text-writeup">
+        <!-- <p routerLink="/auth/forgot-password" class="forgot-password"> Forgotten password?</p> -->
+        <p>Already have an account? <a routerLink="/auth/login" class="login-text">login</a> </p>
+      </div>
+
+
+      <ion-button block type="submit" [disabled]="signupForm.invalid || submitted" mode="md" style="--background: var(--primary);">
+        Signup <i *ngIf="submitted" class="loader"></i>
+      </ion-button>
+    </form>
+  </main>
+
+</ion-content>

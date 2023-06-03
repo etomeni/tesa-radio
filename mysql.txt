@@ -1,0 +1,125 @@
+ssh -i "ssh/tesaFollowersEC2keyPair.pem" ubuntu@ec2-44-202-239-134.compute-1.amazonaws.com
+
+sudo systemctl start mysql
+
+//  steps
+sudo dpkg --configure -a
+
+// option 1
+sudo apt autoremove --purge mysql-server\* mariadb-server\*
+
+
+// option 3
+sudo apt-get install mysql-server
+
+
+// // option 5
+// sudo mkdir /var/run/mysqld/
+// sudo chown -R mysql:mysql /var/log/mysql
+// sudo mysqld --basedir=/usr --datadir=/var/lib/mysql --user=mysql --socket=/var/run/mysqld/mysqld.sock
+// sudo /etc/init.d/mysql restart
+
+//  step 2
+sudo apt-get upgrade
+sudo apt-get upgrade mysql-server
+
+
+// step 3
+apt-get remove --purge mysql\*
+apt-get install mysql-server mysql-client
+
+// // step 4
+// sudo mkdir /var/run/mysqld
+// sudo touch /var/run/mysqld/mysqld.sock
+// sudo chown -R mysql /var/run/mysqld
+// sudo /etc/init.d/mysql restart
+
+// step 5
+sudo apt autoremove --purge mysql-server\* mariadb-server\*
+sudo rm -rf /var/lib/mysql
+sudo rm -rf /etc/mysql/
+sudo mkdir -p /etc/mysql/conf.d
+sudo apt install mysql-server
+
+// view logs
+less /var/log/mysql/error.log
+
+
+
+
+sudo systemctl start mysql.service
+sudo systemctl status mysql.service
+sudo systemctl enable mysql.service
+
+/assets/images/shoutOut.jpg
+Ud1cud9E8ZZUEBY102Za
+
+var config = {
+    createDB: {
+        host: "127.0.0.1",
+        user: "sunday",
+        password: "secretWeb.vip@tesaFollowers1"
+    },
+
+    DBcreated: {
+        host: "127.0.0.1", // 3.86.102.4
+        port: 3306, // delete for localhost
+        user: "sunday", // root for localhost
+        database: "tesafollowers", // tesaFollowers -> for local machine
+        // password: "" // secretWeb.vip@tesaFollowers1 -> for cloud
+        password: "secretWeb.vip@tesaFollowers1" // secretWeb.vip@tesaFollowers1 -> for cloud
+        // password: "socialAudience.club@1" // socialAudience.club@1 -> for socialaudience.club cloud
+    },
+
+    hostState: {
+        siteName: ""
+    }
+
+}
+
+CREATE USER 'username'@'host' IDENTIFIED WITH authentication_plugin BY 'password';
+
+
+CREATE USER 'sunday'@'host' IDENTIFIED WITH authentication_plugin BY 'secretWeb.vip@tesaFollowers1';
+
+CREATE USER 'sunday'@'localhost' IDENTIFIED BY 'secretWeb.vip@tesaFollowers1';
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secretWeb.vip@tesaFollowers1';
+
+
+GRANT PRIVILEGE ON database.table TO 'username'@'host';
+GRANT ALL PRIVILEGES ON *.* TO 'sunday'@'localhost' WITH GRANT OPTION;
+
+mysql -u root -p
+secretWeb.vip@tesaFollowers1
+
+source godwin.sql
+
+SELECT * FROM users;
+UPDATE `users` SET `role` = 'admin' WHERE `users`.`email` = 'omojevwegodwin56@gmail.com';
+
+
+{"publicKey": "FLWPUBK-812ab7596b673e1ce29ce25860e2bfcc-X"}
+
+SELECT * FROM `payment_method`;
+UPDATE `payment_method` SET `data` = '{"publicKey": "FLWPUBK-812ab7596b673e1ce29ce25860e2bfcc-X"}' WHERE `payment_method`.`id` = 1;
+UPDATE `payment_method` SET `data` = '{\"publicKey\": \"FLWPUBK-4246edd2d1f351a3adc83d131e431ec5-X\"}' WHERE `payment_method`.`id` = 1;
+UPDATE `payment_method` SET `exchangeRate` = '745' WHERE `payment_method`.`id` = 1;
+
+UPDATE services SET ${services.name} = ? WHERE 1;
+
+UPDATE `services` SET `resellRate` = ((1 * `providerRate`) + `providerRate`) WHERE `services`.`id` = 345;
+
+UPDATE `services` SET `resellRate` = ((0.8 * `providerRate`) + `providerRate`) WHERE 1;
+
+
+encryption key 
+b740b6510e85c95f0f944b31
+
+
+FLWPUBK-812ab7596b673e1ce29ce25860e2bfcc-X
+
+
+secret key FLWSECK-b740b6510e854850cb5d2794fa70a4ef-X
+
+omojevwegodwin56@gmail.com

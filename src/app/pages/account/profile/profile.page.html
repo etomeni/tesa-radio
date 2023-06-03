@@ -1,0 +1,144 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+  		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+		</ion-buttons>
+
+    <ion-title>
+      Account
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-icon routerLink="/account/settings" name="settings-outline"></ion-icon>
+
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header class="condense-header" collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Account</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <ion-item button detail="false" lines="full" class="profileHeader">
+    <ion-thumbnail slot="start">
+      <img alt="Silhouette of mountains" style="border-radius: 50%;" src="assets/updates/IMG-20220914-WA0007.jpg" />
+    </ion-thumbnail>
+
+    <ion-label class="ion-text-wrap" style="padding-bottom: 15px;">
+      <h3>Sunday Etom Eni</h3>
+      <p>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star"></ion-icon>
+        <ion-icon name="star-outline"></ion-icon>
+        <ion-icon name="star-outline"></ion-icon>
+      </p>
+    </ion-label>
+  </ion-item>
+
+
+
+  <div class="lastPlayedShow-Podcast">
+    <h3>Previous Listen Audio</h3>
+    
+    <swiper-container [modules]="swiperModules" [slidesPerView]="2.3" [loop]="true">
+      <swiper-slide>
+        <ion-card>
+          <!-- <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" /> -->
+          <img alt="Silhouette of mountains" src="/assets/images/showdetails.jpg" />
+          <ion-card-header>
+            <!-- <ion-card-title>Card Title</ion-card-title> -->
+            <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+          </ion-card-header>
+        
+          <ion-card-content>
+
+            <div class="playPauseBtnWave">
+              <span>
+                <ion-icon name="play"></ion-icon>
+                <!-- <ion-icon name="pause"></ion-icon> -->
+              </span>
+
+              <div [id]="'showsWaveformId-'+'1'"></div>
+            </div>
+
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+
+      <swiper-slide>
+        <ion-card>
+          <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+          <ion-card-header>
+            <!-- <ion-card-title>Card Title</ion-card-title> -->
+            <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+          </ion-card-header>
+        
+          <ion-card-content>
+            <div class="playPauseBtnWave">
+              <span>
+                <ion-icon name="play"></ion-icon>
+                <!-- <ion-icon name="pause"></ion-icon> -->
+              </span>
+
+              <div [id]="'showsWaveformId-'+'1'"></div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+
+      <swiper-slide>
+        <ion-card>
+          <img alt="Silhouette of mountains" src="https://ionicframework.com/docs/img/demos/card-media.png" />
+          <ion-card-header>
+            <!-- <ion-card-title>Card Title</ion-card-title> -->
+            <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+          </ion-card-header>
+        
+          <ion-card-content>
+            <div class="playPauseBtnWave">
+              <span>
+                <ion-icon name="play"></ion-icon>
+                <!-- <ion-icon name="pause"></ion-icon> -->
+              </span>
+
+              <div [id]="'showsWaveformId-'+'1'"></div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+
+  <ion-list lines="none">
+    <ion-item button detail="true">
+      <ion-icon name="add-circle-outline" slot="start"></ion-icon>
+
+      <ion-label class="ion-text-wrap">
+        Create Podcast
+      </ion-label>
+    </ion-item>
+
+    <ion-item button detail="true">
+      <ion-icon name="mic-circle-outline" slot="start"></ion-icon>
+
+      <ion-label class="ion-text-wrap">
+        My Podcasts
+      </ion-label>
+    </ion-item>
+  
+    <ion-item button detail="true">
+      <ion-icon name="chatbox-outline" slot="start"></ion-icon>
+
+      <ion-label class="ion-text-wrap">
+        Feedbacks
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+</ion-content>

@@ -1,3 +1,105 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+
+  <ion-menu contentId="menu-content" menuId="main-menu" side="end" type="overlay">
+   
+    <ion-content>
+
+      <div class="menu-content-header-bg"></div>
+      <div class="menu-content-header-content">
+        <img src="assets/icon/favicon.png" alt="Tesa Radio" srcset="">
+        <ion-label>
+          <h1>Tesa <span style="color: black;">Radio</span></h1>
+          <p>The TesPreneur Radio for Entrepreneurs</p>
+        </ion-label>
+      </div>
+
+      <div class="live-radio-BTN">
+        <ion-menu-toggle class="ion-no-border">
+          <ion-button mode="md" routerLink="/" class="ion-no-border">
+            <ion-icon name="musical-notes-sharp"></ion-icon>
+            Live Radio
+          </ion-button>
+        </ion-menu-toggle>
+      </div>
+
+      <ion-list lines="none" class="menu-items">
+        <ion-menu-toggle>
+          <ion-item routerLink="/podcasts" [routerLinkActive]="['active']">
+            <ion-icon slot="start" name="radio"></ion-icon>
+            <ion-label>Podcasts</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item routerLink="/shows" [routerLinkActive]="['active']">
+            <ion-icon slot="start" name="apps"></ion-icon>
+            <ion-label>Shows</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item routerLink="/tesa-bot" [routerLinkActive]="['active']">
+            <ion-icon slot="start" name="search-circle"></ion-icon>
+            <ion-label>Tesa Bot</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item routerLink="/shout-out" [routerLinkActive]="['active']">
+            <ion-icon slot="start" name="megaphone"></ion-icon>
+            <ion-label>Shout Out</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <!-- <ion-menu-toggle>
+          <ion-item routerLink="/demand" [routerLinkActive]="['active']"> 
+            <ion-icon slot="start" name="mic"></ion-icon>
+            <ion-label>Show on Demand</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item routerLink="/shout-out" [routerLinkActive]="['active']">
+            <ion-icon slot="start" name="megaphone"></ion-icon>
+            <ion-label>Shout out</ion-label>
+          </ion-item>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle>
+          <ion-item routerLink="/about" [routerLinkActive]="['active']">
+            <ion-icon name="business"></ion-icon>
+            <ion-label>About Us</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item routerLink="/contact" [routerLinkActive]="['active']">
+            <ion-icon name="chatbubble-ellipses-sharp"></ion-icon>
+            <ion-label>Contact Us</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item routerLink="/account" [routerLinkActive]="['active']">
+            <ion-avatar>
+              <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+            </ion-avatar>
+
+            <ion-label>Sunday Etom Eni</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle>
+          <ion-item (click)="logout()" [routerLinkActive]="['active']">
+            <ion-icon name="log-out-outline"></ion-icon>
+            <ion-label>Log Out</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+      </ion-list>
+
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="menu-content"></ion-router-outlet>
 </ion-app>

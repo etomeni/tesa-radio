@@ -1,0 +1,228 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="backBTNarrow">
+  		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+		</ion-buttons>
+
+    <ion-title>
+      <span style="color: #de2341;">Tesa </span> 
+      <span style="color: white;">Radio Shows</span>
+    </ion-title>
+    
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" role="feed">
+  <ion-header class="condense-header" collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        <span style="color: #de2341;">Tesa </span> 
+        <span style="color: white;">Radio Shows</span>
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <section class="main" *ngIf="loadingStatus">
+    <ion-grid fixed class="showsContainer" *ngIf="shows.length">
+      <ion-row>
+        <ion-col size="4" sizeMd="3" sizeXl="2" *ngFor="let show of shows; let i = index;" role="article">
+          <div class="wrap" [routerLink]="show.id" [queryParams]="show">
+            <!-- <ion-icon name="videocam-outline"></ion-icon> -->
+            <ion-avatar>
+              <img [src]="show.image" alt="shows image">
+            </ion-avatar>
+  
+            {{ show.title }}
+          </div>
+        </ion-col>
+        
+        <!-- <ion-col size="4">
+          <div class="wrap" routerLink="/shows-details">
+            <ion-icon name="code-working"></ion-icon>
+            <br>
+            Contact Developer
+          </div>
+        </ion-col> -->
+  
+      </ion-row>
+
+      <ion-row>
+        <ion-col size="12">
+          <ion-infinite-scroll (ionInfinite)="loadMoreData($event)">
+            <ion-infinite-scroll-content loadingText="Loading more content, please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+    
+    <section class="emptyContentContainer" *ngIf="!shows.length">
+      <div>
+        <img src="assets/images/empty.gif" alt="empty content" width="100%">
+        <p>No Published show Yet!</p>
+      </div>
+    </section>
+
+  </section>
+
+  <aside class="loadingContainerSection" *ngIf="!loadingStatus">
+    <section class="lottieLoadingImgSection">
+      <ion-img src="assets/lottie/animation_500_lhcdnv18.gif"></ion-img>
+    </section>
+
+
+    <ion-grid class="showsContainer" style="margin-top: 20px;">
+      <ion-row>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+        
+        <ion-col size="4">
+          <div class="wrap">
+            <ion-avatar style="margin: 5px auto; padding: 0;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </ion-avatar>
+
+            <p style="margin-left: 20%; margin-right: 20%;">
+              <ion-skeleton-text [animated]="true" style="width: 100%;"></ion-skeleton-text>
+            </p>
+  
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </aside>
+
+</ion-content>

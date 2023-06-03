@@ -1,0 +1,69 @@
+ion-grid {
+    color: white;
+
+    // border-radius: 20px;
+
+    ion-row {
+        ion-col {
+            section.title {
+                text-align: center;
+                h3 span {
+                    color: var(--primary);
+                }
+            }
+
+        
+            form {
+                background: rgba(255, 255, 255, 0.75);
+                border-radius: 10px;
+        
+                ion-item {
+                    --background: transparent;
+        
+                    ion-label {
+                        --color: #444444;
+                    }
+        
+                    ion-textarea,
+                    ion-input {
+                        --placeholder-color: #444444;
+                        --color: #252525;
+                    }
+                }
+        
+        
+                .responseContainer {
+                    margin-top: 15px;
+                    font-size: small;
+                    text-align: center; 
+                    border-radius: 10px;
+        
+                    &.errorMsg {
+                        background-color: var(--error-bg); 
+                        color: var(--error); 
+                        border: 1px solid var(--error-border);
+                    }
+        
+                    &.successMsg {
+                        background-color: var(--success-bg); 
+                        color: var(--success); 
+                        border: 1px solid var(--success-border);
+                    }
+        
+                    p {
+                        padding: 15px 10px;
+                        margin: 0;
+                    }
+                }
+        
+                ion-button.submitBtn {
+                    --background: var(--primary);
+                    margin: 10px 25%;
+                }
+            }
+
+        }
+    }
+}
+
+

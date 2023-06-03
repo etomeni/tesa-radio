@@ -1,0 +1,101 @@
+<ion-header [translucent]="true" class="ion-no-border authHeaderGlobalStyle">
+  <ion-toolbar>
+		<ion-buttons slot="start" class="backBTNarrow">
+  		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+		</ion-buttons>
+
+    <ion-title>
+      <span style="color: var(--primary);"> Login </span>
+    </ion-title>
+
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true" class="authGlobalStyle">
+
+  <ion-header class="condense-header" collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">
+        Login
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <main>
+    <form #loginForm="ngForm" (ngSubmit)="onSubmitLogin(loginForm.value)">
+      <div data-info="email input">
+        <ion-item lines="none" class="formStart">
+          <ion-input 
+            mode="md" 
+            required 
+            id="email-input" 
+            minlength="5" 
+            type="email" 
+            autocomplete="email"
+            email
+
+            label="E-Mail *" 
+            labelPlacement="floating" 
+            placeholder="Enter your email address"
+
+            [errorText]="email.hasError('required') ? 'Please Enter your Email address.' : email.hasError('minlength') || email.hasError('email') ? 'Incorrect Email address.' : ''"
+
+            name="email"
+            #email="ngModel"
+            ngModel
+            aria-label="email" aria-describedby="email-Help email"
+          ></ion-input>
+        </ion-item>
+      </div>
+            
+      <div data-info="password input">
+        <ion-item lines="none" class="formEnd">
+          <ion-input 
+            mode="md" 
+            required 
+            id="password-input"
+            minlength="6" 
+            type="password"
+            autocomplete="password" 
+
+            label="Password *" 
+            labelPlacement="floating" 
+            placeholder="Enter your password"
+
+            [errorText]="password.hasError('required') ? 'Please enter your password.' : password.hasError('minlength') ? 'Incorrect password.' : ''"
+            
+            name="password"
+            #password="ngModel"
+            ngModel
+            aria-label="password" aria-describedby="password-Help password"
+          ></ion-input>
+        </ion-item>
+      </div>
+
+      <!-- <div class="errorContainer" *ngIf="error.status"> -->
+      <div class="responseContainer {{ response.status ? 'successMsg' : 'errorMsg' }}" *ngIf="response.display">
+        <p>
+          {{ response.message }}
+        </p>
+      </div>
+
+      <div class="bottom-text-writeup">
+        <p routerLink="/auth/forgot-password" class="forgot-password"> Forgotten password?</p>
+        <!-- or <br> -->
+        <p>Don't have an account? <a routerLink="/auth/signup" class="signup-text">signup</a> </p>
+      </div>
+
+
+      <ion-button block type="submit" [disabled]="loginForm.invalid || submitted" mode="md" style="--background: var(--primary);">
+        Login <i *ngIf="submitted" class="loader"></i>
+      </ion-button>
+    </form>
+  </main>
+
+</ion-content>

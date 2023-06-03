@@ -1,0 +1,69 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-title></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <main class="main">
+    <swiper-container 
+      #introSwiper
+      [modules]="swiperModules"
+      (slidechange)="swiperSlideChanged($event)"
+      (afterinit)="swiperInitReady()"
+      [slidesPerView]="1" 
+      [loop]="false" 
+      pagination="true" 
+      navigation="false" 
+      scrollbar="false"
+      css-mode="true"
+    >
+      <swiper-slide *ngFor="let introSlider of introSliders; let i=index;">
+
+        <section>
+          <div class="imageContainer">
+            <img [src]="introSlider.image" alt="introduction slider images">
+          </div>
+          
+          <ion-card-header>
+            <ion-card-title>
+              <ion-text [innerHTML]="introSlider.title"></ion-text>
+            </ion-card-title>
+          </ion-card-header>
+  
+          <ion-card-content>
+            <ion-text [innerHTML]="introSlider.description"></ion-text>
+          </ion-card-content>
+        </section>
+        
+      </swiper-slide>
+
+      <div slot="container-end">
+        <ion-card-content class="navBTN">
+          <ion-buttons>
+            <ion-button *ngIf="!slideSettings.isBeginning" (click)="swiperGoPrev()">
+              Back
+            </ion-button>
+    
+            <ion-button *ngIf="slideSettings.isBeginning" (click)="swiperGoEnd()">
+              Skip
+            </ion-button>
+          </ion-buttons>
+      
+          <ion-buttons>
+            <ion-button *ngIf="!slideSettings.isEnd" (click)="swiperGoNext()">
+              Next
+            </ion-button>
+    
+            <ion-button color="danger" fill="solid" *ngIf="slideSettings.isEnd" (click)="swiperGetStarted()">
+              Get Started
+            </ion-button>
+          </ion-buttons>
+        </ion-card-content>
+      </div>
+
+    </swiper-container>
+  </main>
+
+</ion-content>
