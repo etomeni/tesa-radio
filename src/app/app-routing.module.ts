@@ -76,6 +76,19 @@ const routes: Routes = [
         path: 'settings',
         loadChildren: () => import('./pages/account/settings/settings.module').then( m => m.SettingsPageModule)
       },
+      {
+        path: 'my-podcasts',
+        loadChildren: () => import('./pages/account/my-podcasts/my-podcasts.module').then( m => m.MyPodcastsPageModule)
+      },
+      {
+        path: 'my-podcasts/:id',
+        loadChildren: () => import('./pages/account/my-podcasts-details/my-podcasts-details.module').then( m => m.MyPodcastsDetailsPageModule)
+      },
+      {
+        path: 'feedbacks',
+        loadChildren: () => import('./pages/account/feedbacks/feedbacks.module').then( m => m.FeedbacksPageModule)
+      },
+
     ]
   },
   
@@ -115,7 +128,6 @@ const routes: Routes = [
     path: '**',
     loadChildren: () => import('./pages/page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
   },
-
 ];
 
 @NgModule({

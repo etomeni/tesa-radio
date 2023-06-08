@@ -23,7 +23,6 @@ interface audiosInterface {
   arrayID: number,
   type: string,
   src: string,
-  wave_surfer: any,
   audio: any,
   title: string,
   description: string,
@@ -52,8 +51,6 @@ interface audiosInterface {
   providedIn: 'root'
 })
 export class AudioService {
-  // wave_surfer: any;
-
   currentlyPlayingAudio = {
     type: <audioType> '', // radio || podcast || shows
     playingAudio: <any> null,
@@ -69,7 +66,6 @@ export class AudioService {
   radio = {
     src: <string> '',
     audio: new Audio("https://stream.zeno.fm/1z937nxzhchvv"),
-    wave_surfer: <any> '',
 
     timingInterval: <any> '',
     currentTime: <any> '',
@@ -91,18 +87,27 @@ export class AudioService {
     const playRadio = () => {
       this.radio.audio.load();
 
-      if (this.radio.audio.readyState) {
-        this.radio.loadingState = false;
-      }
+      const setRadioPlayInterval = setInterval(() => {
+        if (this.radio.loadingState) {
+          if (this.radio.audio.readyState) {
+            this.radio.loadingState = false;
+          }
+    
+          if (this.radio.audio.readyState > 1) {
+            this.radio.loadingState = false;
+            this.play(audioType.radio, '');
+          }
+        }
 
-      if (this.radio.audio.readyState > 1) {
-        this.radio.loadingState = false;
-        this.radio.audio.play();
-      }
+      }, 500);
+
+      
 
       this.radio.audio.addEventListener("playing", () => {
         this.radio.isPlaying = true;
         this.radio.loadingState = false;
+
+        clearInterval(setRadioPlayInterval);
 
         this.currentlyPlayingAudio.playingAudio = this.radio.audio;
         this.currentlyPlayingAudio.type = audioType.radio;
@@ -118,15 +123,13 @@ export class AudioService {
         this.radio.src = res.streamUrl;
         this.radio.audio = new Audio(res.streamUrl);
         
-        this.radio.wave_surfer.load(res.streamUrl);
-
-        this.resourcesService.store("radioStreamUrl", { ...this.radio, ...res} );
+        this.resourcesService.setLocalStorage("radioStreamUrl", { ...this.radio, ...res} );
         playRadio();
       },
       (err: any) => {
         console.log(err);
 
-        this.resourcesService.get("radioStreamUrl").then(
+        this.resourcesService.getLocalStorage("radioStreamUrl").then(
           (res: any) => {
             if (res) {
               // console.log(res);
@@ -141,7 +144,9 @@ export class AudioService {
           }
         )
       }
-    );
+    ).finally(() => {
+
+    });
   }
 
   play(audio_Type: audioType, audio_array_id: any) {
@@ -239,6 +244,7 @@ export class AudioService {
         case audioType.podcast:
           this.podcasts[audio_array_id].isPlaying = false;
           this.podcasts[audio_array_id].loadingState = true;
+          this.setLastPlayed(this.podcasts[audio_array_id]);
 
           this.podcasts[audio_array_id].timingInterval = setInterval(()=> {
             this.podcasts[audio_array_id].currentTime = this.audioTiming(this.podcasts[audio_array_id].audio.currentTime);
@@ -294,6 +300,7 @@ export class AudioService {
         case audioType.shows:
           this.shows[audio_array_id].isPlaying = false;
           this.shows[audio_array_id].loadingState = true;
+          this.setLastPlayed(this.shows[audio_array_id]);
 
           this.shows[audio_array_id].timingInterval = setInterval(()=> {
             this.shows[audio_array_id].currentTime = this.audioTiming(this.shows[audio_array_id].audio.currentTime);
@@ -524,289 +531,19 @@ export class AudioService {
       return minutes + ":" + seconds;
     }
   }
+
+  async setLastPlayed(newLastPlayed: any) {
+    let last_playedz: any[] = [];
+
+    let localStoredLastPlayed: any = await this.resourcesService.getLocalStorage("lastPlayed");
+    if (localStoredLastPlayed) {
+      last_playedz = [ newLastPlayed, ...localStoredLastPlayed ];
+    } else {
+      last_playedz.unshift(newLastPlayed);
+    }
+    // console.log(last_playedz);
+
+    this.resourcesService.setLocalStorage("lastPlayed", last_playedz.slice(0, 9));
+  }
   
 }
-
-
-
-
-
-
-// playWaveSurfer(audio_Type: audioType, audio_array_id: any) {
-//   if (this.currentlyPlayingAudio.playingAudio) {
-//     if (this.currentlyPlayingAudio.type == audioType.radio) {
-//       this.radio.wave_surfer.pause();
-
-//       if (this.currentlyPlayingAudio.type != audio_Type) {
-//         this.radio.wave_surfer.stop();
-//         // this.radio.wave_surfer.setCurrentTime(0);
-//         // this.radio.wave_surfer. .removeAllListeners;
-//       }
-//     } 
-
-//     if (this.currentlyPlayingAudio.type == audioType.podcast) {
-//       this.podcasts[this.currentlyPlayingAudio.id].wave_surfer.pause();
-
-//       if (this.currentlyPlayingAudio.type != audio_Type) {
-//         this.podcasts[this.currentlyPlayingAudio.id].wave_surfer.stop();
-//         // this.podcasts[this.currentlyPlayingAudio.id].wave_surfer.setCurrentTime(0);
-//         // this.podcasts[this.currentlyPlayingAudio.id].wave_surfer. .removeAllListeners();
-//       }
-//     } 
-
-//     if (this.currentlyPlayingAudio.type == audioType.shows) {
-//       this.shows[this.currentlyPlayingAudio.id].wave_surfer.pause();
-      
-//       if (this.currentlyPlayingAudio.type != audio_Type) {
-//         this.shows[this.currentlyPlayingAudio.id].wave_surfer.stop();
-//         // this.shows[this.currentlyPlayingAudio.id].wave_surfer.setCurrentTime(0);
-//         // this.shows[this.currentlyPlayingAudio.id].wave_surfer. .removeAllListeners();
-//       }
-//     } 
-//   }
-//   this.mediaSessionFunc(audio_Type, audio_array_id);
-
-//   return new Promise<any> ((resolve, reject) => {
-//     switch (audio_Type) {
-//       case audioType.radio:
-//         this.radio.loadingState = true;
-//         this.radio.isPlaying = false;
-      
-//         this.radio.wave_surfer.play().then(
-//           (res: any) => {
-//             this.currentlyPlayingAudio.playingAudio = this.radio.wave_surfer;
-//             this.currentlyPlayingAudio.type = audio_Type;
-
-//             this.radio.isPlaying = true;
-//             this.radio.loadingState = false;
-//             if ("mediaSession" in navigator) {
-//               navigator.mediaSession.metadata = new MediaMetadata({
-//                 title: "Tesa Radio",
-//                 artist: 'Team Tesa',
-//                 album: "Team Tesa Radio",
-//                 artwork: [
-//                   { src: '/assets/images/radiomic.png', sizes: '512x512', type: 'image/png' },
-//                 ]
-//               });
-            
-//               // TODO: Update playback state.
-//               navigator.mediaSession.playbackState = 'playing';
-//             };
-
-//             this.radio.wave_surfer.on('finish', ()=> {
-//               this.radio.wave_surfer.setCurrentTime(0);
-//               this.radio.wave_surfer.stop();
-//               this.radio.isPlaying = this.radio.wave_surfer.isPlaying() || false;
-//               this.radio.loadingState = false;
-//             });
-
-//             this.radio.wave_surfer.on('pause', ()=> {
-//               this.radio.isPlaying = this.radio.wave_surfer.isPlaying() || false;
-//               this.radio.loadingState = false;
-//             });
-
-//             // this.radio.wave_surfer.on('play', ()=> {
-//             //   audioObj.isPlaying = this.radio.wave_surfer.isPlaying();
-//             // });
-            
-//             resolve(this.radio);
-//           },
-//           (err: any) => {
-//             this.radio.wave_surfer.load(this.radio.src);
-//             reject(err);
-//           }
-//         );
-
-//         break;
-//       case audioType.podcast:
-//         this.podcasts[audio_array_id].isPlaying = false;
-//         this.podcasts[audio_array_id].loadingState = true;
-
-//         this.podcasts[audio_array_id].wave_surfer.play().then(
-//           (res: any) => {
-//             this.currentlyPlayingAudio.type = audio_Type;
-//             this.currentlyPlayingAudio.playingAudio = this.podcasts[audio_array_id].wave_surfer;
-//             this.currentlyPlayingAudio.id = audio_array_id;
-
-//             this.podcasts[audio_array_id].isPlaying = true;
-//             this.podcasts[audio_array_id].loadingState = false;
-//             if ("mediaSession" in navigator) {
-//               navigator.mediaSession.metadata = new MediaMetadata({
-//                 title: this.podcasts[audio_array_id].title || "Tesa Radio",
-//                 artist: 'Tesa Radio',
-//                 album: this.podcasts[audio_array_id].category,
-//                 artwork: [
-//                   { src: this.podcasts[audio_array_id].image || '/assets/images/radiomic.png', sizes: '512x512', type: 'image/png' },
-//                 ]
-//               });
-            
-//               // TODO: Update playback state.
-//               navigator.mediaSession.playbackState = 'playing';
-//             };
-
-//             this.podcasts[audio_array_id].wave_surfer.on('finish', ()=> {
-//               this.podcasts[audio_array_id].wave_surfer.setCurrentTime(0);
-//               this.podcasts[audio_array_id].wave_surfer.stop();
-//               this.podcasts[audio_array_id].isPlaying = this.podcasts[audio_array_id].wave_surfer.isPlaying() || false;
-//               this.podcasts[audio_array_id].loadingState = false;
-//             });
-
-//             this.podcasts[audio_array_id].wave_surfer.on('pause', ()=> {
-//               this.podcasts[audio_array_id].isPlaying = this.podcasts[audio_array_id].wave_surfer.isPlaying() || false;
-//               this.podcasts[audio_array_id].loadingState = false;
-//             });
-            
-//             resolve(this.podcasts[audio_array_id]);
-//           },
-//           (err: any) => {
-//             this.podcasts[audio_array_id].wave_surfer.load(this.podcasts[audio_array_id].src);
-//             reject(err);
-//           }
-//         );
-    
-//         break;
-//       case audioType.shows:
-//         this.shows[audio_array_id].isPlaying = false;
-//         this.shows[audio_array_id].loadingState = true;
-
-//         this.shows[audio_array_id].wave_surfer.play();
-
-//         resolve(this.shows[audio_array_id]);
-
-//         break;
-//       default:
-//         this.currentlyPlayingAudio.playingAudio.play().then(
-//           (res: any) => {
-//             this.currentlyPlayingAudio.id = audio_array_id;
-
-//             resolve(this.currentlyPlayingAudio);
-//           },
-//           (err: any) => {
-//             // this.currentlyPlayingAudio.playingAudio.load();
-//             reject(this.currentlyPlayingAudio);
-//           }
-//         );
-
-//         break;
-//     };
-//   });
-// }
-
-// pauseWaveSurfer(audio_Type: audioType, audio_array_id: any) {
-//   this.currentlyPlayingAudio.type = audio_Type;
-//   this.currentlyPlayingAudio.id = audio_array_id;
-//   // this.currentlyPlayingAudio.isPlaying = false;
-
-//   return new Promise<any> ((resolve, reject) => {
-//     switch (audio_Type) {
-//       case audioType.radio:
-//         if ("mediaSession" in navigator) {
-//           navigator.mediaSession.playbackState = 'paused';
-//         }
-
-//         this.radio.wave_surfer.pause();
-//         this.radio.isPlaying = false;
-//         resolve(this.radio);
-
-//         // if (this.radio.wave_surfer.paused) {
-//         //   // this.currentlyPlayingAudio.playingAudio = this.radio.audio;
-//         // } else {
-//         //   reject(this.radio);
-//         // }
-
-//         break;
-    
-//       case audioType.podcast:
-//         if ("mediaSession" in navigator) {
-//           navigator.mediaSession.playbackState = 'playing';
-//         }
-
-//         this.podcasts[audio_array_id].wave_surfer.pause();
-//         this.currentlyPlayingAudio.playingAudio = this.podcasts[audio_array_id].wave_surfer;
-//         this.podcasts[audio_array_id].isPlaying = false;
-//         resolve(this.podcasts[audio_array_id]);
-
-//         // if (this.podcasts[audio_array_id].wave_surfer.paused) {
-//         // } else {
-//         //   reject(this.podcasts[audio_array_id]);
-//         // };
-
-//         break;
-    
-//       case audioType.shows:
-//         if ("mediaSession" in navigator) {
-//           navigator.mediaSession.playbackState = 'playing';
-//         }
-
-//         this.shows[audio_array_id].wave_surfer.pause();
-//         this.currentlyPlayingAudio.playingAudio = this.shows[audio_array_id].wave_surfer;
-//         this.shows[audio_array_id].isPlaying = false;
-//         resolve(this.shows[audio_array_id]);
-
-//         // if (this.shows[audio_array_id].wave_surfer.paused) {
-//         // } else {
-//         //   reject(this.shows[audio_array_id]);
-//         // };
-
-//         break;
-    
-//       default:
-//         if ("mediaSession" in navigator) {
-//           navigator.mediaSession.playbackState = 'paused';
-//         }
-
-//         if (this.currentlyPlayingAudio.playingAudio) {
-//           this.currentlyPlayingAudio.playingAudio.pause();
-//           if (this.currentlyPlayingAudio.playingAudio.paused) {
-//             resolve(this.currentlyPlayingAudio);
-//           } else {
-//             reject(this.currentlyPlayingAudio);
-//           }
-//         }
-
-//         break;
-//     }
-//   });
-// }
-
-
-  // waveSurferFunc(wave_surferObj: any, audioObj: any) {
-  //   // this.wave_surfer.load("assets/audio.mp3");
-
-  //   wave_surferObj.on('ready', ()=> {
-  //     audioObj.loadingState = false;
-  //     // wave_surferObj.play();
-  //     audioObj.playbackRate = wave_surferObj.getPlaybackRate();
-  //   });
-
-  //   // console.log(wave_surferObj);
-    
-
-  //   wave_surferObj.on('audioprocess', ()=> {
-  //     audioObj.playbackRate = wave_surferObj.getPlaybackRate();
-  //     audioObj.isPlaying = wave_surferObj.isPlaying();
-  //   });
-
-  //   wave_surferObj.on('error', ()=> {
-  //     wave_surferObj.stop();
-  //     audioObj.isPlaying = wave_surferObj.isPlaying();
-  //   });
-
-  //   wave_surferObj.on('finish', ()=> {
-  //     wave_surferObj.stop();
-  //     audioObj.isPlaying = wave_surferObj.isPlaying();
-  //   });
-
-  //   wave_surferObj.on('pause', ()=> {
-  //     audioObj.isPlaying = wave_surferObj.isPlaying();
-  //   });
-
-  //   wave_surferObj.on('play', ()=> {
-  //     audioObj.isPlaying = wave_surferObj.isPlaying();
-  //   });
-
-  //   // wave_surferObj.on('seek', ()=> {
-  //   //   wave_surferObj.play();
-  //   // });
-
-  // }

@@ -39,6 +39,21 @@ ion-content {
             margin-bottom: 0;
             margin-left: 15px;
         }
+
+        ion-card {
+            --margin: 0px;
+            margin: 15px 5px; 
+
+            img {
+                width: 100%;
+                max-height: 100px;
+                object-fit: cover;
+            }
+
+            ion-card-header {
+                padding: 15px 10px;
+            }
+        }
     }
 
 

@@ -32,7 +32,7 @@ export class ResourcesService {
 
   private openai: OpenAIApi;
   configuration = new Configuration({
-    apiKey: "Your-Key-Here",
+    apiKey: "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",
   });
 
 
@@ -49,11 +49,16 @@ export class ResourcesService {
   chatGPTopenAIgenerateText(prompt: string):Promise<string | undefined>{
     return this.openai.createCompletion({
       model: "text-davinci-003",
-      prompt: prompt,
-      max_tokens: 256
+      prompt: prompt, // "Tesa Bot " + prompt
+      max_tokens: 256,
+      temperature: 0.9,
+      frequency_penalty: 0,
+      presence_penalty: 0.6
     }).then((response: any) => {
+      console.log(response);
       return response.data.choices[0].text;
     }).catch((error: any) =>{
+      console.log(error);
       return '';
     });
   }
@@ -105,6 +110,7 @@ export class ResourcesService {
   async openTesaBotModal() {
     const modal = await this.modalCtrl.create({
       component: TesaBotPage,
+      componentProps: { modalOpened: true },
       mode: 'ios', 
       id: "tesaBotModall",
       canDismiss: this.canDismiss,
@@ -115,7 +121,8 @@ export class ResourcesService {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-      console.log(`Hello, ${data}!`);
+      // console.log(`Hello, ${data}!`);
+      console.log(data);
     }
   }
 
@@ -136,12 +143,13 @@ export class ResourcesService {
   //   this._storage?.set(key, value);
   // }
 
-  async store (storageKey: string, value: any) {
+  async setLocalStorage(storageKey: string, value: any) {
     const encryptedvalue = btoa(escape(JSON.stringify(value)))
     return await this._storage?.set(storageKey, encryptedvalue);
   }
 
-  async get(storageKey:string) {
+  // getLocalStorage
+  async getLocalStorage(storageKey:string) {
     return new Promise(resolve=>{
       this._storage?.get(storageKey).then((value)=>{
         if (value == null) {
@@ -153,11 +161,13 @@ export class ResourcesService {
     })
   }
 
-  async removeItem(storageKey:string) {
+  // removeLocalStorageItem
+  async removeLocalStorageItem(storageKey:string) {
     await this._storage?.remove(storageKey);
   }
   
-  async clear () {
+  // clearLocalStorage
+  async clearLocalStorage() {
     await this._storage?.clear();
   }
   

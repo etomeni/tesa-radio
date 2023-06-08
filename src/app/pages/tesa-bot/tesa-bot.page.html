@@ -27,6 +27,35 @@
   </ion-header>
 
 
+  <section class="response-question">
+    <ul>
+      <li class="response">
+        <div>
+          dsvsvsddsfvbshjvbfsjdkfjsnkdnfsdkjnfdjsknfdsf
+          dsfds
+          fdsfsdsfsdfsdfsdfsdfsdfdsfsdvsfdvsdsdfsdfdsfdsf
+          dsfdsfdsfdsfdsfdsfdsfdsfsdavdfbdfnfgfbdfgbdghfgg
+          dfgdfgdffggsdhsfsshgfdgfsdfdhfdsghfdgdhfgfdsghdfs
+          gfsdgdfgdfgsdfgdbgfdgfdgfdsgdhgdhdfhdghgdhdhdgd
+        </div>
+      </li>
+
+      <li class="question">
+        <div>
+          dsvsvsddsfvbshjvbfsjdkfjsnkdnfsdkjnfdjsknfdsf
+          dsfds
+          fdsfsdsfsdfsdfsdfsdfsdfdsfsdvsfdvsdsdfsdfdsfdsf
+          dsfdsfdsfdsfdsfdsfdsfdsfsdavdfbdfnfgfbdfgbdghfgg
+          dfgdfgdffggsdhsfsshgfdgfsdfdhfdsghfdgdhfgfdsghdfs
+          gfsdgdfgdfgsdfgdbgfdgfdgfdsgdhgdhdfhdghgdhdhdgd
+        </div>
+      </li>
+    </ul>
+
+  </section>
+
+
+
   
 
 </ion-content>
@@ -34,6 +63,32 @@
 <!-- tesa bot -->
 <ion-footer [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-searchbar animated="true" placeholder="Tesa Bot - Ask Anything..." (ionChange)="searchInput()" [autofocus]="true" autocorrect="on"></ion-searchbar>
+    <form #tesaBotForm="ngForm" (ngSubmit)="onSubmitTesaBot(tesaBotForm.value)">
+      <div class="wrapper">
+        <ion-textarea 
+          mode="md" 
+          required
+          [autofocus]="true"
+          [spellcheck]="true"
+          [rows]="tesaBotTextareaRows"
+    
+          placeholder="Tesa Bot - Ask Anything..."
+          id="tesaBot-input"
+          name="tesaBot"
+          #tesaBot="ngModel"
+          ngModel
+          aria-label="tesaBot" aria-describedby="tesaBot"
+          (ionFocus)="tesaBotInputFocus('focusIn')"
+          (ionBlur)="tesaBotInputFocus('focusOut')"
+        ></ion-textarea>
+
+        <ion-button block type="submit" [disabled]="tesaBotForm.invalid || submitted" mode="md" style="--background: var(--primary); margin-top: 10px;">
+          <ion-icon name="send"></ion-icon>
+          <i *ngIf="submitted" class="loader"></i>
+        </ion-button>
+      </div>
+      
+    </form>
+
   </ion-toolbar>
 </ion-footer>

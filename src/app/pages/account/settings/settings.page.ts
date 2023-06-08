@@ -3,6 +3,8 @@ import { ActionSheetController, ModalController } from '@ionic/angular';
 
 import { EditProfileModalComponent } from 'src/app/components/edit-profile-modal/edit-profile-modal.component';
 import { ChangePasswordModalComponent } from 'src/app/components/change-password-modal/change-password-modal.component';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { ResourcesService } from 'src/app/services/resources.service';
 
 @Component({
   selector: 'app-settings',
@@ -15,7 +17,9 @@ export class SettingsPage implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
-    private actionSheetCtrl: ActionSheetController
+    private actionSheetCtrl: ActionSheetController,
+    private firebaseService: FirebaseService,
+    private resourcesService: ResourcesService
   ) {}
 
   ngOnInit() {
@@ -95,7 +99,8 @@ export class SettingsPage implements OnInit {
 
 
   logOut() {
-
+    this.firebaseService.logoutFirebaseUser();
+    this.resourcesService.presentToast("user logged out", 'Info');
   }
 
 }

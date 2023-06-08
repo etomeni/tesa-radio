@@ -53,7 +53,7 @@ export class ShowsDetailsPage implements OnInit {
 
   getShowDetails() {
     const getStoredShows = () => {
-      this.resourcesService.get("showDetails").then(
+      this.resourcesService.getLocalStorage("showDetails").then(
         (res: any) => {
           if (res) {
             // this.showDetails = res;
@@ -85,7 +85,7 @@ export class ShowsDetailsPage implements OnInit {
         this.audioService.shows = res;
         // this.lastShowDetail = res[0].lastVisible;
         this.lastShowDetail = res.length ? res[0].lastVisible : undefined;
-        this.resourcesService.store("showDetails", res);
+        this.resourcesService.setLocalStorage("showDetails", res);
 
         this.loadingStatus = false;
 
@@ -127,10 +127,10 @@ export class ShowsDetailsPage implements OnInit {
           }
 
           this.audioService.shows = [...this.audioService.shows, ...res];
-          this.resourcesService.store("showDetails", this.audioService.shows);
+          this.resourcesService.setLocalStorage("showDetails", this.audioService.shows);
   
           // this.showDetails = [...this.showDetails, ...res];
-          // this.resourcesService.store("showDetails", this.showDetails);
+          // this.resourcesService.setLocalStorage("showDetails", this.showDetails);
         } else {
           this.lastShowDetail = undefined;
         }

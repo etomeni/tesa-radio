@@ -243,9 +243,7 @@ ion-content.authGlobalStyle {
 }
 
 ion-content {
-
-
-
+    --background: var(--black);
 
     section.lottieLoadingImgSection {
         text-align: center;

@@ -10,6 +10,8 @@ import { ChangePasswordModalComponent } from './change-password-modal/change-pas
 import { PodcastListComponent } from './podcast-list/podcast-list.component';
 import { ShowPodcastViewComponent } from './show-podcast-view/show-podcast-view.component';
 import { NewShoutOutComponent } from './new-shout-out/new-shout-out.component';
+import { CreatePodcastComponent } from './create-podcast/create-podcast.component';
+import { NewPodcastContentComponent } from './new-podcast-content/new-podcast-content.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { NewShoutOutComponent } from './new-shout-out/new-shout-out.component';
     ChangePasswordModalComponent,
     PodcastListComponent,
     ShowPodcastViewComponent,
-    NewShoutOutComponent
+    NewShoutOutComponent,
+    CreatePodcastComponent,
+    NewPodcastContentComponent
   ],
 
   imports: [
@@ -32,7 +36,9 @@ import { NewShoutOutComponent } from './new-shout-out/new-shout-out.component';
     ChangePasswordModalComponent,
     PodcastListComponent,
     ShowPodcastViewComponent,
-    NewShoutOutComponent
+    NewShoutOutComponent,
+    CreatePodcastComponent,
+    NewPodcastContentComponent
   ],
 
   schemas: [

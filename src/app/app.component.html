@@ -38,7 +38,7 @@
         </ion-menu-toggle>
 
         <ion-menu-toggle>
-          <ion-item routerLink="/tesa-bot" [routerLinkActive]="['active']">
+          <ion-item button (click)="searchInput()">
             <ion-icon slot="start" name="search-circle"></ion-icon>
             <ion-label>Tesa Bot</ion-label>
           </ion-item>
@@ -79,20 +79,30 @@
           </ion-item>
         </ion-menu-toggle>
 
-        <ion-menu-toggle>
+        <!-- <ion-menu-toggle>
           <ion-item routerLink="/account" [routerLinkActive]="['active']">
             <ion-avatar>
-              <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+              <img alt="user profile picture" [src]="firebaseService.currentUser.profilePhotoURL == '' || undefined || null ? 'assets/images/avatar.svg' : firebaseService.currentUser.profilePhotoURL" />
             </ion-avatar>
 
-            <ion-label>Sunday Etom Eni</ion-label>
+            <ion-label> {{ firebaseService.isCurrentUserLoggedIn ? firebaseService.currentUser.name : "Guest" }} </ion-label>
+          </ion-item>
+        </ion-menu-toggle> -->
+
+        <ion-menu-toggle *ngIf="!firebaseService.isCurrentUserLoggedIn">
+          <ion-item routerLink="/account" [routerLinkActive]="['active']">
+            <ion-avatar>
+              <img alt="user profile picture" [src]="localUser.profilePhotoURL == '' || localUser.profilePhotoURL == undefined || localUser.profilePhotoURL == null ? 'assets/images/avatar.svg' : localUser.profilePhotoURL" />
+            </ion-avatar>
+
+            <ion-label> {{ localUser.name || "Guest" }} </ion-label>
           </ion-item>
         </ion-menu-toggle>
 
-        <ion-menu-toggle>
+        <ion-menu-toggle *ngIf="firebaseService.isCurrentUserLoggedIn">
           <ion-item (click)="logout()" [routerLinkActive]="['active']">
             <ion-icon name="log-out-outline"></ion-icon>
-            <ion-label>Log Out</ion-label>
+            <ion-label> Log Out </ion-label>
           </ion-item>
         </ion-menu-toggle>
 

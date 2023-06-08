@@ -32,6 +32,7 @@
             <div class="whitecolor">
               <!-- <ion-icon [name]="currentlyPlayingAudio.isPlaying ? 'pause' : 'play'" class="radio-BTN" *ngIf="!loadingReadyState" (click)="playPauseRadio(currentlyPlayingAudio.isPlaying ? 'pause' : 'play')"></ion-icon> -->
               <ion-icon [name]="audioService.radio.isPlaying ? 'pause' : 'play'" class="radio-BTN" *ngIf="!audioService.radio.loadingState" (click)="playPauseRadio(audioService.radio.isPlaying ? 'pause' : 'play')"></ion-icon>
+              <!-- <ion-icon [name]="audioService.radio.isPlaying ? 'pause' : 'play'" class="radio-BTN"  (click)="playPauseRadio(audioService.radio.isPlaying ? 'pause' : 'play')"></ion-icon> -->
   
               <ion-icon name="refresh-circle" class="radio-BTN loader" *ngIf="audioService.radio.loadingState"></ion-icon>
             </div>

@@ -14,6 +14,7 @@ interface podcastInterface {
   creator_id: string,
   creator_name: string,
   episodes: number,
+  viewStat: number,
 
   lastInteraction: any,
   createdAt: any,
@@ -72,7 +73,7 @@ export class PodcastsPage implements OnInit {
 
   getPodcasts() {
     const getLocalStorage = () => {
-      this.resourcesService.get("podcasts").then((res: any) => {
+      this.resourcesService.getLocalStorage("podcasts").then((res: any) => {
         if (res) {
           // this.podcasts = res;
           this._podcasts = res;
@@ -89,7 +90,7 @@ export class PodcastsPage implements OnInit {
         
         this._podcasts = res;
         this.lastPodcast = res[0].lastVisible;
-        this.resourcesService.store("podcasts", res);
+        this.resourcesService.setLocalStorage("podcasts", res);
 
         this.loadingStatus = false;
       },
@@ -111,7 +112,7 @@ export class PodcastsPage implements OnInit {
         this.lastPodcast = res.length ? res[0].lastVisible : undefined;
         this._podcasts = [...this._podcasts, ...res];
 
-        this.resourcesService.store("podcasts", this._podcasts);
+        this.resourcesService.setLocalStorage("podcasts", this._podcasts);
       }
     ).catch((err: any) => {
       console.log(err);
@@ -135,13 +136,13 @@ export class PodcastsPage implements OnInit {
     this.firebaseService.getOrderedLimitedFirestorDocs("podcasts", "lastInteraction", 10, "episodes").then(
       (res: any) => {
         this.suggestedPodcastViews = res;
-        this.resourcesService.store("suggestedPodcasts", res);
+        this.resourcesService.setLocalStorage("suggestedPodcasts", res);
 
       },
       (err: any) => {
         console.log(err);
         
-        this.resourcesService.get("suggestedPodcasts").then((res: any) => {
+        this.resourcesService.getLocalStorage("suggestedPodcasts").then((res: any) => {
           if (res) {
             // this.podcasts = res;
             this.suggestedPodcastViews = res;

@@ -5,6 +5,7 @@ import { FirebaseService } from '../services/firebase.service';
 import { ResourcesService } from '../services/resources.service';
 
 
+
 enum toastState {
   Success = "Success",
   Error = "Error",
@@ -99,15 +100,9 @@ export class HomePage implements OnInit {
 
     this.getSuggestedPodcats();
     this.getSuggestedShows();
-
-    this.firebaseService.updateFirestoreData("podcasts", "Ud1cud9E8ZZUEBY102Za", {
-      lastInteraction: Date.now(),
-      episodes: 0
-    })
   }
 
   playPauseRadio(playPauseValue: string) {
-
     if (playPauseValue == 'play') {
       this.audioService.play(audioType.radio, '')
     }
@@ -115,8 +110,6 @@ export class HomePage implements OnInit {
     if (playPauseValue == 'pause') {
       this.audioService.pause(audioType.radio, '')
     }
-
-    
   }
 
   // the logic used for the suggested podcast and shows
@@ -130,12 +123,12 @@ export class HomePage implements OnInit {
       (res: any) => {
         // console.log(res);
         this.suggestedShows = res;
-        this.resourcesService.store("suggestedShows", res);
+        this.resourcesService.setLocalStorage("suggestedShows", res);
       },
       (err: any) => {
         console.log(err);
 
-        this.resourcesService.get("suggestedShows").then(
+        this.resourcesService.getLocalStorage("suggestedShows").then(
           (res: any) => {
             if(res) {
               this.suggestedShows = res;
@@ -151,12 +144,12 @@ export class HomePage implements OnInit {
       (res: any) => {
         // console.log(res);
         this.suggestedPodcasts = res;
-        this.resourcesService.store("suggestedPodcasts", res);
+        this.resourcesService.setLocalStorage("suggestedPodcasts", res);
       },
       (err: any) => {
         console.log(err);
 
-        this.resourcesService.get("suggestedPodcasts").then(
+        this.resourcesService.getLocalStorage("suggestedPodcasts").then(
           (res: any) => {
             if(res) {
               this.suggestedShows = res;
@@ -167,43 +160,8 @@ export class HomePage implements OnInit {
     );
   }
 
-
-  // createShows() {
-  //   let today = Date.now();
-
-  //   this.topShows.forEach((element) => {
-  //     let show = {
-  //       creator_id: "",
-  //       creator_name: "Tesa Radio",
-  //       // description: "",
-  //       image: element.image,
-  //       title: element.title,
-  //       lastInteraction: today,
-  //       episodes: 0,
-  //       createdAt: today,
-  //       updatedAt: today,
-  //     }
-      
-  //     this.firebaseService.save2FirestoreDB("shows", show).then(
-  //       (res: any) => {
-  //         // console.log(res);
-  //         this.firebaseService.updateFirestoreData("shows", res.id, { id: res.id }).then(
-  //           (res: any) => {
-  //             console.log(res);
-  //           },
-  //           (err: any) => {
-  //             console.log(err);
-  //           }
-  //         );
-  //       }
-  //     );
-
-  //   });
-  // }
-
-
   searchInput() {
-    console.log("ionInput");
+    // console.log("ionInput");
     this.resourcesService.openTesaBotModal();
   }
 

@@ -37,6 +37,48 @@ enum conditionType {
   'not-in' = "not-in",
 };
 
+interface userInterface {
+  updatedAt: number,
+  createdAt: number,
+  email: string,
+  name: string,
+  phoneNumber: string,
+  profilePhotoURL: string,
+  id: string,
+  userID: string,
+  lastInteraction: number,
+
+  lastPlayed: [
+    {
+      id: string,
+      arrayID: number,
+      type: "shows" | "podcast",
+      src: string,
+      wave_surfer: any,
+      audio: any,
+      title: string,
+      description: string,
+      image: string,
+      category: string,
+      ref_id: string,
+      playStat: string,
+      comments: any,
+      createdAt: string,
+      updatedAt: string,
+  
+      // playing controls
+      durationSummary: string,
+      timingInterval: any, 
+      seekAudioRangeValue: number,
+      currentTime: any,
+      duration: any,
+      playbackRate: any,
+      loadingState: boolean // true, 
+      isPlaying: boolean // false,
+    }
+  ]
+};
+
 interface whereCondition {
   property: string, 
   condition: "!=" | "<" | "<=" | "==" | ">" | ">=" | "array-contains" | "array-contains-any" | "in" | "not-in",
@@ -48,6 +90,7 @@ interface whereCondition {
 })
 export class FirebaseService {
   public isCurrentUserLoggedIn: boolean = false;
+  public currentUser: any;
 
   constructor(
     private realtimeDB: Database,
@@ -121,7 +164,6 @@ export class FirebaseService {
     // })
   }
 
-
   async getOrderedLimitedFirestorDocs(path: string, orderBypath: string, limitNum: number = 10, orderBypath2: 'lastInteraction' | 'episodes' | 'category' | 'createdAt' | 'updatedAt' = "lastInteraction") {
     const docRef = collection(this.firestore, path);
     let queryRef: any;
@@ -144,7 +186,6 @@ export class FirebaseService {
     });
     return results;
   }
-
 
   async getAllFirestoreDocumentData(path: string, docId: string) {
     let results: any[] = [];
@@ -181,7 +222,73 @@ export class FirebaseService {
     });
   }
 
-  async getLimitedFirestoreDocumentData(path: string, limitNum: number, where_Condition: whereCondition = {property: '', condition: '==', value: '' }) {
+  // async getLimitedFirestoreDocumentData(path: string, limitNum: number, where_Condition: whereCondition = {property: '', condition: '==', value: '' }) {
+  //   let results: any[] = [];
+
+  //   // Query the first page of docs
+  //   const docRef = collection(this.firestore, path);
+  //   let first;
+  //   // const first = query(docRef, orderBy(order_By), limit(limitNum));
+  //   if (where_Condition.property && where_Condition.value) {
+  //     first = query(docRef, where(where_Condition.property, where_Condition.condition, where_Condition.value), limit(limitNum));
+  //   } else {
+  //     first = query(docRef, limit(limitNum));
+  //   }
+  //   const documentSnapshots = await getDocs(first);
+
+  //   const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+
+  //   documentSnapshots.forEach((doc: any) => {
+  //     // doc.data() is never undefined for query doc snapshots
+  //     // console.log(doc.id, " => ", doc.data());
+
+  //     let _id = doc.id;
+  //     let res = { ...doc.data(), _id, lastVisible };
+  //     results.push(res);
+  //   });
+
+  //   return results;
+  // }
+
+  // async getNextLimitedFirestoreDocumentData(path: string, last_Visible: any, limitNum: number, where_Condition: whereCondition = {property: '', condition: '==', value: '' }) {
+  //   let results: any[] = [];
+    
+  //   // Construct a new query starting at this document,
+  //   // get the next 25 cities.
+  //   const docRef = collection(this.firestore, path);
+  //   let next;
+  //   // next = query(docRef, orderBy(order_By), where(where_Condition.property, where_Condition.condition, where_Condition.value), startAfter(last_Visible), limit(limitNum));
+  //   if (where_Condition.property && where_Condition.value) {
+  //     next = query(docRef, where(where_Condition.property, where_Condition.condition, where_Condition.value), startAfter(last_Visible), limit(limitNum));
+  //   } else {
+  //     next = query(docRef, startAfter(last_Visible), limit(limitNum));
+  //   }
+  //   const documentSnapshots = await getDocs(next);
+
+  //   // console.log(documentSnapshots);
+  //   const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+  //   // console.log("last", lastVisible);
+
+  //   documentSnapshots.forEach((doc: any) => {
+  //     // doc.data() is never undefined for query doc snapshots
+  //     // console.log(doc.id, " => ", doc.data());
+
+  //     let _id = doc.id;
+  //     let res = { ...doc.data(), _id, lastVisible };
+  //     results.push(res);
+  //   });
+
+  //   return results;
+  // }
+
+
+
+  async getLimitedFirestoreDocumentData(
+    path: string, 
+    limitNum: number, 
+    where_Condition: whereCondition = {property: '', condition: '==', value: '' },
+    where_Condition2: whereCondition = {property: '', condition: '==', value: '' },
+  ) {
     let results: any[] = [];
 
     // Query the first page of docs
@@ -189,16 +296,23 @@ export class FirebaseService {
     let first;
     // const first = query(docRef, orderBy(order_By), limit(limitNum));
     if (where_Condition.property && where_Condition.value) {
-      first = query(docRef, where(where_Condition.property, where_Condition.condition, where_Condition.value), limit(limitNum));
+      if (where_Condition2.property && where_Condition2.value) {
+        first = query(
+          docRef, 
+            where(where_Condition.property, where_Condition.condition, where_Condition.value),
+            where(where_Condition2.property, where_Condition2.condition, where_Condition2.value),
+            limit(limitNum)
+          );
+      } else {
+        first = query(docRef, where(where_Condition.property, where_Condition.condition, where_Condition.value), limit(limitNum));
+      }
+
     } else {
       first = query(docRef, limit(limitNum));
     }
     const documentSnapshots = await getDocs(first);
 
     const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
-
-    // let _id = last_visible.id;
-    // let lastVisible = { ...last_visible.data(), _id };
 
     documentSnapshots.forEach((doc: any) => {
       // doc.data() is never undefined for query doc snapshots
@@ -212,7 +326,13 @@ export class FirebaseService {
     return results;
   }
 
-  async getNextLimitedFirestoreDocumentData(path: string, last_Visible: any, limitNum: number, where_Condition: whereCondition = {property: '', condition: '==', value: '' }) {
+  async getNextLimitedFirestoreDocumentData(
+    path: string, 
+    last_Visible: any, 
+    limitNum: number, 
+    where_Condition: whereCondition = {property: '', condition: '==', value: '' },
+    where_Condition2: whereCondition = {property: '', condition: '==', value: '' }
+  ) {
     let results: any[] = [];
     
     // Construct a new query starting at this document,
@@ -221,7 +341,17 @@ export class FirebaseService {
     let next;
     // next = query(docRef, orderBy(order_By), where(where_Condition.property, where_Condition.condition, where_Condition.value), startAfter(last_Visible), limit(limitNum));
     if (where_Condition.property && where_Condition.value) {
-      next = query(docRef, where(where_Condition.property, where_Condition.condition, where_Condition.value), startAfter(last_Visible), limit(limitNum));
+      if (where_Condition2.property && where_Condition2.value) {
+        next = query(
+          docRef, 
+          where(where_Condition.property, where_Condition.condition, where_Condition.value), 
+          where(where_Condition2.property, where_Condition2.condition, where_Condition2.value), 
+          startAfter(last_Visible), 
+          limit(limitNum)
+        );
+      } else {
+        next = query(docRef, where(where_Condition.property, where_Condition.condition, where_Condition.value), startAfter(last_Visible), limit(limitNum));
+      }
     } else {
       next = query(docRef, startAfter(last_Visible), limit(limitNum));
     }
@@ -242,6 +372,10 @@ export class FirebaseService {
 
     return results;
   }
+
+
+
+
 
   async countFirestoreDocs(path: string, where_Condition: whereCondition = {property: '', condition: '==', value: '' }) {
     const coll = collection(this.firestore, path);
@@ -283,6 +417,7 @@ export class FirebaseService {
       })
     })
   }
+
 
 
   // auth
@@ -369,18 +504,21 @@ export class FirebaseService {
 
     await new Promise((resolve, reject) =>
       this.fireAuth.onAuthStateChanged(
-        (user: any) => {
-          // console.log(user);
+        (authRes: any) => {
+          // console.log(authRes);
           
-          if (user) {
+          if (authRes) {
             // User is signed in.
+            this.getUserData(authRes);
+            this.isCurrentUserLoggedIn = true;
             responseData.state = true;
             responseData.message = "Success, you're logged in.";
-            responseData.user = user;
+            responseData.user = authRes;
             
             return resolve(responseData);
           } else {
             // No user is signed in.
+            this.isCurrentUserLoggedIn = false;
             responseData.state = false;
             responseData.message = "Error, no user logged in.";
 
@@ -407,21 +545,53 @@ export class FirebaseService {
       // this.fireAuth.signOut().then(
       signOut(this.fireAuth).then(
         (res: any) => {
-          this.resourcesService.removeItem("isCurrentUserLoggedIn");
-          this.resourcesService.removeItem("user");
+          this.isCurrentUserLoggedIn = false;
+          this.resourcesService.removeLocalStorageItem("isCurrentUserLoggedIn");
+          this.resourcesService.removeLocalStorageItem("user");
           this.router.navigateByUrl('/auth/login', {replaceUrl: true});
                     
-          resolve(res);
+          resolve(res || true);
         },
         (error) => {
-          this.resourcesService.store("isCurrentUserLoggedIn", false);
-          this.resourcesService.removeItem("user");
+          this.isCurrentUserLoggedIn = false;
+          this.resourcesService.setLocalStorage("isCurrentUserLoggedIn", false);
+          this.resourcesService.removeLocalStorageItem("user");
           this.router.navigateByUrl('/auth/login', {replaceUrl: true});
 
-          reject(error);
+          reject(error || false);
         }
       )
     })
+  }
+
+
+
+  getUserData(authUserData: any) {
+    this.getFirestoreDocumentData("users", authUserData.uid).then(
+      (res: any) => {
+        // console.log(res);
+        if(res) {
+          this.currentUser = res;
+
+          let userData = {
+            userAuthInfo: authUserData,
+            userDBinfo: res,
+            loginStatus: true
+          }
+          this.resourcesService.setLocalStorage("user", userData);
+        }
+      },
+      (err: any) => {
+        console.log(err);
+        this.resourcesService.getLocalStorage("user").then(
+          (res: any) => {
+            if(res) {
+              this.currentUser = res.userDBinfo;
+            }
+          }
+        )
+      }
+    )
   }
 
 

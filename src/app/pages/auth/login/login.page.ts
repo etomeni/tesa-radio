@@ -44,7 +44,7 @@ export class LoginPage implements OnInit {
       (authRes: any) => {
         console.log(authRes);
         
-        this.resourcesService.store('isCurrentUserLoggedIn', true).then(() => {
+        this.resourcesService.setLocalStorage('isCurrentUserLoggedIn', true).then(() => {
           this.firebaseService.isCurrentUserLoggedIn = true;
         });
 
@@ -52,11 +52,11 @@ export class LoginPage implements OnInit {
         this.firebaseService.getFirestoreDocumentData("users", authRes.user.uid).then(
           (fireStoreRes: any)=>{
             let userData = {
-              userLoginInfo: authRes.user,
+              userAuthInfo: authRes.user,
               userDBinfo: fireStoreRes,
               loginStatus: true
             }
-            this.resourcesService.store("user", userData);
+            this.resourcesService.setLocalStorage("user", userData);
 
             this.response.display = true;
             this.response.status = false;
@@ -66,7 +66,7 @@ export class LoginPage implements OnInit {
             this.router.navigateByUrl('/account', {replaceUrl: true});
           }).catch((error: any) => {
             console.log(error);
-            this.resourcesService.store('isCurrentUserLoggedIn', false).then(() => {
+            this.resourcesService.setLocalStorage('isCurrentUserLoggedIn', false).then(() => {
               this.firebaseService.isCurrentUserLoggedIn = false;
             });
 
@@ -79,7 +79,7 @@ export class LoginPage implements OnInit {
       }
     ).catch( err => {
       console.log(err);
-      this.resourcesService.store('isCurrentUserLoggedIn', false).then(() => {
+      this.resourcesService.setLocalStorage('isCurrentUserLoggedIn', false).then(() => {
         this.firebaseService.isCurrentUserLoggedIn = false;
       });
 

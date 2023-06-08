@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
     // return true;
 
 
-    return this.resourcesService.get("isCurrentUserLoggedIn").then(
+    return this.resourcesService.getLocalStorage("isCurrentUserLoggedIn").then(
       (res: any) => {
         if (res) {
           this.router.navigateByUrl('/account', {replaceUrl: true});

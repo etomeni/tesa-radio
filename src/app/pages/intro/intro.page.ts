@@ -106,7 +106,7 @@ export class IntroPage implements OnInit {
   swiperGetStarted() {
     // console.log('get starteed');
 
-    this.resourcesService.store("intro", true).finally(() => {
+    this.resourcesService.setLocalStorage("intro", true).finally(() => {
       this.router.navigateByUrl('/home', {replaceUrl: true});
     })
   }

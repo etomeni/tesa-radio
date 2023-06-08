@@ -50,7 +50,7 @@ export class ShoutOutPage implements OnInit {
         if(res.length) {
           this.shoutOuts = res;
           this.lastShoutOut = res[0].lastVisible;
-          this.resourcesService.store("shoutOuts", res);
+          this.resourcesService.setLocalStorage("shoutOuts", res);
         }
 
         this.loadingStatus = false;
@@ -58,7 +58,7 @@ export class ShoutOutPage implements OnInit {
       (err: any) => {
         console.log(err);
         
-        this.resourcesService.get("shoutOuts").then((res: any) => {
+        this.resourcesService.getLocalStorage("shoutOuts").then((res: any) => {
           if (res) {
             this.shoutOuts = res;
             this.lastShoutOut = res[0].lastVisible;
@@ -78,7 +78,7 @@ export class ShoutOutPage implements OnInit {
         this.lastShoutOut = res.length ? res[0].lastVisible : undefined;
         this.shoutOuts = [...this.shoutOuts, ...res];
         
-        this.resourcesService.store("shoutOuts", this.shoutOuts);
+        this.resourcesService.setLocalStorage("shoutOuts", this.shoutOuts);
       },
       (err: any) => {
         console.log(err);

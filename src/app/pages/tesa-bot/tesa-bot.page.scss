@@ -13,6 +13,53 @@ ion-footer {
       ion-searchbar {
         padding: 10px;
       }
+
+
+      .wrapper {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        // max-height: 100px;
+        // overflow: visible;
+
+        ion-textarea {
+          --padding-end: 5px;
+          --padding-start: 5px;
+        }
+      }
     }
 }
    
+
+ion-content {
+  section.response-question {
+    ul {
+      list-style: none;
+      margin: 0 15px;
+      padding: 0;
+      li {
+        border-radius: 15px;
+        padding: 15px;
+        margin-bottom: 10px;
+        // div {
+        // }
+
+        &.response {
+          width: 95%;
+          border-top-left-radius: 3px;
+          background: var(--success-bg);
+          // color: var(--white);
+          float: left;
+        }
+        
+        &.question {
+          width: 90%;
+          border-top-right-radius: 3px;
+          background: var(--primary-dark);
+          color: var(--white);
+          float: right;
+        }
+      }
+    }
+  }
+}

@@ -11,6 +11,7 @@ interface podcastInterface {
   creator_id: string,
   creator_name: string,
   episodes: number,
+  viewStat: number,
 
   lastInteraction: any,
   createdAt: any,
@@ -26,6 +27,7 @@ interface podcastInterface {
 export class ShowPodcastViewComponent  implements OnInit {
   @Input() childPodcastViews!: podcastInterface[];
   @Input() viewType!: boolean;
+  @Input() accountPage: boolean = false;
 
   
   constructor() { }

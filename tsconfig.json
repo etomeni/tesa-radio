@@ -23,16 +23,12 @@
       "dom"
     ],
     "useDefineForClassFields": false,
-    // "esModuleInterop": true, 
-    "allowSyntheticDefaultImports": true
-
+    // "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
     "strictInputAccessModifiers": true,
     "strictTemplates": true,
-    // "esModuleInterop": true, 
-    // "allowSyntheticDefaultImports": true
   }
 }

@@ -63,16 +63,16 @@ export class SignupPage implements OnInit {
           this.firebaseService.save2FirestoreDB("users", data2dB, authRes.user.uid).then((fireStoreRes: any) => {
             // console.log(res);
 
-            this.resourcesService.store('isCurrentUserLoggedIn', true).then(() => {
+            this.resourcesService.setLocalStorage('isCurrentUserLoggedIn', true).then(() => {
               this.firebaseService.isCurrentUserLoggedIn = true;
             });
 
             let userData = {
-              userLoginInfo: authRes.user,
+              userAuthInfo: authRes.user,
               userDBinfo: data2dB,
               loginStatus: true
             }
-            this.resourcesService.store("user", userData);
+            this.resourcesService.setLocalStorage("user", userData);
 
             
             this.response.display = true;

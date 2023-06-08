@@ -28,7 +28,7 @@ export class AccountGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     // return true;
     
-    return this.resourcesService.get("isCurrentUserLoggedIn").then(
+    return this.resourcesService.getLocalStorage("isCurrentUserLoggedIn").then(
       (res: any) => {
         if (res) {
           return true;

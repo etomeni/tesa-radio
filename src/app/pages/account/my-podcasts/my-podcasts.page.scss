@@ -1,0 +1,192 @@
+
+ion-header {
+    --background: #ffffff00;
+    ion-toolbar {
+      --background: transparent;
+    }
+
+    .view-types {
+        text-align: end;
+        margin-right: 15px;
+
+        ion-icon {
+            background-color: #444444;
+            color: #ffffff;
+            padding: 5px 8px;
+
+            &.active {
+                background-color: #adadad;
+                color: #222222;
+            }
+        }
+    }
+
+}
+
+ion-content {
+    // --background:
+    //     linear-gradient(
+    //     #000000bf, 
+    //     #000000bf
+    //     ),
+    //     url("/assets/images/podcast.jpg") 
+    //     no-repeat right center / cover;
+    // --background-size: cover;
+    // --background-repeat: no-repeat;
+    // --background-position: center center;
+    --margin: 0;
+    --padding: 0;
+
+    .condense-header {
+        background: rgba(0, 0, 0, 0.272);
+        ion-toolbar {
+            --background: transparent;
+        }
+    }
+
+    div.main {
+        margin-top: 20px;
+        section {
+            margin-bottom: 15px;
+
+            h3, h4, .h3 {
+                margin: 0; padding-left: 10px;
+                color: var(--primary);
+            }
+        }
+    }
+
+    swiper-container {
+        h3 {
+            margin: 0; 
+            padding-left: 10px;
+            color: var(--primary);
+        }
+        
+        ion-card {
+            margin: 15px 5px;
+
+            img {
+            width: 100%;
+            max-height: 100px;
+            }
+            
+            ion-card-header {
+            padding: 15px 10px;
+            }
+        }
+    }
+
+    .createNewContainer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--primary-dark);
+
+        ion-button {
+            --background: var(--primary);
+            --background-activated: var(--primary-dark);
+            margin-right: 5px;
+        }
+    }
+
+
+
+
+    aside.loadingAzide {
+        ion-grid {
+
+            .grid-view {
+                color: white !important;
+                text-align: center !important;
+        
+                .colorRed {
+                    color: #de2341;
+                }
+        
+                .error {
+                    color: #de2341;
+                    font-size: small;
+                }
+                
+                ion-icon.colorRed {
+                    font-size: 25px;
+                    color: #de2341;
+                }
+                
+                ion-col div.wrap {
+                    width: 100%;
+                    height: 100%;
+                
+                    background: #a1a1a171;
+                    border-radius: 5px;
+                    margin: 1px;
+                    padding: 1px;
+                    text-align: center;
+                    cursor: pointer;
+                
+                    img:hover {
+                        border: 3px solid var(--primary-dark);
+                    }
+                
+                    ion-icon {
+                        color: #de2341;
+                        display: inline-block;
+                        margin-top: 5px;
+                        margin-bottom: 3px;
+                        text-align: center !important;
+                        font-size: x-large;
+                    }
+                }
+            }
+            
+            .list-view {
+                ion-list {
+                    background-color: unset;
+                    // padding-top: 10px;
+                    // padding-bottom: 10px;
+            
+                    ion-item {
+                        --background: #a1a1a171; 
+                        margin-bottom: 10px;
+                        --border-radius: 10px;
+            
+                        ion-label {
+                            font-weight: bolder;
+                            h3 {
+                                color: black;
+                            }
+                            p {
+                                color: #222222;
+                            }
+            
+                            .playPauseBtnWave {
+                                height: 30px; 
+                                display: flex; 
+                                justify-content: space-between; 
+                                padding-left: 10px; 
+                                padding-right: 10px; 
+                                align-items: center; 
+                                // background-color: aqua;
+                                span {
+                                    &:hover {
+                                        box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+                                    }
+            
+                                    ion-icon {
+                                        padding: 5px;
+                                        border: 2px solid var(--primary-dark);
+                                        border-radius: 50%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+    }
+
+}

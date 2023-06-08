@@ -30,7 +30,7 @@ export class ShowsPage implements OnInit {
         if(res.length) {
           this.shows = res;
           this.lastShow = res[0].lastVisible;
-          this.resourcesService.store("shows", res);
+          this.resourcesService.setLocalStorage("shows", res);
         }
 
         this.loadingStatus = true;
@@ -38,7 +38,7 @@ export class ShowsPage implements OnInit {
     ).catch((err: any) => {
       console.log(err);
 
-      this.resourcesService.get("shows").then((res: any) => {
+      this.resourcesService.getLocalStorage("shows").then((res: any) => {
         if (res) {
           this.shows = res;
           this.lastShow = res[0].lastVisible;
@@ -57,7 +57,7 @@ export class ShowsPage implements OnInit {
         this.lastShow = res.length ? res[0].lastVisible : undefined;
         this.shows = [...this.shows, ...res];
         
-        this.resourcesService.store("shows", this.shows);
+        this.resourcesService.setLocalStorage("shows", this.shows);
       }
     ).catch((err: any) => {
       console.log(err);

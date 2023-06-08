@@ -47,7 +47,7 @@ export class NewShoutOutComponent  implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.resourcesService.get("user").then(
+    this.resourcesService.getLocalStorage("user").then(
       (res: any) => {
         if (res) {
           this.currentUser = res;

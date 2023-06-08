@@ -1,0 +1,167 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="backBTNarrow">
+  		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
+		</ion-buttons>
+
+    <ion-title>My Podcast Details</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content [fullscreen]="true">
+  <ion-header class="condense-header" collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">My Podcast Details</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <div *ngIf="!loadingStatus">
+    <div class="podcast-header" >
+      <section class="titleSection">
+        <div class="imgContainer">
+          <img [src]="podcastInfo.image || 'assets/images/imgPlaceholder.png'" alt="podcast image">
+        </div>
+  
+        <div class="detailsContainer">
+          <h3 class="podcastTitle"> {{ podcastInfo.title }} </h3>
+          <p class="creatorName" style="margin: 0;"> {{ podcastInfo.creator_name }} </p>
+    
+          <p class="category"> {{ podcastInfo.category }} </p>
+  
+          <p class="episodes"> {{ podcastInfo.episodes }} episodes</p>
+        </div>
+      </section>
+  
+      <div class="aboutPodcastContainer">
+        <p class="aboutPodcast">
+          {{ podcastInfo.description }}
+        </p>
+      </div>
+  
+    </div>
+
+    <div class="createNewContainer">
+      <div class="h3"></div>
+
+      <ion-button color="danger" size="small" (click)="openCreatePodcastModal()">
+        <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+        Create New
+      </ion-button>
+    </div>
+  
+    <app-podcast-list></app-podcast-list>
+
+    <section>
+      <ion-infinite-scroll (ionInfinite)="loadMoreData($event)">
+        <ion-infinite-scroll-content loadingText="Loading more content, please wait..." loadingSpinner="bubbles"></ion-infinite-scroll-content>
+      </ion-infinite-scroll>
+    </section>
+
+  </div>
+
+  <!-- Loading Sections -->
+  <aside class="loadingContainerSection" *ngIf="loadingStatus">
+    <section class="loadingSection">
+      <ion-img src="assets/lottie/animation_500_lhcdnv18.gif"></ion-img>
+    </section>
+
+    <div class="podcast-header" >
+      <section class="titleSection">
+        <div class="imgContainer">
+          <ion-thumbnail>
+            <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+          </ion-thumbnail>
+        </div>
+  
+        <div class="detailsContainer">
+          <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+          <ion-skeleton-text [animated]="true" style="width: 80%"></ion-skeleton-text>
+        </div>
+      </section>
+  
+      <div class="aboutPodcastContainer">
+        <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+        <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+      </div>
+    </div>
+
+    <ion-list lines="full">
+      <ion-item>
+        <ion-label class="ion-text-wrap">
+          <ion-card-header>
+            <ion-card-subtitle>
+              <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>
+            </ion-card-subtitle>
+
+            <ion-card-title>
+              <ion-skeleton-text [animated]="true" style="width: 90%">
+              </ion-skeleton-text>
+            </ion-card-title>
+          </ion-card-header>
+          
+          <ion-card-content>
+            <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+    
+            <section>
+              <div class="playPause">
+                <div class="iconText">
+                  <ion-skeleton-text [animated]="true" style="width: 30%"></ion-skeleton-text>
+                </div>
+                
+                <div class="timingAudioWave">
+                  <ion-skeleton-text [animated]="true" style="width: 65%"></ion-skeleton-text>
+                </div>
+    
+              </div>
+            </section>
+          </ion-card-content>
+        </ion-label>
+      </ion-item>
+    
+      <ion-item>
+        <ion-label class="ion-text-wrap">
+          <ion-card-header>
+            <ion-card-subtitle>
+              <ion-skeleton-text [animated]="true" style="width: 40%"></ion-skeleton-text>
+            </ion-card-subtitle>
+
+            <ion-card-title>
+              <ion-skeleton-text [animated]="true" style="width: 90%">
+              </ion-skeleton-text>
+            </ion-card-title>
+          </ion-card-header>
+          
+          <ion-card-content>
+            <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+            <ion-skeleton-text [animated]="true" style="width: 100%"></ion-skeleton-text>
+    
+            <section>
+              <div class="playPause">
+                <div class="iconText">
+                  <ion-skeleton-text [animated]="true" style="width: 30%"></ion-skeleton-text>
+                </div>
+                
+                <div class="timingAudioWave">
+                  <ion-skeleton-text [animated]="true" style="width: 65%"></ion-skeleton-text>
+                </div>
+    
+              </div>
+            </section>
+          </ion-card-content>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+  </aside>
+
+</ion-content>

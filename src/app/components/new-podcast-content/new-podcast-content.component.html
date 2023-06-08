@@ -1,0 +1,142 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start" class="backBTNarrow" (click)="closeModal()">
+      <ion-icon style="color: white;" slot="start" name="arrow-back"></ion-icon>
+		</ion-buttons>
+
+    <ion-title>Add New Podcast Audio</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content [fullscreen]="true" class="authGlobalStyle">
+  <ion-header class="condense-header" collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Add New Podcast Audio</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <main>
+    <form #createNewPodcastForm="ngForm" (ngSubmit)="onSubmit(createNewPodcastForm.value)">
+      <div data-info="title input">
+        <ion-item lines="none" class="formStart">
+          <ion-input 
+            mode="md" 
+            required 
+            minlength="5" 
+            type="text" 
+
+            label="Podcast Title *" 
+            labelPlacement="floating" 
+            placeholder="Enter podcast title"
+
+            [errorText]="title.hasError('required') ? 'Please enter podcast title.' : title.hasError('minlength') ? 'The entered characters are too short for a podcast title.' : ''"
+
+            id="title-input" 
+            name="title"
+            #title="ngModel"
+            ngModel
+            aria-label="title" aria-describedby="title-Help title"
+          ></ion-input>
+        </ion-item>
+      </div>
+
+      <div data-info="description input">
+        <ion-item lines="none" class="formStart">
+          <ion-textarea 
+            mode="md" 
+            required 
+            minlength="10" 
+
+            label="Podcast Description *" 
+            labelPlacement="floating" 
+            placeholder="Enter a short Description of the podcast"
+            [autoGrow]="true"
+
+            [errorText]="description.hasError('required') ? 'Please enter podcast description.' : description.hasError('minlength') ? 'The entered characters are too short for a podcast description.' : ''"
+
+            id="description-input" 
+            name="description"
+            #description="ngModel"
+            ngModel
+            aria-label="description" aria-describedby="description-Help description"
+          ></ion-textarea>
+        </ion-item>
+      </div>
+
+      <div data-info="audio input">
+        <input 
+          type="file"
+          id="audioInput" 
+          accept="audio/*"
+          required
+          style="display: none;"
+          (change)="handleAudioFileChange($event)"
+          #audioInput
+          name="audio"
+          #audio="ngModel"
+          ngModel
+          aria-label="audioInput" aria-describedby="audioInput-Help audioInput"
+        >
+
+        <div class="imgBtnContainer" (click)="audioInput.click()">
+          <div>Choose Podcast Audio <i color="danger">*</i></div>
+
+          <ion-button size="small">
+            <ion-icon slot="start" name="musical-notes"></ion-icon>
+            Browse File
+          </ion-button>
+        </div>
+
+        <div class="imgPreview" style="max-height: 100px;" *ngIf="uploadedFiles.audio.previewSrc">
+          <audio [src]="uploadedFiles.audio.previewSrc" controls></audio>
+        </div>
+      </div>
+
+      <div data-info="image input">
+        <input 
+          type="file"
+          id="imageInputz" 
+          accept="image/*"
+          style="display: none;"
+          (change)="handleImageFileChange($event)"
+          #imageInputz
+          name="image"
+          #image="ngModel"
+          ngModel
+          aria-label="imageInputz" aria-describedby="imageInputz-Help imageInputz"
+        >
+
+        <div class="imgBtnContainer" (click)="imageInputz.click()">
+          <div> Choose Podcast Image </div>
+
+          <ion-button size="small">
+            <ion-icon slot="start" name="image-outline"></ion-icon>
+            Browse File
+          </ion-button>
+        </div>
+
+        <div class="imgPreview" style="max-height: 100px;" *ngIf="uploadedFiles.image.previewSrc">
+          <img [src]="uploadedFiles.image.previewSrc" alt="uploaded podcast image preview" style="max-height: 100px; width: auto;">
+        </div>
+      </div>
+
+
+      <div class="responseContainer {{ response.status ? 'successMsg' : 'errorMsg' }}" *ngIf="response.display">
+        <p>
+          {{ response.message }}
+        </p>
+      </div>
+
+      <ion-button block type="submit" [disabled]="createNewPodcastForm.invalid || submitted" mode="md" style="--background: var(--primary); margin-top: 10px;">
+        Submit <i *ngIf="submitted" class="loader"></i>
+      </ion-button>
+    </form>
+  </main>
+
+</ion-content>

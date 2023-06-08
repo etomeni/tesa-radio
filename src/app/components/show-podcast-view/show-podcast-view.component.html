@@ -10,6 +10,23 @@
         </ion-avatar>
 
         {{ podcast.title }}
+
+        <div class="episode-stat" *ngIf="accountPage">
+          <div class="episode">
+            <small *ngIf="podcast.episodes">
+              <ion-icon name="analytics" size="small"></ion-icon> 
+              {{ podcast.episodes }}
+            </small>
+          </div>
+
+          <div class="stat"> 
+            <small *ngIf="podcast.viewStat">
+              <ion-icon name="stats-chart" size="small"></ion-icon> 
+              {{ podcast.viewStat }}
+            </small>
+          </div>
+        </div>
+
       </div>
     </ion-col>
 
@@ -29,6 +46,22 @@
 
           <ion-label class="ion-text-wrap">
             <p> {{ podcast.title }} </p>
+
+            <div class="episode-stat" *ngIf="accountPage">
+              <div class="episode">
+                <small *ngIf="podcast.episodes">
+                  <ion-icon name="analytics" size="small"></ion-icon> 
+                  {{ podcast.episodes }}
+                </small>
+              </div>
+
+              <div class="stat"> 
+                <small *ngIf="podcast.viewStat">
+                  <ion-icon name="stats-chart" size="small"></ion-icon> 
+                  {{ podcast.viewStat }}
+                </small>
+              </div>
+            </div>
           </ion-label>
         </ion-item>
       </ion-list>

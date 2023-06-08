@@ -20,7 +20,7 @@ export class IntroGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     // return true;
 
-    return this.resourcesService.get("intro").then( res => {
+    return this.resourcesService.getLocalStorage("intro").then( res => {
       if (res) {
         // this.router.navigateByUrl('/home', {replaceUrl: true});
         // return false;

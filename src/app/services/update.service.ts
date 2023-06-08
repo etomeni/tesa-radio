@@ -56,10 +56,10 @@ export class UpdateService {
       async (res: appUpdate) => {
         this.updateFunction(res);
         
-        this.resourcesService.store("update", res);
+        this.resourcesService.setLocalStorage("update", res);
       },
       (err: any) => {
-        this.resourcesService.get("update").then(
+        this.resourcesService.getLocalStorage("update").then(
           (res: any) => {
             if (res) {
               this.updateFunction(res);

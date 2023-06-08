@@ -41,6 +41,7 @@ ion-grid {
                 text-align: center !important;
                 font-size: x-large;
             }
+
         }
     }
     
@@ -87,6 +88,18 @@ ion-grid {
                 }
             }
         }
+    }
+
+
+    .episode-stat {
+        // background-color: #777777;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-top: 10px; 
+        color: var(--primary); 
+        text-align: left;
     }
     
 }

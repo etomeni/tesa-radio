@@ -79,7 +79,7 @@ export class PodcastDetailsPage implements OnInit {
 
   getPodcastDetails() {
     const getStoredShows = () => {
-      this.resourcesService.get("podcastDetails").then(
+      this.resourcesService.getLocalStorage("podcastDetails").then(
         (res: any) => {
           if (res) {
             this.audioService.podcasts = res;
@@ -121,7 +121,7 @@ export class PodcastDetailsPage implements OnInit {
         this.audioService.podcasts = res;
         // this.lastPodcastDetail = res[0].lastVisible;
         this.lastPodcastDetail = res.length ? res[0].lastVisible : undefined;
-        this.resourcesService.store("podcastDetails", res);
+        this.resourcesService.setLocalStorage("podcastDetails", res);
 
         this.loadingStatus = false;
 
@@ -163,7 +163,7 @@ export class PodcastDetailsPage implements OnInit {
           }
   
           this.audioService.podcasts = [...this.audioService.podcasts, ...res];
-          this.resourcesService.store("podcastDetails", this.audioService.podcasts);
+          this.resourcesService.setLocalStorage("podcastDetails", this.audioService.podcasts);
         } else {
           this.lastPodcastDetail = undefined;
         }
