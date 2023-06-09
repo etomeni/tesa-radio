@@ -123,3 +123,7 @@ FLWPUBK-812ab7596b673e1ce29ce25860e2bfcc-X
 secret key FLWSECK-b740b6510e854850cb5d2794fa70a4ef-X
 
 omojevwegodwin56@gmail.com
+
+
+cd /etc/nginx/sites-available
+systemctl restart nginx

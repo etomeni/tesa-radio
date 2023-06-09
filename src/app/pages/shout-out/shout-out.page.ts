@@ -29,7 +29,7 @@ interface shoutOutInterface {
 export class ShoutOutPage implements OnInit {
   loadingStatus: boolean = true;
 
-  shoutOuts!: shoutOutInterface[];
+  shoutOuts: shoutOutInterface[] = [];
   lastShoutOut: any = undefined;
 
   constructor(

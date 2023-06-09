@@ -1,23 +1,26 @@
 <ion-header [translucent]="true" class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start" class="backBTNarrow">
+    <ion-buttons slot="start" *ngIf="!modalOpened" class="backBTNarrow">
   		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
 		</ion-buttons>
 
-    <ion-title>
-      <span style="color: #de2341;">Tesa </span> <span style="color: white;">Bot</span>
-    </ion-title>
-
-    <ion-buttons slot="end" (click)="closeTesaBotModal()">
+    <ion-buttons slot="start" *ngIf="modalOpened" (click)="closeTesaBotModal()">
   		<ion-button>
         <ion-icon slot="icon-only" name="close" style="color: white;"></ion-icon>
       </ion-button>
     </ion-buttons>
 
+    <ion-title>
+      <span style="color: #de2341;">Tesa </span> <span style="color: white;">Bot</span>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="false">
   <ion-header class="condense-header" collapse="condense">
     <ion-toolbar>
       <ion-title size="large">
@@ -28,39 +31,36 @@
 
 
   <section class="response-question">
-    <ul>
-      <li class="response">
-        <div>
-          dsvsvsddsfvbshjvbfsjdkfjsnkdnfsdkjnfdjsknfdsf
-          dsfds
-          fdsfsdsfsdfsdfsdfsdfsdfdsfsdvsfdvsdsdfsdfdsfdsf
-          dsfdsfdsfdsfdsfdsfdsfdsfsdavdfbdfnfgfbdfgbdghfgg
-          dfgdfgdffggsdhsfsshgfdgfsdfdhfdsghfdgdhfgfdsghdfs
-          gfsdgdfgdfgsdfgdbgfdgfdgfdsgdhgdhdfhdghgdhdhdgd
+    <ul #responseView [scrollTop]="responseView.scrollHeight">
+      <li *ngFor="let chat of chatListArray">
+        <div class="response" *ngIf="chat.response">
+          {{ chat.response }}
+        </div>
+
+        <div class="question" *ngIf="chat.question">
+          {{ chat.question }}
         </div>
       </li>
 
-      <li class="question">
-        <div>
-          dsvsvsddsfvbshjvbfsjdkfjsnkdnfsdkjnfdjsknfdsf
-          dsfds
-          fdsfsdsfsdfsdfsdfsdfsdfdsfsdvsfdvsdsdfsdfdsfdsf
-          dsfdsfdsfdsfdsfdsfdsfdsfsdavdfbdfnfgfbdfgbdghfgg
-          dfgdfgdffggsdhsfsshgfdgfsdfdhfdsghfdgdhfgfdsghdfs
-          gfsdgdfgdfgsdfgdbgfdgfdgfdsgdhgdhdfhdghgdhdhdgd
+      <li class="loadingLi" *ngIf="submitted">
+        <div class="loadingContainer">
+          <div class="loadingio-spinner-dual-ball-quu6ubs8yr">
+            <div class="ldio-8bhcs03yepb">
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
+          </div>
         </div>
       </li>
     </ul>
 
   </section>
 
-
-
-  
-
 </ion-content>
 
-<!-- tesa bot -->
+
+<!-- tesa bot question -->
 <ion-footer [translucent]="true" class="ion-no-border">
   <ion-toolbar>
     <form #tesaBotForm="ngForm" (ngSubmit)="onSubmitTesaBot(tesaBotForm.value)">
@@ -70,19 +70,18 @@
           required
           [autofocus]="true"
           [spellcheck]="true"
-          [rows]="tesaBotTextareaRows"
+          [autoGrow]="true"
+          rows="1"
     
           placeholder="Tesa Bot - Ask Anything..."
           id="tesaBot-input"
           name="tesaBot"
           #tesaBot="ngModel"
-          ngModel
+          [(ngModel)]="tesaBotQuestion"
           aria-label="tesaBot" aria-describedby="tesaBot"
-          (ionFocus)="tesaBotInputFocus('focusIn')"
-          (ionBlur)="tesaBotInputFocus('focusOut')"
         ></ion-textarea>
 
-        <ion-button block type="submit" [disabled]="tesaBotForm.invalid || submitted" mode="md" style="--background: var(--primary); margin-top: 10px;">
+        <ion-button block type="submit" [disabled]="tesaBotForm.invalid || submitted" mode="md">
           <ion-icon name="send"></ion-icon>
           <i *ngIf="submitted" class="loader"></i>
         </ion-button>

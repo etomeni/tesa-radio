@@ -1,16 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { ResourcesService } from 'src/app/services/resources.service';
 
+interface chatList {
+  // s_no: number,
+  question: string,
+  response: any,
+}
 @Component({
   selector: 'app-tesa-bot',
   templateUrl: './tesa-bot.page.html',
   styleUrls: ['./tesa-bot.page.scss'],
 })
 export class TesaBotPage implements OnInit {
+  @ViewChild('responseView', { static: false })
+  responseView!: ElementRef;
+  
   modalOpened: boolean = false;
   submitted: boolean = false;
-  tesaBotTextareaRows: number = 1;
+  tesaBotQuestion: string = '';
+  responseLoadingState: boolean = false;
+
+  chatListArray: chatList[] = [
+    {
+      // s_no: 0,
+      question: '',
+      response: '',
+    }
+  ];
 
   constructor(
     private modalCtrl: ModalController,
@@ -21,34 +38,57 @@ export class TesaBotPage implements OnInit {
   }
 
   closeTesaBotModal() {
-    let data2sendOnDismiaa: any;
-    this.modalCtrl.dismiss(data2sendOnDismiaa, 'confirm', 'tesaBotModall');
-
-
+    this.modalCtrl.dismiss(null, 'confirm', 'tesaBotModall');
     return true;
-  }
-
-  tesaBotInputFocus(focusType: 'focusIn' | 'focusOut') {
-    if(focusType == 'focusIn') {
-      this.tesaBotTextareaRows = 5;
-    }
-    if(focusType == 'focusOut') {
-      this.tesaBotTextareaRows = 1;
-    }
   }
 
   onSubmitTesaBot(formData: any) {
     this.submitted = true;
+    // console.log(formData);
 
-    console.log(formData);
+    const scrollToBottom = () => {
+      try {
+        this.responseView.nativeElement.scrollTop = this.responseView.nativeElement.scrollHeight;
+      } catch (error) { }
+    }
+
+    const chat: chatList = {
+      question: formData.tesaBot.trim(),
+      response: '',
+      // s_no: this.chatListArray[this.chatListArray.length - 1].s_no + 1,
+    }
+    this.chatListArray.push(chat);
+    this.tesaBotQuestion = '';
+    scrollToBottom();
+
     this.resourcesService.chatGPTopenAIgenerateText(formData.tesaBot).then(
       (res: any) => {
-        console.log(res);
-        
+        // console.log(res);
+        const response: chatList = {
+          question: '',
+          response: res,
+          // s_no: this.chatListArray[this.chatListArray.length - 1].s_no + 1
+        }
+        this.chatListArray.push(response);
+        this.submitted = false;
+        scrollToBottom();
       }
-    )
+    ).catch(() => {
+      const response: chatList = {
+        question: '',
+        response: "Oooops, sorry an error occoured while trying to fetch you your reply.",
+        // s_no: this.chatListArray[this.chatListArray.length - 1].s_no + 1
+      }
 
+      this.chatListArray.push(response);
+      this.submitted = false;
+      scrollToBottom();
+    });
 
   }
 
 }
+
+
+// ssh -i "ssh/tesaFollowersEC2keyPair.pem" ubuntu@ec2-44-202-239-134.compute-1.amazonaws.com
+

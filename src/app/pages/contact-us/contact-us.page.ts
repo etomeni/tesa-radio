@@ -4,6 +4,14 @@ import { AlertController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
 
+
+enum toastState {
+  Success = "Success",
+  Error = "Error",
+  Warning = "Warning",
+  Info = "Info"
+};
+
 @Component({
   selector: 'app-contact-us',
   templateUrl: './contact-us.page.html',
@@ -36,58 +44,36 @@ export class ContactUsPage implements OnInit {
 
   onSubmit(formData: any) {
     this.submitted = true;
-    
-    var today = new Date();
-    var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    var dateTime = date+' '+time;
-
 
     // save in firebase real time database
-    let contactFormPath = "contactUs/" + dateTime;
     let form2submit = {
       name: formData.name,
       email: formData.email,
       phoneNumber: formData.phoneNumber,
       Message: formData.message,
-      date: date,
-      time: time,
+      createdAt: Date.now(),
+      updatedAt: Date.now(),
     }
-    let mailJSparam = {
-      subject: "New Contact Message From " + formData.name,
-      from_name: formData.name,
-      reply_to: formData.email,
-      from_phone_number: formData.phoneNumber,
-      before_msg: "",
-      message: formData.message,
-      after_msg: "",
-      to_name: "Team Tesa",  
-    }
-    this.firebaseService.save2FirestoreDB(contactFormPath, form2submit).then( () => {
+
+    // save in firebase real time database realtimeDB
+    this.firebaseService.save2FirestoreDB("contactUs", form2submit).then((res: any) => {
+      // console.log(res);
+      
+      this.sendMail(formData);
+
+      this.response.display = true;
       this.response.status = true;
-
-      // send mail after succedd
-      // this.sendmailService.contactUs(mailJSparam).then(
-      //   res => {
-      //     this.presentAlert("Contact Message sent successfully!!!");
-      //   },
-      //   rejects => {
-      //     this.presentAlert("Ooops, unable to deliver Contact Message");
-      //   }
-      // ).catch(()=> {
-      //   this.presentAlert("Ooops, unable to deliver Contact Message");
-      // });
-
-      // this.sendMail(formData);
-      // console.log("contact form sent");
+      this.response.message = "";
 
       this.response.message = "Contact Message sent successfully!!!";
+      this.resourcesService.presentToast("Contact Message sent successfully!!!", toastState.Success);
+      this.submitted = false;
     }).catch( err => {
-      this.presentAlert("An error ocurred while sending the message");
-      this.response.message = "An error ocurred while sending the message";
       console.log(err);
-    }).finally(() => {
       this.response.display = true;
+      this.response.status = false;
+      this.response.message = "An error ocurred while sending the message";
+      this.resourcesService.presentToast("An error ocurred while sending the message", toastState.Error);
       this.submitted = false;
     });
     
@@ -107,11 +93,10 @@ export class ContactUsPage implements OnInit {
       message: form2submit.message
     });
     
-    // const link = 'http://127.0.0.1/sendMailwithIonic/sendMail.php';
     const link = 'https://audiomackstream.com/sendMailwithIonic/sendMail.php';
 
     let response: any = this.http.post(link, postParam).subscribe( res => {
-      console.log(res);      
+      console.log(res);
     });
 
   }

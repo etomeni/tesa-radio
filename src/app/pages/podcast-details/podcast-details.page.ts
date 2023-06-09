@@ -106,7 +106,7 @@ export class PodcastDetailsPage implements OnInit {
       console.log(err);
     })
 
-    this.firebaseService.getLimitedFirestoreDocumentData("audios", 10, {property: "type", condition: '==', value: audioType.podcast}).then(
+    this.firebaseService.getLimitedFirestoreDocumentData("audios", 10, {property: "type", condition: '==', value: audioType.podcast}, {property: "ref_id", condition: '==', value: this.podcast_id}).then(
       (res: any[]) => {
         // console.log(res);
 
@@ -148,7 +148,7 @@ export class PodcastDetailsPage implements OnInit {
   }
 
   getMorePodcastDetails() {
-    this.firebaseService.getNextLimitedFirestoreDocumentData("audios", this.lastPodcastDetail, 10, {property: "type", condition: '==', value: audioType.podcast}).then(
+    this.firebaseService.getNextLimitedFirestoreDocumentData("audios", this.lastPodcastDetail, 10, {property: "type", condition: '==', value: audioType.podcast}, {property: "ref_id", condition: '==', value: this.podcast_id}).then(
       (res: any[]) => {
         // console.log(res);
 

@@ -1,0 +1,27 @@
+ion-content {
+    ion-grid.wrapper-outter,
+    ion-grid.wrapper-outter ion-row {
+        text-align: center;
+        height: 100%;
+    }
+    
+    .yCenter {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .wrapper-inner {
+        // width: 100%;
+        margin: auto;
+        // color: white;
+        // padding: 10px;
+        // background-color: #fff;
+        // border-radius: 20px;
+    }
+    
+    .error {
+        color: red;
+    }
+
+}    

@@ -55,7 +55,7 @@ export class ResourcesService {
       frequency_penalty: 0,
       presence_penalty: 0.6
     }).then((response: any) => {
-      console.log(response);
+      // console.log(response);
       return response.data.choices[0].text;
     }).catch((error: any) =>{
       console.log(error);
@@ -103,6 +103,14 @@ export class ResourcesService {
     toast.present();
   }
 
+  // viewsPlayStat(viewsPlay: number) {
+  //   let returnValue: any;
+
+  //   returnValue = viewsPlay > 1000 ? "1K";
+  //   returnValue = viewsPlay > 1000 ? "1K";
+
+
+  // }
 
 
 

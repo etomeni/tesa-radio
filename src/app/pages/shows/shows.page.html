@@ -32,7 +32,6 @@
       <ion-row>
         <ion-col size="4" sizeMd="3" sizeXl="2" *ngFor="let show of shows; let i = index;" role="article">
           <div class="wrap" [routerLink]="show.id" [queryParams]="show">
-            <!-- <ion-icon name="videocam-outline"></ion-icon> -->
             <ion-avatar>
               <img [src]="show.image" alt="shows image">
             </ion-avatar>
@@ -40,15 +39,6 @@
             {{ show.title }}
           </div>
         </ion-col>
-        
-        <!-- <ion-col size="4">
-          <div class="wrap" routerLink="/shows-details">
-            <ion-icon name="code-working"></ion-icon>
-            <br>
-            Contact Developer
-          </div>
-        </ion-col> -->
-  
       </ion-row>
 
       <ion-row>

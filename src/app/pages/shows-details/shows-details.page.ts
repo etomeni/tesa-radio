@@ -71,9 +71,13 @@ export class ShowsDetailsPage implements OnInit {
       )
     }
 
-    this.firebaseService.getLimitedFirestoreDocumentData("audios", 3, {property: "type", condition: '==', value: audioType.podcast}).then(
+    this.firebaseService.getLimitedFirestoreDocumentData(
+      "audios", 15, 
+      {property: "type", condition: '==', value: audioType.shows}, 
+      {property: "ref_id", condition: '==', value: this.show_id}
+    ).then(
       (res: any[]) => {
-        console.log(res);
+        // console.log(res);
 
         for (let i = 0; i < res.length; i++) {
           res[i].audio = new Audio(res[i].src);
@@ -111,7 +115,11 @@ export class ShowsDetailsPage implements OnInit {
   }
 
   getMoreShowDetails() {
-    this.firebaseService.getNextLimitedFirestoreDocumentData("audios", this.lastShowDetail, 3, {property: "type", condition: '==', value: audioType.podcast}).then(
+    this.firebaseService.getNextLimitedFirestoreDocumentData(
+      "audios", this.lastShowDetail, 10, 
+      {property: "type", condition: '==', value: audioType.shows}, 
+      {property: "ref_id", condition: '==', value: this.show_id}
+    ).then(
       (res: any[]) => {
         // console.log(res);
 
