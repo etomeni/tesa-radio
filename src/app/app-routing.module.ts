@@ -125,12 +125,12 @@ const routes: Routes = [
     loadChildren: () => import('./pages/shout-out/shout-out.module').then( m => m.ShoutOutPageModule)
   },
   {
-    path: '**',
-    loadChildren: () => import('./pages/page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
-  },
-  {
     path: 'browser-view',
     loadChildren: () => import('./pages/browser-view/browser-view.module').then( m => m.BrowserViewPageModule)
+  },
+  {
+    path: '**',
+    loadChildren: () => import('./pages/page-not-found/page-not-found.module').then( m => m.PageNotFoundPageModule)
   },
 ];
 

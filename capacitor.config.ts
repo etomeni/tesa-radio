@@ -1,13 +1,26 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'tesa-radio',
+  appId: 'com.tesamedia.radio',
+  appName: 'Tesa Radio',
   webDir: 'www',
   server: {
     androidScheme: 'https'
   },
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
+
+  plugins: {
+    SplashScreen: {
+      launchAutoHide: false,
+      showSpinner: false,
+      androidScaleType: "CENTER_CROP",
+      backgroundColor: "#000000"
+    },
+
+    PushNotifications: {
+      presentationOptions: ["badge", "sound", "alert"]
+    }
+  }
 };
 
 export default config;

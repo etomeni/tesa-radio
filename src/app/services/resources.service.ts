@@ -3,6 +3,11 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Storage } from '@ionic/storage-angular';
 import { AlertController, ModalController, ToastController } from '@ionic/angular';
+
+import { NativeMarket } from '@capacitor-community/native-market';
+import { AppUpdate, AppUpdateAvailability } from '@capawesome/capacitor-app-update';
+import { Capacitor } from '@capacitor/core';
+
 import { Configuration, OpenAIApi } from 'openai';
 
 import { TesaBotPage } from '../pages/tesa-bot/tesa-bot.page';
@@ -39,7 +44,7 @@ export class ResourcesService {
   constructor(
     private storage: Storage,
     private toastController: ToastController,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
   ) {
     this.initStorage();
     this.openai = new OpenAIApi(this.configuration);
@@ -64,6 +69,38 @@ export class ResourcesService {
   }
   
 
+  // TODO:::::
+  // read the documentation here on setup of app updates
+  // https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/app-update#openappstoreoptions
+
+  async openAppOnStore() {
+    if(Capacitor.isNativePlatform()) {
+      NativeMarket.openStoreListing({
+        appId: "com.tesamedia.app",
+      }).catch(async () => {
+        await AppUpdate.openAppStore();
+      });
+    }
+  }
+
+  async updateApp() {
+    if(Capacitor.isNativePlatform()) {
+      const getUpdateAvailability = await (await AppUpdate.getAppUpdateInfo()).updateAvailability;
+  
+      if (getUpdateAvailability == AppUpdateAvailability.UPDATE_AVAILABLE) {
+        const getCurrentAppVersion = await (await AppUpdate.getAppUpdateInfo()).currentVersion;
+        const getAvailableAppVersion = await (await AppUpdate.getAppUpdateInfo()).availableVersion;
+        
+        if(Capacitor.getPlatform() == 'ios') {
+          await AppUpdate.openAppStore();
+        }
+  
+        if(Capacitor.getPlatform() == 'android') {
+          await AppUpdate.performImmediateUpdate();
+        }
+      }
+    }
+  }
 
   async presentToast(message: any, header: string) {
     let ionToastCssClassName: string = '';
@@ -115,6 +152,9 @@ export class ResourcesService {
 
 
 
+
+
+
   async openTesaBotModal() {
     const modal = await this.modalCtrl.create({
       component: TesaBotPage,
@@ -138,18 +178,11 @@ export class ResourcesService {
     return role !== 'gesture';
   }
 
-
   async initStorage() {
     // If using, define drivers here: await this.storage.defineDriver(/*...*/);
     const storage = await this.storage.create();
     this._storage = storage;
   }
-
-  // Create and expose methods that users of this service can
-  // call, for example:
-  // public set(key: string, value: any) {
-  //   this._storage?.set(key, value);
-  // }
 
   async setLocalStorage(storageKey: string, value: any) {
     const encryptedvalue = btoa(escape(JSON.stringify(value)))
@@ -178,6 +211,4 @@ export class ResourcesService {
   async clearLocalStorage() {
     await this._storage?.clear();
   }
-  
-
 }

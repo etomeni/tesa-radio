@@ -54,17 +54,17 @@ export class NewShoutOutComponent  implements OnInit {
         }
       }
     );
-
   }
 
 
   onSubmit(formData: any) {
     this.submitted = true;
-    const data2db: shoutOutInterface = {
-      sender_name: formData.senderName || this.currentUser.name,
-      sender_email: formData.senderEmail || this.currentUser.email,
-      sender_image: this.currentUser.userDBinfo.profilePhotoURL || "assets/images/avatar.svg",
-      sender_id: this.currentUser.userDBinfo.userID || '',
+    
+    let data2db: shoutOutInterface = {
+      sender_name: formData.senderName,
+      sender_email: formData.senderEmail,
+      sender_image: "assets/images/avatar.svg",
+      sender_id: '',
 
       recipient_name: formData.recipientName,
       recipient_email: formData.recipientEmail,
@@ -72,7 +72,17 @@ export class NewShoutOutComponent  implements OnInit {
       createdAt: Date.now(),
       updatedAt: Date.now()
     };
-    
+
+    if (this.currentUser) {
+      if (this.currentUser.userDBinfo.profilePhotoURL) {
+        data2db.sender_image = this.currentUser.userDBinfo.profilePhotoURL;
+      }
+
+      if (this.currentUser.userDBinfo.userID) {
+        data2db.sender_id = this.currentUser.userDBinfo.userID;
+      }
+    }
+
     // save in firebase real time database realtimeDB
     this.firebaseService.save2FirestoreDB("shoutOuts", data2db).then((res: any) => {
       // console.log(res);

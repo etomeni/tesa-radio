@@ -1,13 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import { FirebaseService } from 'src/app/services/firebase.service';
+import { ResourcesService } from 'src/app/services/resources.service';
 
+
+enum toastState {
+  Success = "Success",
+  Error = "Error",
+  Warning = "Warning",
+  Info = "Info"
+};
+
+interface userInterface {
+  updatedAt: number,
+  createdAt: number,
+  email: string,
+  name: string,
+  phoneNumber: string,
+  profilePhotoURL: string,
+  id: string,
+  userID: string,
+  lastInteraction: number
+}
 @Component({
   selector: 'app-edit-profile-modal',
   templateUrl: './edit-profile-modal.component.html',
   styleUrls: ['./edit-profile-modal.component.scss'],
 })
 export class EditProfileModalComponent  implements OnInit {
-  message: string = "";
 
   isEditProfilModalOpen: boolean = false;
   modalFormSubmitted: boolean = false;
@@ -17,37 +37,72 @@ export class EditProfileModalComponent  implements OnInit {
     message: ''
   };
 
+  currentUser: userInterface | any;
+
   constructor(
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private firebaseService: FirebaseService,
+    private resourcesService: ResourcesService,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    const getUserInterval = setInterval(
+      () => {
+        if (this.firebaseService.currentUser) {
+          this.currentUser = this.firebaseService.currentUser;
+          clearInterval(getUserInterval);
+        }
+      },
+      500
+    );
 
-
-  cancel() {
-    return this.modalCtrl.dismiss(null, 'cancel');
-  }
-
-  confirm() {
-    return this.modalCtrl.dismiss(this.message, 'confirm');
   }
   
   onSubmitEditProfile(formDataValue: any) {
     this.modalFormSubmitted = true;
-    console.log(formDataValue);
 
+    const data2db = {
+      name: formDataValue.name,
+      phoneNumber: formDataValue.phoneNumber,
+    }
 
-    // if successful dismiss the modal with optional message
-    if (!this.modalFormSubmitted) {
-      // this.modal.dismiss(this.message, 'confirm');
-      this.modalCtrl.dismiss(this.message, 'confirm');
+    try {
+      this.firebaseService.updateFirestoreData('users', this.currentUser.userID, data2db).then(
+        (res: any) => {
+
+          this.firebaseService.updateUserProfileFireAuth(`${formDataValue.name}`);
+        
+          this.modalResponse.display = true;
+          this.modalResponse.status = true;
+          this.modalResponse.message = "Profile details updated successfully!!!";
+          this.resourcesService.presentToast("Profile details updated successfully!!!", toastState.Success);
+          this.modalFormSubmitted = false;
+
+          this.modalCtrl.dismiss(data2db, 'confirm');
+        },
+        (err: any) => {
+          console.log(err);
+          this.modalResponse.display = true;
+          this.modalResponse.status = false;
+          this.modalResponse.message = "an error ocurred while updating profile details";
+          this.resourcesService.presentToast("an error ocurred while updating profile details", toastState.Error);
+          this.modalFormSubmitted = false;
+        }
+      );
       
+    } catch (error) {
+      console.log(error);
+      this.modalResponse.display = true;
+      this.modalResponse.status = false;
+      this.modalResponse.message = "an error ocurred while updating profile details";
+      this.resourcesService.presentToast("an error ocurred while updating profile details", toastState.Error);
+      this.modalFormSubmitted = false;
     }
 
   }
 
-
-
-
+  cancel() {
+    return this.modalCtrl.dismiss(null, 'cancel');
+  }
 
 }

@@ -31,13 +31,13 @@
   
       <ion-label class="ion-text-wrap" style="padding-bottom: 15px;">
         <h3> {{ user.name }} </h3>
-        <p>
+        <!-- <p>
           <ion-icon name="star"></ion-icon>
           <ion-icon name="star"></ion-icon>
           <ion-icon name="star"></ion-icon>
           <ion-icon name="star-outline"></ion-icon>
           <ion-icon name="star-outline"></ion-icon>
-        </p>
+        </p> -->
       </ion-label>
     </ion-item>
   
@@ -57,8 +57,10 @@
                 <span>
                   <ion-icon [name]="last_Played.isPlaying ? 'pause' : 'play'"></ion-icon>
                 </span>
-                
-                <ion-range
+
+                <div style="margin-left: 10px;" *ngIf="last_Played.isPlaying"> {{ last_Played.currentTime }} </div>
+
+                <!-- <ion-range
                   min="0" max="100"
                   aria-label="seek"
                   [value]="last_Played.seekAudioRangeValue"
@@ -67,7 +69,7 @@
                 >
                   <div slot="start" style="margin: 0 10px 0 0;"> {{ last_Played.currentTime }} </div>
                   <div slot="end" style="margin: 0 0 0 10px;"> {{ last_Played.duration }} </div>
-                </ion-range>
+                </ion-range> -->
               </div>
             </ion-card-content>
           </ion-card>
@@ -99,6 +101,14 @@
           Feedbacks
         </ion-label>
       </ion-item> -->
+
+      <ion-item button detail="true" routerLink="/account/settings">
+        <ion-icon name="settings-outline" slot="start"></ion-icon>
+  
+        <ion-label class="ion-text-wrap">
+          Settings
+        </ion-label>
+      </ion-item>
     </ion-list>
   </main>
 

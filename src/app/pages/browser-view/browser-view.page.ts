@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { ModalController, ToastController } from '@ionic/angular';
 // import { Network } from '@capacitor/network';
+import { Browser } from '@capacitor/browser';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class BrowserViewPage implements OnInit {
   loadingState: boolean = true;
   initIframe: boolean = false;
 
-  pageUrl: any;
+  pageUrl: any = "https://tesamedia.com/";
   modal: any;
 
   constructor(
@@ -27,8 +28,16 @@ export class BrowserViewPage implements OnInit {
 
   ngOnInit() {
     // this.getPageData();
-    this.networkStatusUpdate();
+    // this.networkStatusUpdate();
     // this.updateService.checkForUpdate();
+  }
+
+  async openWebView() {
+    await Browser.open({ 
+      url: 'https://tesamedia.com/',
+      toolbarColor: '#de2341',
+      presentationStyle: 'fullscreen'
+    });
   }
 
   // getPageData() {

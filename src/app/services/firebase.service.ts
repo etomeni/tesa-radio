@@ -9,6 +9,9 @@ import {
   updatePassword,
   updateProfile,
   updateEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  deleteUser,
 } from '@angular/fire/auth';
 import { Database, onValue, ref } from '@angular/fire/database';
 import { 
@@ -20,6 +23,8 @@ import {
   getCountFromServer
 } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
+import { PushNotifications } from '@capacitor/push-notifications';
+import { Capacitor } from '@capacitor/core';
 import { Observable } from 'rxjs';
 import { ResourcesService } from './resources.service';
 
@@ -99,6 +104,68 @@ export class FirebaseService {
     private router: Router,
     private resourcesService: ResourcesService,
   ) { }
+
+
+
+  // push notifications
+  async __pushNotification() {
+    await PushNotifications.addListener('registration', token => {
+      // console.info('Registration token: ', token.value);
+
+      this.getFirestoreDocumentData("appData", "fcm").then(
+        (res: any) => {
+          // console.log(res);
+          let newTokens: any[] = res.token;
+          newTokens.unshift(token.value);
+
+          this.save2FirestoreDB("appData", { pnTokens: newTokens }, "fcm");
+
+          if (this.currentUser) {
+            const userId = this.currentUser.userID || this.currentUser.id || this.currentUser._id;
+            if (userId) {
+              this.updateFirestoreData("users", userId, { pnTokens: newTokens });
+            }
+          }
+        }
+      );
+    });
+
+    // await PushNotifications.addListener('registrationError', err => {
+    //   console.error('Registration error: ', err.error);
+    // });
+
+    await PushNotifications.addListener('pushNotificationReceived', notification => {
+      console.log('Push notification received: ', notification);
+    });
+
+    await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
+      console.log('Push notification action performed', notification.actionId, notification.inputValue);
+    });
+  }
+
+  async getDeliveredNotifications() {
+    const notificationList = await PushNotifications.getDeliveredNotifications();
+    console.log('delivered notifications', notificationList);
+  }
+  
+  async registerPushNotifications() {
+    if(Capacitor.isNativePlatform()) {
+      let permStatus = await PushNotifications.checkPermissions();
+  
+      if (permStatus.receive === 'prompt') {
+        permStatus = await PushNotifications.requestPermissions();
+      }
+  
+      if (permStatus.receive !== 'granted') {
+        throw new Error('User denied permissions!');
+      } else {
+        this.__pushNotification();
+      }
+  
+      await PushNotifications.register();
+    }
+  }
+
 
 
   getAllRealTimeDBdata(path: string) {
@@ -439,29 +506,6 @@ export class FirebaseService {
     })
   }
 
-  updateUserProfileFireAuth (displayName: string, photoURL: string) {
-    return new Promise<any> ( (resolve, reject) => {
-      const currentUser: any = this.fireAuth.currentUser;
-      updateProfile(currentUser, {
-        displayName,
-        photoURL
-      }).then (
-        (res: any)=>resolve(res),
-        (err: any)=>reject(err)
-      )
-    });
-  }
-
-  updateEmailAddressFireAuth (newEmail: string) {
-    return new Promise<any> ( (resolve, reject) => {
-      const currentUser: any = this.fireAuth.currentUser;
-      updateEmail(currentUser, newEmail).then (
-        (res: any)=>resolve(res),
-        (err: any)=>reject(err)
-      )
-    });
-  }
-
   sendEmailVerificationFireAuth () {
     return new Promise<any> ( (resolve, reject) => {
       const currentUser: any = this.fireAuth.currentUser;
@@ -472,13 +516,87 @@ export class FirebaseService {
     });
   }
 
-  updatePasswordFireAuth (newPassword: string) {
+  updateUserProfileFireAuth (displayName: string, photoURL: string = '') {
     return new Promise<any> ( (resolve, reject) => {
       const currentUser: any = this.fireAuth.currentUser;
-      updatePassword(currentUser, newPassword).then (
+      let updateData: any;
+      if(photoURL) {
+        updateData = {
+          displayName,
+          photoURL
+        }
+      } else {
+        updateData = {
+          displayName,
+        }
+      }
+
+      updateProfile(currentUser, updateData).then (
         (res: any)=>resolve(res),
         (err: any)=>reject(err)
       )
+    });
+  }
+
+  updateEmailAddressFireAuth (newEmail: string, currentUserEmail: string, currentUserPassword: string) {
+    const currentUser: any = this.fireAuth.currentUser;
+    const credential = EmailAuthProvider.credential(currentUserEmail,currentUserPassword);
+  
+    return new Promise<any> ( (resolve, reject) => {
+      reauthenticateWithCredential(currentUser, credential).then(() => {
+        // User re-authenticated.
+        updateEmail(currentUser, newEmail).then (
+          (res: any)=>resolve(res),
+          (err: any)=>reject(err)
+        );
+      }).catch((error) => {
+        console.log(error);
+        reject(error)
+        // An error ocurred
+        // ...
+      });
+
+    });
+  }
+
+  deleteFireAuthAcct (currentUserEmail: string, currentUserPassword: string) {
+    const currentUser: any = this.fireAuth.currentUser;
+    const credential = EmailAuthProvider.credential(currentUserEmail, currentUserPassword);
+
+    return new Promise<any> ( (resolve, reject) => {
+      reauthenticateWithCredential(currentUser, credential).then(() => {
+        // User re-authenticated.
+        deleteUser(currentUser).then(
+          // User deleted.
+          (res: any)=>resolve(res),
+          (err: any)=>reject(err)
+        )
+      }).catch((error) => {
+        console.log(error);
+        reject(error)
+        // An error ocurred
+        // ...
+      });
+    });
+  }
+
+  updatePasswordFireAuth (newPassword: string, currentUserEmail: string, currentUserPassword: string) {
+    const currentUser: any = this.fireAuth.currentUser;
+    const credential = EmailAuthProvider.credential(currentUserEmail, currentUserPassword);
+
+    return new Promise<any> ( (resolve, reject) => {
+      reauthenticateWithCredential(currentUser, credential).then(() => {
+        // User re-authenticated.
+        updatePassword(currentUser, newPassword).then (
+          (res: any)=>resolve(res),
+          (err: any)=>reject(err)
+        );
+      }).catch((error) => {
+        console.log(error);
+        reject(error)
+        // An error ocurred
+        // ...
+      });
     });
   }
 

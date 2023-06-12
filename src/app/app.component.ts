@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { register } from 'swiper/element/bundle';
 import { FirebaseService } from './services/firebase.service';
 import { ResourcesService } from './services/resources.service';
@@ -35,31 +35,32 @@ interface userInterface {
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
 })
-export class AppComponent implements AfterViewInit {
-
-
-  localUser: any = this.resourcesService.getLocalStorage("user").then(
-    (res: any) => {
-      if(res) {
-        this.localUser = res.userDBinfo;
-        return res;
-      }
-    }
-  )
-
+export class AppComponent implements OnInit {
+  currentUser: any = {
+    name: '',
+    profilePhotoURL: ''
+  };
+  
   constructor(
     private resourcesService: ResourcesService,
     public firebaseService: FirebaseService,
-  ) {}
+  ) { }
 
-  ngAfterViewInit(): void {
-    this.resourcesService.getLocalStorage("user").then(
-      (res: any) => {
-        if(res) {
-          this.localUser = res.userDBinfo;
+  ngOnInit(): void {
+    const getUserInterval = setInterval(
+      () => {
+        if (this.currentUser.currentUser) {
+          this.currentUser = this.firebaseService.currentUser;
+          // console.log(this.firebaseService.currentUser);
+
+          clearInterval(getUserInterval);
         }
-      }
-    )
+      },
+      500
+    );
+    
+    this.resourcesService.updateApp();
+    this.resourcesService.registerPushNotifications();
 
     this.firebaseService.IsLoggedIn();
   }

@@ -1,5 +1,16 @@
-# KazaRice
-KazaRice, is a food delevery app
+# Tesa Radio
+Tesa Radio, is an internet radio app, with other cool features
+
+# TODO
+Read the documentation on the setup required to get used plugins working on different devices
+```link
+https://github.com/capawesome-team/capacitor-plugins/tree/main/packages/app-update#openappstoreoptions
+
+https://capacitorjs.com/docs/apis/splash-screen#variables
+
+https://capacitorjs.com/docs/apis/push-notifications
+
+```
 
 
 # Installation
@@ -26,8 +37,8 @@ To change/generate icon & splash screen for Capacitor based projects first run
 sudo npm install -g cordova-res
 ```
 
-After successfull installation create a folder in the root directory with the name resources.
 
+After successfull installation create a folder in the root directory with the name resources.
 
 # Building the application
 

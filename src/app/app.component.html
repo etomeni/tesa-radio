@@ -38,7 +38,6 @@
         </ion-menu-toggle>
 
         <ion-menu-toggle>
-          <!-- <ion-item button (click)="searchInput()"> -->
           <ion-item button routerLink="/tesa-bot" [routerLinkActive]="['active']">
             <ion-icon slot="start" name="search-circle"></ion-icon>
             <ion-label>Tesa Bot</ion-label>
@@ -80,25 +79,27 @@
           </ion-item>
         </ion-menu-toggle>
 
-        <!-- <ion-menu-toggle>
-          <ion-item routerLink="/account" [routerLinkActive]="['active']">
+        <ion-menu-toggle>
+          <ion-item routerLink="/account" [routerLinkActive]="['active']" *ngIf="currentUser.name">
             <ion-avatar>
-              <img alt="user profile picture" [src]="firebaseService.currentUser.profilePhotoURL == '' || undefined || null ? 'assets/images/avatar.svg' : firebaseService.currentUser.profilePhotoURL" />
+              <img alt="user profile picture" [src]="currentUser.profilePhotoURL == '' || currentUser.profilePhotoURL == undefined || currentUser.profilePhotoURL == null ? 'assets/images/avatar.svg' : currentUser.profilePhotoURL" />
             </ion-avatar>
 
-            <ion-label> {{ firebaseService.isCurrentUserLoggedIn ? firebaseService.currentUser.name : "Guest" }} </ion-label>
+            <ion-label> {{ currentUser.name || "Guest" }} </ion-label>
           </ion-item>
-        </ion-menu-toggle> -->
 
-        <!-- <ion-menu-toggle *ngIf="!firebaseService.isCurrentUserLoggedIn">
-          <ion-item routerLink="/account" [routerLinkActive]="['active']">
-            <ion-avatar>
-              <img alt="user profile picture" [src]="localUser.profilePhotoURL == '' || localUser.profilePhotoURL == undefined || localUser.profilePhotoURL == null ? 'assets/images/avatar.svg' : localUser.profilePhotoURL" />
-            </ion-avatar>
-
-            <ion-label> {{ localUser.name || "Guest" }} </ion-label>
+          <ion-item routerLink="/account" [routerLinkActive]="['active']" *ngIf="!currentUser.name">
+            <ion-icon name="apps-outline"></ion-icon>
+            <ion-label> Profile </ion-label>
           </ion-item>
-        </ion-menu-toggle> -->
+        </ion-menu-toggle>
+
+        <ion-menu-toggle *ngIf="!firebaseService.isCurrentUserLoggedIn">
+          <ion-item routerLink="/auth/login" [routerLinkActive]="['active']">
+            <ion-icon name="log-in-outline"></ion-icon>
+            <ion-label> Login </ion-label>
+          </ion-item>
+        </ion-menu-toggle>
 
         <ion-menu-toggle *ngIf="firebaseService.isCurrentUserLoggedIn">
           <ion-item (click)="logout()" [routerLinkActive]="['active']">
@@ -107,15 +108,7 @@
           </ion-item>
         </ion-menu-toggle>
 
-        <ion-menu-toggle *ngIf="!firebaseService.isCurrentUserLoggedIn">
-          <ion-item routerLink="/account" [routerLinkActive]="['active']">
-            <ion-icon name="log-in-outline"></ion-icon>
-            <ion-label> Login </ion-label>
-          </ion-item>
-        </ion-menu-toggle>
-
       </ion-list>
-
     </ion-content>
   </ion-menu>
 
