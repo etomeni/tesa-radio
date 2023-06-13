@@ -44,8 +44,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 exports.__esModule = true;
 exports.AppComponent = void 0;
 var core_1 = require("@angular/core");
-var bundle_1 = require("swiper/element/bundle");
 var splash_screen_1 = require("@capacitor/splash-screen");
+var app_1 = require("@capacitor/app");
+var bundle_1 = require("swiper/element/bundle");
 bundle_1.register();
 var toastState;
 (function (toastState) {
@@ -63,12 +64,15 @@ var audioType;
 })(audioType || (audioType = {}));
 ;
 var AppComponent = /** @class */ (function () {
-    function AppComponent(resourcesService, firebaseService, location, platform, router) {
-        this.resourcesService = resourcesService;
-        this.firebaseService = firebaseService;
+    function AppComponent(router, location, platform, alertController, toastController, firebaseService, resourcesService, routerOutlet) {
+        this.router = router;
         this.location = location;
         this.platform = platform;
-        this.router = router;
+        this.alertController = alertController;
+        this.toastController = toastController;
+        this.firebaseService = firebaseService;
+        this.resourcesService = resourcesService;
+        this.routerOutlet = routerOutlet;
         this.currentUser = {
             name: '',
             profilePhotoURL: ''
@@ -78,6 +82,7 @@ var AppComponent = /** @class */ (function () {
         if (route != '') {
             this.router.navigateByUrl(route);
         }
+        this.initializeApp();
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -99,6 +104,23 @@ var AppComponent = /** @class */ (function () {
         this.firebaseService.IsLoggedIn();
         this.resourcesService.updateApp();
     };
+    AppComponent.prototype.initializeApp = function () {
+        var _this = this;
+        this.platform.backButton.subscribeWithPriority(-1, function () {
+            if (_this.routerOutlet.canGoBack()) {
+                // console.log('Navigate to back page');
+                _this.location.back();
+            }
+            else {
+                if (_this.location.isCurrentPathEqualTo('/home')) {
+                    _this.exitAppConfirmation();
+                }
+                else {
+                    _this.router.navigateByUrl('/home');
+                }
+            }
+        });
+    };
     AppComponent.prototype.searchInput = function () {
         // console.log("ionInput");
         this.resourcesService.openTesaBotModal();
@@ -107,6 +129,57 @@ var AppComponent = /** @class */ (function () {
         this.firebaseService.logoutFirebaseUser();
         this.resourcesService.presentToast("user logged out", 'Info');
         // this.firebaseService.isCurrentUserLoggedIn = false;
+    };
+    AppComponent.prototype.exitAppConfirmation = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var loading;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.alertController.create({
+                            // header: headerTitle,
+                            message: "Are you sure you want to close this App?",
+                            cssClass: 'alert-class',
+                            buttons: [{
+                                    text: "Cancel",
+                                    role: 'cancel',
+                                    handler: function () {
+                                        _this.alertController.dismiss();
+                                    }
+                                },
+                                {
+                                    text: "Close App",
+                                    handler: function () {
+                                        app_1.App.exitApp();
+                                    }
+                                }]
+                        })];
+                    case 1:
+                        loading = _a.sent();
+                        loading.present();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    AppComponent.prototype.presentToast = function (header, message) {
+        return __awaiter(this, void 0, void 0, function () {
+            var toast;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.toastController.create({
+                            header: header,
+                            message: message,
+                            duration: 10000,
+                            position: 'top'
+                        })];
+                    case 1:
+                        toast = _a.sent();
+                        toast.present();
+                        return [2 /*return*/];
+                }
+            });
+        });
     };
     AppComponent = __decorate([
         core_1.Component({
@@ -118,58 +191,3 @@ var AppComponent = /** @class */ (function () {
     return AppComponent;
 }());
 exports.AppComponent = AppComponent;
-// user: userInterface | any = {
-//   email: '',
-//   name: '',
-//   phoneNumber: '',
-//   profilePhotoURL: '',
-//   id: '',
-//   userID: ''
-// };
-// isCurrentUserLoggedIn: boolean = this.firebaseService.isCurrentUserLoggedIn;
-// checkUserLoggedin() {
-//   this.resourcesService.getLocalStorage("isCurrentUserLoggedIn").then(
-//     (res: any) => {
-//       if (res) {
-//         this.isCurrentUserLoggedIn = true;
-//       }
-//     }
-//   )
-//   this.firebaseService.IsLoggedIn().then(
-//     (res: any) => {
-//       if(res.state) {
-//         this.isCurrentUserLoggedIn = true;
-//         this.getUserData(res.user)
-//       } else {
-//         this.isCurrentUserLoggedIn = false;
-//       }
-//     }
-//   );
-// }
-// getUserData(authUserData: any) {
-//   this.firebaseService.getAllFirestoreDocumentData("users", authUserData.uid).then(
-//     (res: any) => {
-//       console.log(res);
-//       if(res) {
-//         this.user = res;
-//         let userData = {
-//           userAuthInfo: authUserData,
-//           userDBinfo: res,
-//           loginStatus: true
-//         }
-//         this.resourcesService.setLocalStorage("user", userData);
-//       }
-//     },
-//     (err: any) => {
-//       console.log(err);
-//       this.resourcesService.getLocalStorage("user").then(
-//         (res: any) => {
-//           if(res) {
-//             this.user = res.userDBinfo;
-//             // this.authUser = res.userAuthInfo
-//           }
-//         }
-//       )
-//     }
-//   )
-// }

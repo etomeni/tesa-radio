@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
+import { AlertController, IonRouterOutlet, Platform, ToastController } from '@ionic/angular';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { App } from '@capacitor/app';
 import { register } from 'swiper/element/bundle';
 import { FirebaseService } from './services/firebase.service';
 import { ResourcesService } from './services/resources.service';
-import { Location } from '@angular/common';
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@capacitor/splash-screen';
 
 
 register();
@@ -47,18 +48,21 @@ export class AppComponent implements OnInit {
   };
   
   constructor(
-    private resourcesService: ResourcesService,
-    public firebaseService: FirebaseService,
+    private router: Router,
     private location: Location,
     private platform: Platform,
-    private router: Router
+    private alertController: AlertController,
+    private toastController: ToastController,
+    public firebaseService: FirebaseService,
+    private resourcesService: ResourcesService,
+    private routerOutlet: IonRouterOutlet,
   ) {
     // take the user to the path requested.
     const route = location.path();
     if(route != ''){
       this.router.navigateByUrl(route);
     }
-
+    this.initializeApp();
   }
 
   ngOnInit(): void {
@@ -83,6 +87,21 @@ export class AppComponent implements OnInit {
     this.resourcesService.updateApp();
   }
 
+  initializeApp() {
+    this.platform.backButton.subscribeWithPriority(-1, () => {
+      if (this.routerOutlet.canGoBack()) {
+        // console.log('Navigate to back page');
+        this.location.back();
+      } else {
+        if (this.location.isCurrentPathEqualTo('/home')) {
+          this.exitAppConfirmation();
+        } else {
+          this.router.navigateByUrl('/home');
+        }
+      }
+    });
+  }
+
   searchInput() {
     // console.log("ionInput");
     this.resourcesService.openTesaBotModal();
@@ -94,68 +113,38 @@ export class AppComponent implements OnInit {
 
     // this.firebaseService.isCurrentUserLoggedIn = false;
   }
+
+  
+  async exitAppConfirmation () {
+    const loading = await this.alertController.create({
+      // header: headerTitle,
+      message: "Are you sure you want to close this App?",
+      cssClass: 'alert-class',
+      buttons: [{
+        text: "Cancel",
+        role: 'cancel',
+        handler: ()=> {
+          this.alertController.dismiss();
+        }
+      },
+      {
+        text: "Close App",
+        handler: ()=> {
+          App.exitApp();
+        }
+      }]
+    });
+    loading.present();
+  }
+
+  async presentToast(header: string, message: string) {
+    const toast = await this.toastController.create({
+      header: header,
+      message: message,
+      duration: 10000, // 10 seconds
+      position: 'top', // position: 'top' | 'bottom' | 'middle',
+    });
+    toast.present();
+  }
   
 }
-
-
-
-// user: userInterface | any = {
-//   email: '',
-//   name: '',
-//   phoneNumber: '',
-//   profilePhotoURL: '',
-//   id: '',
-//   userID: ''
-// };
-// isCurrentUserLoggedIn: boolean = this.firebaseService.isCurrentUserLoggedIn;
-
-// checkUserLoggedin() {
-//   this.resourcesService.getLocalStorage("isCurrentUserLoggedIn").then(
-//     (res: any) => {
-//       if (res) {
-//         this.isCurrentUserLoggedIn = true;
-//       }
-//     }
-//   )
-
-//   this.firebaseService.IsLoggedIn().then(
-//     (res: any) => {
-//       if(res.state) {
-//         this.isCurrentUserLoggedIn = true;
-
-//         this.getUserData(res.user)
-//       } else {
-//         this.isCurrentUserLoggedIn = false;
-//       }
-//     }
-//   );
-// }
-
-// getUserData(authUserData: any) {
-//   this.firebaseService.getAllFirestoreDocumentData("users", authUserData.uid).then(
-//     (res: any) => {
-//       console.log(res);
-//       if(res) {
-//         this.user = res;
-
-//         let userData = {
-//           userAuthInfo: authUserData,
-//           userDBinfo: res,
-//           loginStatus: true
-//         }
-//         this.resourcesService.setLocalStorage("user", userData);
-//       }
-//     },
-//     (err: any) => {
-//       console.log(err);
-//       this.resourcesService.getLocalStorage("user").then(
-//         (res: any) => {
-//           if(res) {
-//             this.user = res.userDBinfo;
-//             // this.authUser = res.userAuthInfo
-//           }
-//         }
-//       )
-//     }
-//   )
-// }
