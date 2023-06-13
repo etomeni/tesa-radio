@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "558985101546",
+    "firebase_url": "https://tesa-radio-default-rtdb.firebaseio.com",
+    "project_id": "tesa-radio",
+    "storage_bucket": "tesa-radio.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558985101546:android:389bcbf51b1eccf2815793",
+        "android_client_info": {
+          "package_name": "com.tesamedia.radio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "558985101546-54361gle9idjlni0u1f6g93gd6f38e9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCB2ufNitrNmckeUb6CpxGtHW1MSBd2VvQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "558985101546-54361gle9idjlni0u1f6g93gd6f38e9h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

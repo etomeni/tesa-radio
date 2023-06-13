@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { register } from 'swiper/element/bundle';
 import { FirebaseService } from './services/firebase.service';
 import { ResourcesService } from './services/resources.service';
+import { Location } from '@angular/common';
+import { Platform } from '@ionic/angular';
+import { SplashScreen } from '@capacitor/splash-screen';
+
 
 register();
 
@@ -44,25 +49,38 @@ export class AppComponent implements OnInit {
   constructor(
     private resourcesService: ResourcesService,
     public firebaseService: FirebaseService,
-  ) { }
+    private location: Location,
+    private platform: Platform,
+    private router: Router
+  ) {
+    // take the user to the path requested.
+    const route = location.path();
+    if(route != ''){
+      this.router.navigateByUrl(route);
+    }
+
+  }
 
   ngOnInit(): void {
+    this.platform.ready().then(async () => {
+      setTimeout(()=>{
+        SplashScreen.hide();
+      }, 3000);
+    });
+
     const getUserInterval = setInterval(
       () => {
-        if (this.currentUser.currentUser) {
+        if (this.currentUser.name) {
           this.currentUser = this.firebaseService.currentUser;
           // console.log(this.firebaseService.currentUser);
-
           clearInterval(getUserInterval);
         }
       },
       500
     );
     
-    this.resourcesService.updateApp();
-    this.resourcesService.registerPushNotifications();
-
     this.firebaseService.IsLoggedIn();
+    this.resourcesService.updateApp();
   }
 
   searchInput() {

@@ -25,8 +25,10 @@ import {
 import { Router } from '@angular/router';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
 import { Observable } from 'rxjs';
 import { ResourcesService } from './resources.service';
+import { AlertController } from '@ionic/angular';
 
 
 enum conditionType {
@@ -102,6 +104,7 @@ export class FirebaseService {
     private firestore: Firestore,
     private fireAuth: Auth,
     private router: Router,
+    private alertController: AlertController,
     private resourcesService: ResourcesService,
   ) { }
 
@@ -115,8 +118,8 @@ export class FirebaseService {
       this.getFirestoreDocumentData("appData", "fcm").then(
         (res: any) => {
           // console.log(res);
-          let newTokens: any[] = res.token;
-          newTokens.unshift(token.value);
+          let newTokens = new Set(res.token);
+          newTokens.add(token.value);
 
           this.save2FirestoreDB("appData", { pnTokens: newTokens }, "fcm");
 
@@ -135,11 +138,35 @@ export class FirebaseService {
     // });
 
     await PushNotifications.addListener('pushNotificationReceived', notification => {
-      console.log('Push notification received: ', notification);
+      // console.log('Push notification received: ', notification);
+
+      App.getState().then(async (res)=> {
+        if (res.isActive) {
+          const _alert = await this.alertController.create({
+            message: notification.body,
+            header: notification.title,
+            subHeader: notification.subtitle,
+            animated: true,
+            mode: 'ios',
+          });
+
+          _alert.present();
+        }
+      })
     });
 
-    await PushNotifications.addListener('pushNotificationActionPerformed', notification => {
-      console.log('Push notification action performed', notification.actionId, notification.inputValue);
+    await PushNotifications.addListener('pushNotificationActionPerformed', async (notification) => {
+      // console.log('Push notification action performed', notification.actionId, notification.inputValue);
+
+      const _alert = await this.alertController.create({
+        message: notification.notification.body,
+        header: notification.notification.title,
+        subHeader: notification.notification.subtitle,
+        animated: true,
+        mode: 'ios',
+      });
+
+      _alert.present();
     });
   }
 

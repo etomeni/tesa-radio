@@ -12,6 +12,8 @@ https://capacitorjs.com/docs/apis/push-notifications
 
 ```
 
+npx cap update ios
+
 
 # Installation
 

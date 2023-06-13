@@ -8,6 +8,7 @@ import { ChangePasswordModalComponent } from 'src/app/components/change-password
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
 import { Capacitor } from '@capacitor/core';
+import { App } from '@capacitor/app';
 
 
 enum toastState {
@@ -67,6 +68,7 @@ export class SettingsPage implements OnInit {
       this.currentAppVersion = await (await AppUpdate.getAppUpdateInfo()).currentVersion;
       this.availableAppVersion = await (await AppUpdate.getAppUpdateInfo()).availableVersion;
     }
+    
     
   }
 

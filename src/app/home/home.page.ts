@@ -100,6 +100,7 @@ export class HomePage implements OnInit {
 
     this.getSuggestedPodcats();
     this.getSuggestedShows();
+    this.firebaseService.registerPushNotifications();
   }
 
   playPauseRadio(playPauseValue: string) {
