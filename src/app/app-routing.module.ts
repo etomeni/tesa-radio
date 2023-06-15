@@ -12,8 +12,8 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
-    // redirectTo: 'intro',
+    // redirectTo: 'home',
+    redirectTo: 'intro',
     pathMatch: 'full'
   },
   {
@@ -24,7 +24,7 @@ const routes: Routes = [
 
   {
     path: 'auth',
-    // canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -58,7 +58,7 @@ const routes: Routes = [
 
   {
     path: 'account',
-    // canActivate: [AccountGuard],
+    canActivate: [AccountGuard],
     children: [
       {
         path: '',

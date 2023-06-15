@@ -1,50 +1,8 @@
 import { Injectable } from '@angular/core';
 import { RangeCustomEvent } from '@ionic/angular';
+import { audiosInterface, audioType } from 'src/modelInterface';
 import { FirebaseService } from './firebase.service';
 import { ResourcesService } from './resources.service';
-
-
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
-
-enum audioType {
-  radio = "radio",
-  podcast = "podcast",
-  shows = "shows",
-};
-
-interface audiosInterface {
-  id: string,
-  arrayID: number,
-  type: string,
-  src: string,
-  audio: any,
-  title: string,
-  description: string,
-  image: string,
-  category: string,
-  ref_id: string,
-  playStat: string,
-  comments: any,
-  createdAt: string,
-  updatedAt: string,
-
-  // playing controls
-  durationSummary: string,
-  timingInterval: any, 
-  seekAudioRangeValue: number,
-  currentTime: any,
-  duration: any,
-  playbackRate: any,
-  loadingState: boolean // true, 
-  isPlaying: boolean // false,
-}
-
 
 
 @Injectable({

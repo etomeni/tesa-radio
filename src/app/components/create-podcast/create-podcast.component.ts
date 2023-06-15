@@ -3,29 +3,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from '@angular/fire/stor
 import { ModalController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
-
-interface podcastInterface {
-  title: string,
-  description: string,
-  image: string,
-  category: string,
-  creator_id: string,
-  creator_name: string,
-  episodes: number,
-  viewStat: number,
-
-  lastInteraction: any,
-  createdAt: any,
-  updatedAt: any,
-  lastVisible: any
-}
+import { toastState } from 'src/modelInterface';
 
 @Component({
   selector: 'app-create-podcast',

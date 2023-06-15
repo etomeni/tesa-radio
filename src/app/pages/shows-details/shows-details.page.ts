@@ -4,13 +4,7 @@ import { InfiniteScrollCustomEvent } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
 import { AudioService } from 'src/app/services/audio.service';
-
-
-enum audioType {
-  radio = "radio",
-  podcast = "podcast",
-  shows = "shows",
-};
+import { audioType } from 'src/modelInterface';
 
 @Component({
   selector: 'app-shows-details',

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Storage } from '@ionic/storage-angular';
-import { AlertController, ModalController, ToastController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 
 import { NativeMarket } from '@capacitor-community/native-market';
 import { AppUpdate, AppUpdateAvailability } from '@capawesome/capacitor-app-update';
@@ -11,13 +11,8 @@ import { Capacitor } from '@capacitor/core';
 import { Configuration, OpenAIApi } from 'openai';
 
 import { TesaBotPage } from '../pages/tesa-bot/tesa-bot.page';
+import { toastState } from 'src/modelInterface';
 
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
 
 @Injectable({
   providedIn: 'root'
@@ -88,8 +83,8 @@ export class ResourcesService {
       const getUpdateAvailability = await (await AppUpdate.getAppUpdateInfo()).updateAvailability;
   
       if (getUpdateAvailability == AppUpdateAvailability.UPDATE_AVAILABLE) {
-        const getCurrentAppVersion = await (await AppUpdate.getAppUpdateInfo()).currentVersion;
-        const getAvailableAppVersion = await (await AppUpdate.getAppUpdateInfo()).availableVersion;
+        // const getCurrentAppVersion = await (await AppUpdate.getAppUpdateInfo()).currentVersion;
+        // const getAvailableAppVersion = await (await AppUpdate.getAppUpdateInfo()).availableVersion;
         
         if(Capacitor.getPlatform() == 'ios') {
           await AppUpdate.openAppStore();

@@ -1,23 +1,10 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { IonicSlides } from '@ionic/angular';
+import { audioType } from 'src/modelInterface';
 import { AudioService } from '../services/audio.service';
 import { FirebaseService } from '../services/firebase.service';
 import { ResourcesService } from '../services/resources.service';
-
-
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
-
-enum audioType {
-  radio = "radio",
-  podcast = "podcast",
-  shows = "shows",
-};
 
 @Component({
   selector: 'app-home',
@@ -92,6 +79,7 @@ export class HomePage implements OnInit {
     private resourcesService: ResourcesService,
     private firebaseService: FirebaseService,
     public audioService: AudioService,
+    private http: HttpClient
   ) {}
 
 

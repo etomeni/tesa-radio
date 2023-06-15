@@ -3,37 +3,8 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from '@angular/fire/stor
 import { ModalController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
+import { audioType, toastState } from 'src/modelInterface';
 
-
-
-enum audioType {
-  radio = "radio",
-  podcast = "podcast",
-  shows = "shows",
-};
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
-
-interface newAudioInterface {
-  id: string,
-  title: string,
-  description: string,
-  image: string,
-  src: string,
-  ref_id: string,
-  type: string,
-  playStat: number,
-
-  lastInteraction: any,
-  createdAt: any,
-  updatedAt: any,
-  lastVisible: any
-}
 
 @Component({
   selector: 'app-new-podcast-content',

@@ -22,19 +22,13 @@ export class IntroGuard implements CanActivate {
 
     return this.resourcesService.getLocalStorage("intro").then( res => {
       if (res) {
-        // this.router.navigateByUrl('/home', {replaceUrl: true});
-        // return false;
-
+        this.router.navigateByUrl('/home', {replaceUrl: true});
         return true;
       } else {
-        // return true;
-
         this.router.navigateByUrl('/intro', {replaceUrl: true});
         return false;
       };
     }).catch ( error => {
-      // return true;
-
       this.router.navigateByUrl('/intro', {replaceUrl: true});
       return false;
     })

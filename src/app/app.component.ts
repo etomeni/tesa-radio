@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { AlertController, IonRouterOutlet, Platform, ToastController } from '@ionic/angular';
@@ -7,34 +7,9 @@ import { App } from '@capacitor/app';
 import { register } from 'swiper/element/bundle';
 import { FirebaseService } from './services/firebase.service';
 import { ResourcesService } from './services/resources.service';
-
+import { toastState, audioType } from 'src/modelInterface';
 
 register();
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
-
-enum audioType {
-  radio = "radio",
-  podcast = "podcast",
-  shows = "shows",
-};
-
-interface userInterface {
-  updatedAt: number,
-  createdAt: number,
-  email: string,
-  name: string,
-  phoneNumber: string,
-  profilePhotoURL: string,
-  id: string,
-  userID: string,
-  lastInteraction: number
-}
 
 @Component({
   selector: 'app-root',
@@ -55,7 +30,7 @@ export class AppComponent implements OnInit {
     private toastController: ToastController,
     public firebaseService: FirebaseService,
     private resourcesService: ResourcesService,
-    private routerOutlet: IonRouterOutlet,
+    @Optional() private routerOutlet?: IonRouterOutlet
   ) {
     // take the user to the path requested.
     const route = location.path();
@@ -89,7 +64,7 @@ export class AppComponent implements OnInit {
 
   initializeApp() {
     this.platform.backButton.subscribeWithPriority(-1, () => {
-      if (this.routerOutlet.canGoBack()) {
+      if (this.routerOutlet?.canGoBack()) {
         // console.log('Navigate to back page');
         this.location.back();
       } else {

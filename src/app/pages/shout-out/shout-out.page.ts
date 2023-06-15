@@ -5,21 +5,8 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
 
 import { NewShoutOutComponent } from 'src/app/components/new-shout-out/new-shout-out.component';
+import { shoutOutInterface } from 'src/modelInterface';
 
-
-interface shoutOutInterface {
-  sender_name: string,
-  sender_image: string,
-  sender_email: string,
-  sender_id: string,
-
-  recipient_name: string,
-  recipient_email: string,
-  message: string,
-
-  createdAt: string,
-  updatedAt: string,
-}
 
 @Component({
   selector: 'app-shout-out',

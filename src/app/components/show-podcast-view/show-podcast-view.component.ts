@@ -1,23 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { podcastInterface } from 'src/modelInterface';
 
-
-interface podcastInterface {
-  id: string,
-  _id: string,
-  title: string,
-  description: string,
-  image: string,
-  category: string,
-  creator_id: string,
-  creator_name: string,
-  episodes: number,
-  viewStat: number,
-
-  lastInteraction: any,
-  createdAt: any,
-  updatedAt: any,
-  lastVisible: any
-}
 
 @Component({
   selector: 'app-show-podcast-view',

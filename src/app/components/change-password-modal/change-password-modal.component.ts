@@ -2,26 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
+import { toastState, userInterface } from 'src/modelInterface';
 
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
-
-interface userInterface {
-  updatedAt: number,
-  createdAt: number,
-  email: string,
-  name: string,
-  phoneNumber: string,
-  profilePhotoURL: string,
-  id: string,
-  userID: string,
-  lastInteraction: number
-}
 @Component({
   selector: 'app-change-password-modal',
   templateUrl: './change-password-modal.component.html',

@@ -5,37 +5,7 @@ import { NewPodcastContentComponent } from 'src/app/components/new-podcast-conte
 import { AudioService } from 'src/app/services/audio.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
-
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
-
-enum audioType {
-  radio = "radio",
-  podcast = "podcast",
-  shows = "shows",
-};
-
-interface podcastInterface {
-  id: string,
-  _id: string,
-  title: string,
-  description: string,
-  image: string,
-  category: string,
-  creator_id: string,
-  creator_name: string,
-  episodes: number,
-
-  lastInteraction: any,
-  createdAt: any,
-  updatedAt: any,
-  lastVisible: any,
-}
+import { audioType, podcastInterface } from 'src/modelInterface';
 
 @Component({
   selector: 'app-my-podcasts-details',

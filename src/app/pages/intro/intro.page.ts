@@ -65,6 +65,12 @@ export class IntroPage implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.resourcesService.getLocalStorage("intro").then( res => {
+      if (res) {
+        this.router.navigateByUrl('/home', {replaceUrl: true});
+      };
+    });
+
   }
 
   swiperInitReady() {
@@ -72,12 +78,6 @@ export class IntroPage implements OnInit {
   }
 
   swiperSlideChanged(event: any) {
-    // console.log(event);
-
-    // this.swiperVar?.activeIndex
-    // this.introSwiperRef?.nativeElement.swiper.activeIndex;
-    
-
     if (this.introSwiperRef?.nativeElement.swiper.activeIndex == 0) {
       this.slideSettings.isBeginning = true;
     } else {
@@ -104,8 +104,6 @@ export class IntroPage implements OnInit {
   }
 
   swiperGetStarted() {
-    // console.log('get starteed');
-
     this.resourcesService.setLocalStorage("intro", true).finally(() => {
       this.router.navigateByUrl('/home', {replaceUrl: true});
     })

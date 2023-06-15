@@ -3,30 +3,7 @@ import { InfiniteScrollCustomEvent, ModalController } from '@ionic/angular';
 import { CreatePodcastComponent } from 'src/app/components/create-podcast/create-podcast.component';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
-
-
-enum audioType {
-  radio = "radio",
-  podcast = "podcast",
-  shows = "shows",
-};
-interface podcastInterface {
-  id: string,
-  _id: string,
-  title: string,
-  description: string,
-  image: string,
-  category: string,
-  creator_id: string,
-  creator_name: string,
-  episodes: number,
-  viewStat: number,
-
-  lastInteraction: any,
-  createdAt: any,
-  updatedAt: any,
-  lastVisible: any
-}
+import { audioType, podcastInterface } from 'src/modelInterface';
 
 @Component({
   selector: 'app-my-podcasts',

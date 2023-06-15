@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
+import { toastState } from 'src/modelInterface';
 import { FirebaseService } from '../services/firebase.service';
 import { ResourcesService } from '../services/resources.service';
 
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
 
 @Injectable({
   providedIn: 'root'
@@ -18,15 +12,13 @@ enum toastState {
 export class AccountGuard implements CanActivate {
 
   constructor(
-    private router: Router,
     private resourcesService: ResourcesService,
     private firebaseService: FirebaseService
   ){}
 
   canActivate(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    // return true;
+    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     
     return this.resourcesService.getLocalStorage("isCurrentUserLoggedIn").then(
       (res: any) => {

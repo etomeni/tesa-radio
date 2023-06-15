@@ -2,14 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
+import { toastState } from 'src/modelInterface';
 
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
 
 @Component({
   selector: 'app-signup',
@@ -33,7 +27,6 @@ export class SignupPage implements OnInit {
 
   ngOnInit() {
   }
-
 
   onSubmitSignup(formDataValue: any): void { 
     this.submitted = true;

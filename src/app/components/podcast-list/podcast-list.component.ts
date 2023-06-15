@@ -1,14 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AudioService } from 'src/app/services/audio.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
+import { audioType } from 'src/modelInterface';
 // import { ResourcesService } from 'src/app/services/resources.service';
 
 
-enum audioType {
-  radio = "radio",
-  podcast = "podcast",
-  shows = "shows",
-};
 @Component({
   selector: 'app-podcast-list',
   templateUrl: './podcast-list.component.html',
@@ -103,67 +99,3 @@ export class PodcastListComponent  implements OnInit {
   }
 
 }
-
-
-
-// waveSurferFunc() {
-//   this.wave_surfer = WaveSurfer.create({
-//     container: '#podcastListId-1',
-//     height: 50,
-//     waveColor: "#dede",
-//     progressColor: "#de2341",
-//     // backend: "MediaElement",
-//     barGap: 4,
-//     barWidth: 5,
-//     // responsive: true,
-//     scrollParent: false
-//   });
-
-//   this.wave_surfer.load("assets/audio.mp3");
-//   this.wave_surfer.on('ready', ()=> {
-
-//     this.currentlyPlayingAudio.playbackRate = this.wave_surfer.getPlaybackRate();
-//     this.currentlyPlayingAudio.durationSummary = this.displayAudioTime(this.wave_surfer.getDuration());
-//   });
-  
-
-//   this.wave_surfer.on('audioprocess', ()=> {
-
-//     this.currentlyPlayingAudio.durationSummary = this.displayAudioTime(this.wave_surfer.getDuration());
-
-//     this.currentlyPlayingAudio.playbackRate = this.wave_surfer.getPlaybackRate();
-//     this.currentlyPlayingAudio.isPlaying = this.wave_surfer.isPlaying();
-//   });
-
-//   this.wave_surfer.on('error', ()=> {
-//     this.wave_surfer.stop();
-//     this.currentlyPlayingAudio.isPlaying = this.wave_surfer.isPlaying();
-//     clearInterval(this.audioTimingInterval);
-//   });
-
-//   this.wave_surfer.on('finish', ()=> {
-//     this.wave_surfer.stop();
-//     this.currentlyPlayingAudio.isPlaying = this.wave_surfer.isPlaying();
-//     clearInterval(this.audioTimingInterval);
-//   });
-
-//   this.wave_surfer.on('pause', ()=> {
-//     this.currentlyPlayingAudio.isPlaying = this.wave_surfer.isPlaying();
-//     clearInterval(this.audioTimingInterval);
-//   });
-
-//   this.wave_surfer.on('play', ()=> {
-//     this.currentlyPlayingAudio.isPlaying = this.wave_surfer.isPlaying();
-
-//     this.audioTimingInterval = setInterval(()=> {
-//       this.currentlyPlayingAudio.currentTime = this.displayTime(this.wave_surfer.getCurrentTime());
-//       this.currentlyPlayingAudio.duration = this.displayTime(this.wave_surfer.getDuration());
-
-//     }, 500);
-//   });
-
-//   // this.wave_surfer.on('seek', ()=> {
-//   //   this.wave_surfer.play();
-//   // });
-
-// }

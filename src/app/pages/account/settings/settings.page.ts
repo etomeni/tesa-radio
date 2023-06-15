@@ -9,26 +9,8 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
 import { Capacitor } from '@capacitor/core';
 import { App } from '@capacitor/app';
+import { toastState, userInterface } from 'src/modelInterface';
 
-
-enum toastState {
-  Success = "Success",
-  Error = "Error",
-  Warning = "Warning",
-  Info = "Info"
-};
-
-interface userInterface {
-  updatedAt: number,
-  createdAt: number,
-  email: string,
-  name: string,
-  phoneNumber: string,
-  profilePhotoURL: string,
-  id: string,
-  userID: string,
-  lastInteraction: number
-}
 
 @Component({
   selector: 'app-settings',
