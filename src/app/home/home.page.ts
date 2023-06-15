@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { IonicSlides } from '@ionic/angular';
 import { audioType } from 'src/modelInterface';
@@ -79,7 +78,6 @@ export class HomePage implements OnInit {
     private resourcesService: ResourcesService,
     private firebaseService: FirebaseService,
     public audioService: AudioService,
-    private http: HttpClient
   ) {}
 
 

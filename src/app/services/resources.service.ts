@@ -135,16 +135,27 @@ export class ResourcesService {
     toast.present();
   }
 
-  // viewsPlayStat(viewsPlay: number) {
-  //   let returnValue: any;
+  formatLikesCount(count: number) {
+    if (count >= 1000000000) {
+      // Format for billion
+      return (count / 1000000000).toFixed(1) + 'B';
+    } else if (count >= 1000000) {
+      // Format for millions
+      return (count / 1000000).toFixed(1) + 'M';
+    } else if (count >= 1000) {
+      // Format for thousands
+      return (count / 1000).toFixed(1) + 'K';
+    } else {
+      // No formatting needed
+      return count.toString();
+    }
+    
 
-  //   returnValue = viewsPlay > 1000 ? "1K";
-  //   returnValue = viewsPlay > 1000 ? "1K";
-
-
-  // }
-
-
+    // Example usage
+    // const likeCount = 13456;
+    // const formattedLikes = formatLikesCount(likeCount);
+    // console.log(formattedLikes); // Output: "13.5K"
+  }
 
 
 

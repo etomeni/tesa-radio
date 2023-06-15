@@ -58,7 +58,8 @@ export class FirebaseService {
           let newTokens = new Set(res.token);
           newTokens.add(token.value);
 
-          this.save2FirestoreDB("appData", { pnTokens: newTokens }, "fcm");
+          // this.save2FirestoreDB("appData", { pnTokens: newTokens }, "fcm");
+          this.updateFirestoreData("appData", "fcm", { pnTokens: newTokens });
 
           if (this.currentUser) {
             const userId = this.currentUser.userID || this.currentUser.id || this.currentUser._id;
@@ -122,11 +123,10 @@ export class FirebaseService {
   
       if (permStatus.receive !== 'granted') {
         throw new Error('User denied permissions!');
-      } else {
-        this.__pushNotification();
       }
-  
+      
       await PushNotifications.register();
+      this.__pushNotification();
     }
   }
 

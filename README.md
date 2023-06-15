@@ -30,18 +30,6 @@ To test/run the application use
 ionic serve 
 ```
 
-
-## Icon and Splash Screen
-
-To change/generate icon & splash screen for Capacitor based projects first run
-
-```bash
-sudo npm install -g cordova-res
-```
-
-
-After successfull installation create a folder in the root directory with the name resources.
-
 # Building the application
 
 To 
@@ -67,20 +55,29 @@ to open the in android studio or xcode
 
 
 # Required files
-Add your icon.png (1024x1024 px) and splash.png (2732x2732 px) files to the 'resources' folder under the root of your capacitor based project.
 
-All you have to do then is type :
+## Icon and Splash Screen
+
+Provide icon and splash screen source images using this folder/filename structure at the root of your capacitor based project:
 
 ```bash
-npm run resources
-
-cordova-res ios --skip-config --copy
-cordova-res android --skip-config --copy
-
-npx cap sync
+resources/
+├── icon-only.png
+├── icon-foreground.png
+├── icon-background.png
+├── splash.png
+└── splash-dark.png
 ```
-cd ios
 
+Icon files should be at least 1024px x 1024px.
+Splash screen files should be at least 2732px x 2732px.
+The format can be jpg or png.
+
+All you have to do then is run :
+
+```bash
+npx capacitor-assets generate
+```
 
 ```bash
 ionic cap sync
