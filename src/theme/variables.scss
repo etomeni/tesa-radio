@@ -3,6 +3,12 @@
 
 /** Ionic CSS Variables **/
 :root {
+  --ion-background-color: #1a1a1a;
+  --ion-background-color-rgb: 26,26,26
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255, 255, 255
+
+
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -233,4 +239,21 @@
 
     --ion-card-background: #1e1e1e;
   }
+}
+
+body.dark {
+  /* Dark mode variables go here */
+
+  :root {
+    --ion-background-color: #1a1a1a;
+    --ion-background-color-rgb: 26,26,26
+    --ion-text-color: #ffffff;
+    --ion-text-color-rgb: 255, 255, 255
+  };
+  
+  --ion-background-color: #1a1a1a;
+  --ion-background-color-rgb: 26,26,26
+  --ion-text-color: #ffffff;
+  --ion-text-color-rgb: 255, 255, 255
+
 }

@@ -65,6 +65,8 @@ export class ShowsDetailsPage implements OnInit {
       )
     }
 
+    this.audioService.updateShowPodcastPlayStat_n_interations(this.show_id, "shows");
+
     this.firebaseService.getLimitedFirestoreDocumentData(
       "audios", 15, 
       {property: "type", condition: '==', value: audioType.shows}, 

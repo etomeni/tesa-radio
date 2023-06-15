@@ -7,7 +7,7 @@ import { App } from '@capacitor/app';
 import { register } from 'swiper/element/bundle';
 import { FirebaseService } from './services/firebase.service';
 import { ResourcesService } from './services/resources.service';
-import { toastState, audioType } from 'src/modelInterface';
+import { BrowserView } from 'src/modelInterface';
 
 register();
 
@@ -20,6 +20,17 @@ export class AppComponent implements OnInit {
   currentUser: any = {
     name: '',
     profilePhotoURL: ''
+  };
+
+  marketPlace: BrowserView = {
+    display: false,
+    url: '',
+    pageTitle: 'Market Place'
+  };
+  tesaChat: BrowserView = {
+    display: false,
+    url: '',
+    pageTitle: 'Chat'
   };
   
   constructor(
@@ -58,35 +69,30 @@ export class AppComponent implements OnInit {
       500
     );
     
+    this.getSettingsInfo();
     this.firebaseService.IsLoggedIn();
     this.resourcesService.updateApp();
   }
 
   initializeApp() {
     this.platform.backButton.subscribeWithPriority(-1, () => {
-      if (this.routerOutlet?.canGoBack()) {
+      if (!this.routerOutlet?.canGoBack()) {
         // console.log('Navigate to back page');
         this.location.back();
       } else {
-        if (this.location.isCurrentPathEqualTo('/home')) {
-          this.exitAppConfirmation();
-        } else {
-          this.router.navigateByUrl('/home');
-        }
+        this.exitAppConfirmation();
+        // if (this.location.isCurrentPathEqualTo('/home')) {
+        //   this.exitAppConfirmation();
+        // } else {
+        //   this.router.navigateByUrl('/home');
+        // }
       }
     });
-  }
-
-  searchInput() {
-    // console.log("ionInput");
-    this.resourcesService.openTesaBotModal();
   }
 
   logout() {
     this.firebaseService.logoutFirebaseUser();
     this.resourcesService.presentToast("user logged out", 'Info');
-
-    // this.firebaseService.isCurrentUserLoggedIn = false;
   }
 
   
@@ -120,6 +126,27 @@ export class AppComponent implements OnInit {
       position: 'top', // position: 'top' | 'bottom' | 'middle',
     });
     toast.present();
+  }
+
+
+  getSettingsInfo() {
+    this.resourcesService.getLocalStorage("appSettings").then(
+      (res: any) => {
+        if (res) {
+          this.marketPlace = res.marketPlace;
+          this.tesaChat = res.tesaChat;
+        }
+      }
+    );
+
+    this.firebaseService.getFirestoreDocumentData("appData", "settings").then(
+      (res: any) => {
+        // console.log(res);
+        this.resourcesService.setLocalStorage("appSettings", res);
+        this.marketPlace = res.marketPlace;
+        this.tesaChat = res.tesaChat;
+      }
+    );
   }
   
 }

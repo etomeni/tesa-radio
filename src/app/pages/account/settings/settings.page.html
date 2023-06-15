@@ -26,33 +26,33 @@
 
 
   <ion-list lines="none">
-    <ion-item button detail="false" detail-icon="pencil-outline">
+    <ion-item button detail="false" detail-icon="pencil-outline" (click)="openEditProfileModal()">
       <ion-icon name="person-outline" slot="start"></ion-icon>
 
       <ion-label>
         {{ currentUser.name }}
       </ion-label>
 
-      <ion-button id="open-editProfile-modal" (click)="openEditProfileModal()" fill="clear" expand="block">
+      <ion-button id="open-editProfile-modal" fill="clear" expand="block">
         <ion-icon class="edit-pen" name="pencil-outline"></ion-icon>
       </ion-button>
       <!-- <ion-icon class="edit-pen" name="pencil-outline"></ion-icon> -->
     </ion-item>
 
-    <ion-item button detail="false" detail-icon="pencil-outline">
+    <ion-item button detail="false" detail-icon="pencil-outline" (click)="openEditProfileModal()">
       <ion-icon name="call-outline" slot="start"></ion-icon>
 
       <ion-label>
         {{ currentUser.phoneNumber }}
       </ion-label>
 
-      <ion-button id="open-editProfile-modal" (click)="openEditProfileModal()" fill="clear" expand="block">
+      <ion-button id="open-editProfile-modal" fill="clear" expand="block">
         <ion-icon class="edit-pen" name="pencil-outline"></ion-icon>
       </ion-button>
       <!-- <ion-icon class="edit-pen" name="pencil-outline" slot="end"></ion-icon> -->
     </ion-item>
   
-    <ion-item button detail="false" detail-icon="pencil-outline">
+    <ion-item button detail="false" detail-icon="pencil-outline" (click)="openChangePasswordModal()">
       <ion-icon name="key-outline" slot="start"></ion-icon>
 
       <ion-label>
@@ -60,7 +60,7 @@
       </ion-label>
 
 
-      <ion-button id="open-changePassword-modal" (click)="openChangePasswordModal()" fill="clear" expand="block">
+      <ion-button id="open-changePassword-modal" fill="clear" expand="block">
         <ion-icon class="edit-pen" name="pencil-outline"></ion-icon>
       </ion-button>
     </ion-item>

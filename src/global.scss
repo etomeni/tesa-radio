@@ -64,7 +64,7 @@
 ion-header {
 
     ion-toolbar {
-        --background: transparent;
+        // --background: transparent;
 
         ion-buttons {
             &.backBTNarrow {
@@ -243,7 +243,8 @@ ion-content.authGlobalStyle {
 }
 
 ion-content {
-    --background: var(--black);
+    --background: #1a1a1a;
+    --color: #ffffff !important;
 
     section.lottieLoadingImgSection {
         text-align: center;

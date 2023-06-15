@@ -245,6 +245,9 @@ export class AudioService {
                 this.podcasts[audio_array_id].loadingState = false;
                 clearInterval(this.podcasts[audio_array_id].timingInterval);
               });
+
+              // update the play stats
+              this.updateAudioPlayStat_n_interations(this.podcasts[audio_array_id].id);
               
               resolve(this.podcasts[audio_array_id]);
             },
@@ -301,6 +304,9 @@ export class AudioService {
                 clearInterval(this.shows[audio_array_id].timingInterval);
               });
               
+              // update the play stats
+              this.updateAudioPlayStat_n_interations(this.shows[audio_array_id].id);
+
               resolve(this.shows[audio_array_id]);
             },
             (err: any) => {
@@ -503,5 +509,60 @@ export class AudioService {
 
     this.resourcesService.setLocalStorage("lastPlayed", last_playedz.slice(0, 9));
   }
-  
+
+  updateAudioPlayStat_n_interations(id: string) {
+    this.firebaseService.getFirestoreDocumentData("audios", id).then(
+      (res: any) => {
+        // console.log(res);
+        this.firebaseService.updateFirestoreData("audios", res.id, { lastInteraction: Date.now(), playStat: res.playStat + 1 });
+      }
+    )
+  }
+
+  updateShowPodcastPlayStat_n_interations(id: string, type: "podcast" | "shows") {
+    if (type == "podcast") {
+      this.firebaseService.getFirestoreDocumentData("podcasts", id).then(
+        (res: any) => {
+          // console.log(res);
+
+          this.firebaseService.countFirestoreDocs("audios", { property: "ref_id", condition: '==', value: res.id}).then(
+            (res: any) => {
+              // console.log(res);
+    
+              let data2update = {
+                episodes: res,
+                lastInteraction: Date.now(),
+                viewStat: res.viewStat + 1
+              }
+              this.firebaseService.updateFirestoreData("podcasts", res.id, data2update);
+            }
+          );
+
+        }
+      )
+    }
+
+    if (type == "shows") {
+      this.firebaseService.getFirestoreDocumentData("shows", id).then(
+        (res: any) => {
+          // console.log(res);
+
+          this.firebaseService.countFirestoreDocs("audios", { property: "ref_id", condition: '==', value: res.id}).then(
+            (res: any) => {
+              // console.log(res);
+    
+              let data2update = {
+                episodes: res,
+                lastInteraction: Date.now(),
+                viewStat: res.viewStat + 1
+              }
+              this.firebaseService.updateFirestoreData("shows", res.id, data2update);
+            }
+          )
+        }
+      )
+      
+    }
+  }
+
 }

@@ -51,19 +51,19 @@
           </ion-item>
         </ion-menu-toggle>
 
-        <!-- <ion-menu-toggle>
-          <ion-item routerLink="/demand" [routerLinkActive]="['active']"> 
-            <ion-icon slot="start" name="mic"></ion-icon>
+        <ion-menu-toggle *ngIf="tesaChat.display">
+          <ion-item routerLink="/browser-view" [queryParams]="{ url: tesaChat.url, pageTitle: tesaChat.pageTitle, display: tesaChat.display }" [routerLinkActive]="['active']"> 
+            <ion-icon slot="start" name="chatbox-ellipses"></ion-icon>
             <ion-label>Chat</ion-label>
           </ion-item>
         </ion-menu-toggle>
 
-        <ion-menu-toggle>
-          <ion-item routerLink="/shout-out" [routerLinkActive]="['active']">
-            <ion-icon slot="start" name="megaphone"></ion-icon>
+        <ion-menu-toggle *ngIf="marketPlace.display">
+          <ion-item routerLink="/browser-view" [queryParams]="{ url: marketPlace.url, pageTitle: marketPlace.pageTitle, display: marketPlace.display }" [routerLinkActive]="['active']">
+            <ion-icon slot="start" name="cart"></ion-icon>
             <ion-label>Market Place</ion-label>
           </ion-item>
-        </ion-menu-toggle> -->
+        </ion-menu-toggle>
 
         <ion-menu-toggle>
           <ion-item routerLink="/about" [routerLinkActive]="['active']">

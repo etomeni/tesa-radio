@@ -101,7 +101,6 @@ export class CreatePodcastComponent  implements OnInit {
       lastInteraction: Date.now(),
       createdAt: Date.now(),
       updatedAt: Date.now(),
-      lastVisible: Date.now()
     }
 
     if(this.uploadedFiles.fileSrc) {

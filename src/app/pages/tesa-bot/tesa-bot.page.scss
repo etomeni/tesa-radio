@@ -30,7 +30,12 @@ ion-footer {
 
         ion-button {
           --background: var(--primary); 
+          --color: white;
           margin-top: 10px;
+
+          ion-icon {
+            color: white;
+          }
         }
       }
     }

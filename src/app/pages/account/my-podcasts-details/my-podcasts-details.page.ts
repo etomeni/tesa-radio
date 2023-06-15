@@ -212,7 +212,7 @@ export class MyPodcastsDetailsPage implements OnInit {
 
 
   async handleRefresh(event: any) {
-    // window.location.reload();
+    window.location.reload();
 
     // let user: any = await this.resourcesService.getLocalStorage("user");
     // if (user.userDBinfo) {

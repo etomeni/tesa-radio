@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonContent, ModalController } from '@ionic/angular';
 import { ResourcesService } from 'src/app/services/resources.service';
 
 interface chatList {
@@ -13,8 +13,8 @@ interface chatList {
   styleUrls: ['./tesa-bot.page.scss'],
 })
 export class TesaBotPage implements OnInit {
-  @ViewChild('responseView', { static: false })
-  responseView!: ElementRef;
+  @ViewChild(IonContent)
+  content!: IonContent;
   
   modalOpened: boolean = false;
   submitted: boolean = false;
@@ -47,9 +47,9 @@ export class TesaBotPage implements OnInit {
     // console.log(formData);
 
     const scrollToBottom = () => {
-      try {
-        this.responseView.nativeElement.scrollTop = this.responseView.nativeElement.scrollHeight;
-      } catch (error) { }
+      // Passing a duration to the method makes it so the scroll slowly
+      // goes to the bottom instead of instantly
+      this.content.scrollToBottom(500);
     }
 
     const chat: chatList = {
@@ -88,7 +88,3 @@ export class TesaBotPage implements OnInit {
   }
 
 }
-
-
-// ssh -i "ssh/tesaFollowersEC2keyPair.pem" ubuntu@ec2-44-202-239-134.compute-1.amazonaws.com
-

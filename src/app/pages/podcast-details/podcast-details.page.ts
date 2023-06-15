@@ -67,6 +67,8 @@ export class PodcastDetailsPage implements OnInit {
       )
     }
 
+    this.audioService.updateShowPodcastPlayStat_n_interations(this.podcast_id, "podcast");
+
     this.firebaseService.countFirestoreDocs("audios", { property: "ref_id", condition: '==', value: this.podcast_id }).then((res: any) => {
       // console.log(res);
 

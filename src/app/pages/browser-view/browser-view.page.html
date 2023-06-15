@@ -4,7 +4,7 @@
   		<ion-back-button style="color: white;" icon="arrow-back-outline" text="" slot="start"></ion-back-button>
 		</ion-buttons>
 
-    <ion-title>Browser View</ion-title>
+    <ion-title>{{ pageDetails.pageTitle || '' }}</ion-title>
 
     <ion-buttons slot="end">
       <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
@@ -12,49 +12,10 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content [fullscreen]="false">
 
-  <!-- Do ReFresh -->
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+  <section class="loadingSection">
+    <ion-img src="assets/lottie/animation_500_lhcdnv18.gif"></ion-img>
+  </section>
 
-  <!-- <button (click)="openWebView()">Open Web View</button> -->
-
-  <!-- <div class="text-center loading-center" *ngIf="loadingState">
-    <div class="loadingio-spinner-wedges-0a0tixanv03m">
-        <div class="ldio-v89jzfwgb"><div>
-            <div><div></div></div>
-            <div><div></div></div>
-            <div><div></div></div>
-            <div><div></div></div>
-        </div>
-        </div>
-    </div>
-  </div> -->
-
-  <main *ngIf="initIframe">
-    <iframe 
-      src="https://tesamedia.com/"
-      [srcdoc]="pageUrl"
-      width="100vw"
-      height="100vh"
-      style="width: 100vw; height: 100vh; border: none; overflow: hidden;"
-      scrolling="yes"
-      frameborder="0"
-      allowfullscreen="true"
-      allowpaymentrequest="true"
-      allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" 
-      allowFullScreen="true"
-      title="Tesa TV"
-  
-      #iframeWebView
-      id="iframeWebView"
-      name="iframeWebView"
-      [ngClass]="loadingState ? 'hidden' : 'visible'"
-      (onerror)="iframeErr()"
-    ></iframe>
-
-  </main>
 </ion-content>

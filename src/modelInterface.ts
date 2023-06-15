@@ -43,61 +43,6 @@ export interface userInterface {
     lastInteraction: number
 }
   
-  
-export interface user {
-    updatedAt: number,
-    createdAt: number,
-    email: string,
-    name: string,
-    phoneNumber: string,
-    profilePhotoURL: string,
-    id: string,
-    userID: string,
-    lastInteraction: number
-};
-
-export interface user_Interface {
-    updatedAt: number,
-    createdAt: number,
-    email: string,
-    name: string,
-    phoneNumber: string,
-    profilePhotoURL: string,
-    id: string,
-    userID: string,
-    lastInteraction: number,
-  
-    lastPlayed: [
-      {
-        id: string,
-        arrayID: number,
-        type: "shows" | "podcast",
-        src: string,
-        wave_surfer: any,
-        audio: any,
-        title: string,
-        description: string,
-        image: string,
-        category: string,
-        ref_id: string,
-        playStat: string,
-        comments: any,
-        createdAt: string,
-        updatedAt: string,
-    
-        // playing controls
-        durationSummary: string,
-        timingInterval: any, 
-        seekAudioRangeValue: number,
-        currentTime: any,
-        duration: any,
-        playbackRate: any,
-        loadingState: boolean // true, 
-        isPlaying: boolean // false,
-      }
-    ]
-};
-  
 export interface appUpdate {
     currentAppVersion: {
         iOS: string,
@@ -139,8 +84,7 @@ export  interface audiosInterface {
     isPlaying: boolean // false,
 }
 
-
-export interface newAudioInterface {
+export interface audioInterface {
     id: string,
     title: string,
     description: string,
@@ -172,7 +116,6 @@ export interface shoutOutInterface {
 
 export interface podcastInterface {
     id: string,
-    _id: string,
     title: string,
     description: string,
     image: string,
@@ -181,36 +124,32 @@ export interface podcastInterface {
     creator_name: string,
     episodes: number,
     viewStat: number,
-
     lastInteraction: any,
     createdAt: any,
     updatedAt: any,
+    
+    _id: string,
     lastVisible: any
 }
 
-export interface createPodcastInterface {
-    category: string,
-    createdAt: number,
-    creator_id: string,
-    creator_name: string,
-    description: string,
-    episodes: number,
+export interface showInterface {
     id: string,
-    image: string,
-    lastInteraction: number,
     title: string,
-    updatedAt: number,
-};
-  
-export interface createShowInterface {
-    createdAt: number, // 1685722772394
+    image: string,
     creator_id: string,
     creator_name: string, // Tesa Radio
     episodes: number,
-    id: string,
-    image: string,
+    viewStat: number,
     lastInteraction: number,
-    title: string,
+    createdAt: number, // 1685722772394
     updatedAt: number,
+
+    _id: string,
+    lastVisible: any
 };
   
+export interface BrowserView {
+    display: boolean,
+    url: string,
+    pageTitle: string
+}

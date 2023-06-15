@@ -14,7 +14,7 @@
       <span style="color: #de2341;">Tesa </span> <span style="color: white;">Bot</span>
     </ion-title>
 
-    <ion-buttons slot="end">
+    <ion-buttons slot="end" *ngIf="!modalOpened">
       <ion-menu-button menu="main-menu" style="color: white;"></ion-menu-button>
     </ion-buttons>
   </ion-toolbar>
@@ -31,7 +31,7 @@
 
 
   <section class="response-question">
-    <ul #responseView [scrollTop]="responseView.scrollHeight">
+    <ul>
       <li *ngFor="let chat of chatListArray">
         <div class="response" *ngIf="chat.response">
           {{ chat.response }}
