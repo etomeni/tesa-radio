@@ -106,7 +106,7 @@ export class PodcastDetailsPage implements OnInit {
             this.audioService.podcasts[i].currentTime = this.audioService.audioTiming(element.audio.currentTime);
             this.audioService.podcasts[i].duration = this.audioService.audioTiming(element.audio.duration);
           }
-        }, 5000);
+        }, 1000);
       },
       (err: any) => {
         console.log(err);

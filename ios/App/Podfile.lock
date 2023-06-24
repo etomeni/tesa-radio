@@ -1,13 +1,13 @@
 PODS:
-  - Capacitor (5.0.5):
+  - Capacitor (5.0.4):
     - CapacitorCordova
-  - CapacitorApp (5.0.2):
+  - CapacitorApp (5.0.3):
     - Capacitor
   - CapacitorBrowser (5.0.3):
     - Capacitor
   - CapacitorCommunityNativeMarket (5.0.0):
     - Capacitor
-  - CapacitorCordova (5.0.5)
+  - CapacitorCordova (5.0.4)
   - CapacitorHaptics (5.0.2):
     - Capacitor
   - CapacitorKeyboard (5.0.2):
@@ -124,11 +124,11 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capawesome/capacitor-app-update"
 
 SPEC CHECKSUMS:
-  Capacitor: b1248915663add1bd6567e2b67c1c1fa3abcf5e8
-  CapacitorApp: 28fef1fd75b2b3686e875216806fb8416d421097
+  Capacitor: d3d4463573438b9fa65326d1f3549da6f4c21634
+  CapacitorApp: 7a5dec8b33573707164b293475d5c89ba684364a
   CapacitorBrowser: 2688852d02f1e89560a31b70521c71a5e7348860
   CapacitorCommunityNativeMarket: 70b329cac2db3aee51430c83cdbe63cfc7c250bd
-  CapacitorCordova: f8c06b897c74ee8f7701fe10e6443b40822bc83a
+  CapacitorCordova: b1fe6bf1f36974a8e4a9044b342d22d49c0996d6
   CapacitorHaptics: 864585542a435bd41eaabf7f30d9ff5ec03024d3
   CapacitorKeyboard: e628d4e66d621c69e449945ebabded17c5b9c2e8
   CapacitorPushNotifications: 3704ac3dac68a9bfc669fb384cbc7beec9b1f100

@@ -1,12 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonContent, ModalController } from '@ionic/angular';
 import { ResourcesService } from 'src/app/services/resources.service';
+import { chatList } from 'src/modelInterface';
 
-interface chatList {
-  // s_no: number,
-  question: string,
-  response: any,
-}
 @Component({
   selector: 'app-tesa-bot',
   templateUrl: './tesa-bot.page.html',
@@ -21,17 +17,9 @@ export class TesaBotPage implements OnInit {
   tesaBotQuestion: string = '';
   responseLoadingState: boolean = false;
 
-  chatListArray: chatList[] = [
-    {
-      // s_no: 0,
-      question: '',
-      response: '',
-    }
-  ];
-
   constructor(
     private modalCtrl: ModalController,
-    private resourcesService: ResourcesService
+    public resourcesService: ResourcesService
   ) { }
 
   ngOnInit() {
@@ -57,7 +45,7 @@ export class TesaBotPage implements OnInit {
       response: '',
       // s_no: this.chatListArray[this.chatListArray.length - 1].s_no + 1,
     }
-    this.chatListArray.push(chat);
+    this.resourcesService.chatListArray.push(chat);
     this.tesaBotQuestion = '';
     scrollToBottom();
 
@@ -69,7 +57,7 @@ export class TesaBotPage implements OnInit {
           response: res,
           // s_no: this.chatListArray[this.chatListArray.length - 1].s_no + 1
         }
-        this.chatListArray.push(response);
+        this.resourcesService.chatListArray.push(response);
         this.submitted = false;
         scrollToBottom();
       }
@@ -80,7 +68,7 @@ export class TesaBotPage implements OnInit {
         // s_no: this.chatListArray[this.chatListArray.length - 1].s_no + 1
       }
 
-      this.chatListArray.push(response);
+      this.resourcesService.chatListArray.push(response);
       this.submitted = false;
       scrollToBottom();
     });

@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { AlertController, IonRouterOutlet, Platform, ToastController } from '@ionic/angular';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { App } from '@capacitor/app';
+import { Browser } from '@capacitor/browser';
 import { register } from 'swiper/element/bundle';
 import { FirebaseService } from './services/firebase.service';
 import { ResourcesService } from './services/resources.service';
@@ -31,6 +32,16 @@ export class AppComponent implements OnInit {
     display: false,
     url: '',
     pageTitle: 'Chat'
+  };
+  tesaTV: BrowserView = {
+    display: false,
+    url: '',
+    pageTitle: 'Tesa TV'
+  };
+  secretCommunity: BrowserView = {
+    display: false,
+    url: '',
+    pageTitle: 'Secret Community'
   };
   
   constructor(
@@ -145,8 +156,19 @@ export class AppComponent implements OnInit {
         this.resourcesService.setLocalStorage("appSettings", res);
         this.marketPlace = res.marketPlace;
         this.tesaChat = res.tesaChat;
+        this.tesaTV = res.tesaTV;
+        this.secretCommunity = res.secretCommunity;
       }
     );
+  }
+
+
+  async openWebView(url: string) {
+    await Browser.open({ 
+      url: url,
+      toolbarColor: '#de2341',
+      presentationStyle: 'fullscreen',
+    });
   }
   
 }

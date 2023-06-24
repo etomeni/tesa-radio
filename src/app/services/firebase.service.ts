@@ -13,7 +13,6 @@ import {
   EmailAuthProvider,
   deleteUser,
 } from '@angular/fire/auth';
-import { Database, onValue, ref } from '@angular/fire/database';
 import { 
   Firestore, 
   collection, collectionData, 
@@ -26,6 +25,7 @@ import { Router } from '@angular/router';
 import { PushNotifications } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
 import { App } from '@capacitor/app';
+import { Device } from '@capacitor/device';
 import { Observable } from 'rxjs';
 import { ResourcesService } from './resources.service';
 import { AlertController } from '@ionic/angular';
@@ -39,7 +39,6 @@ export class FirebaseService {
   public currentUser: any;
 
   constructor(
-    private realtimeDB: Database,
     private firestore: Firestore,
     private fireAuth: Auth,
     private router: Router,
@@ -49,26 +48,85 @@ export class FirebaseService {
 
   // push notifications
   async __pushNotification() {
-    await PushNotifications.addListener('registration', token => {
+    await PushNotifications.addListener('registration', async token => {
       // console.info('Registration token: ', token.value);
+      const fcmData2Save = {
+        createdAt: Date.now(), // Get the current timestamp in milliseconds
+        token: token.value,
+        deviceId: (await Device.getInfo()).platform + "_" + await (await Device.getId()).identifier,
+      };
 
-      this.getFirestoreDocumentData("appData", "fcm").then(
-        (res: any) => {
-          // console.log(res);
-          let newTokens = new Set(res.token);
-          newTokens.add(token.value);
-
-          // this.save2FirestoreDB("appData", { pnTokens: newTokens }, "fcm");
-          this.updateFirestoreData("appData", "fcm", { pnTokens: newTokens });
-
-          if (this.currentUser) {
-            const userId = this.currentUser.userID || this.currentUser.id || this.currentUser._id;
-            if (userId) {
-              this.updateFirestoreData("users", userId, { pnTokens: newTokens });
+      const saveFCMpnToken = () => {
+        this.getFirestoreDocumentData("appData", "fcm").then(
+          async (res: any) => {
+            // console.log(res);
+            let newTokens: any[] = res.pnTokens;
+            // if (newTokens.indexOf(token.value) === -1) {
+            //   newTokens.push(token.value);
+            // }
+  
+  
+            // DELETE OLD TOKENS GREATER THAN 3 MONTHS 
+            // AND TOKENS WITH THE SAME ID
+  
+            // Subtract 3 months' worth of milliseconds from the current timestamp
+            const threeMonthsAgoTimestamp = fcmData2Save.createdAt - (90 * 24 * 60 * 60 * 1000);
+  
+            for (let i = 0; i < newTokens.length; i++) {
+              const element = newTokens[i];
+  
+              // Compare the createdAt timestamp with the three months ago timestamp
+              if (element.createdAt < threeMonthsAgoTimestamp) {
+                // console.log("createdAt is more than 3 months old");
+                newTokens.splice(i, 1);
+              }
+  
+              // DELETES TOKENS WITH SAME ID
+              newTokens = newTokens.filter((element) => element.deviceId !== fcmData2Save.deviceId);
+            }
+  
+            // SAVES NEW UNIQUE TOKENS TO THE DATABASE
+            if (
+              newTokens.findIndex(item => item.token == token.value) === -1
+            ) {
+              newTokens.push(fcmData2Save);
+            }
+  
+            // this.save2FirestoreDB("appData", { pnTokens: newTokens }, "fcm");
+            this.updateFirestoreData("appData", "fcm", { pnTokens: newTokens });
+            this.resourcesService.setLocalStorage("fcmToken", fcmData2Save);
+  
+            // if user is loggedin update his/her account
+            if (this.currentUser) {
+              const userId = this.currentUser.userID || this.currentUser.id || this.currentUser._id;
+              if (userId) {
+                // this.updateFirestoreData("users", userId, { pnTokens: token.value });
+                this.updateFirestoreData("users", userId, { pnTokens: fcmData2Save });
+              }
             }
           }
+        );
+      }
+
+      this.resourcesService.getLocalStorage("fcmToken").then(
+        (res: any) => {
+          if (res) {
+            const oneWeekAgoTimestamp = fcmData2Save.createdAt - (7 * 24 * 60 * 60 * 1000);
+
+            // Compare the createdAt timestamp with the three months ago timestamp
+            if (fcmData2Save.createdAt < oneWeekAgoTimestamp) {
+              // console.log("createdAt is more than one week old");
+              saveFCMpnToken();
+            }
+          } else {
+            saveFCMpnToken();
+          }
+        },
+        (err: any) => {
+          saveFCMpnToken();
         }
       );
+
     });
 
     // await PushNotifications.addListener('registrationError', err => {
@@ -116,13 +174,14 @@ export class FirebaseService {
   async registerPushNotifications() {
     if(Capacitor.isNativePlatform()) {
       let permStatus = await PushNotifications.checkPermissions();
-  
+
       if (permStatus.receive === 'prompt') {
         permStatus = await PushNotifications.requestPermissions();
       }
   
       if (permStatus.receive !== 'granted') {
-        throw new Error('User denied permissions!');
+        return;
+        // throw new Error('User denied permissions!');
       }
       
       await PushNotifications.register();

@@ -153,3 +153,10 @@ export interface BrowserView {
     url: string,
     pageTitle: string
 }
+
+
+export interface chatList {
+  // s_no: number,
+  question: string,
+  response: any,
+}

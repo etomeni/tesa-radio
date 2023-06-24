@@ -78,6 +78,7 @@ export class ShowsDetailsPage implements OnInit {
         for (let i = 0; i < res.length; i++) {
           res[i].audio = new Audio(res[i].src);
 
+          res[i].audio.load();
           res[i].currentTime = this.audioService.audioTiming(res[i].audio.currentTime);
           res[i].duration = this.audioService.audioTiming(res[i].audio.duration);
         }
@@ -93,10 +94,11 @@ export class ShowsDetailsPage implements OnInit {
           for (let i = 0; i < this.audioService.shows.length; i++) {
             const element = this.audioService.shows[i];
   
+            this.audioService.shows[i].audio.load();
             this.audioService.shows[i].currentTime = this.audioService.audioTiming(element.audio.currentTime);
             this.audioService.shows[i].duration = this.audioService.audioTiming(element.audio.duration);
           }
-        }, 5000);
+        }, 1000);
       },
       (err: any) => {
         console.log(err);

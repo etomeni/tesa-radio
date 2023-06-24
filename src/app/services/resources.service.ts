@@ -11,7 +11,7 @@ import { Capacitor } from '@capacitor/core';
 import { Configuration, OpenAIApi } from 'openai';
 
 import { TesaBotPage } from '../pages/tesa-bot/tesa-bot.page';
-import { toastState } from 'src/modelInterface';
+import { chatList, toastState } from 'src/modelInterface';
 
 
 @Injectable({
@@ -34,6 +34,14 @@ export class ResourcesService {
   configuration = new Configuration({
     apiKey: "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",
   });
+
+  chatListArray: chatList[] = [
+    {
+      // s_no: 0,
+      question: '',
+      response: '',
+    }
+  ];
 
 
   constructor(

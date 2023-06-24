@@ -53,7 +53,7 @@ export class LoginPage implements OnInit {
             this.resourcesService.setLocalStorage("user", userData);
 
             this.response.display = true;
-            this.response.status = false;
+            this.response.status = true;
             this.response.message = "successfull!!!";
             this.resourcesService.presentToast("successfull!!!", toastState.Success);
 

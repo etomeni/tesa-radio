@@ -32,7 +32,7 @@
 
   <section class="response-question">
     <ul>
-      <li *ngFor="let chat of chatListArray">
+      <li *ngFor="let chat of resourcesService.chatListArray">
         <div class="response" *ngIf="chat.response">
           {{ chat.response }}
         </div>

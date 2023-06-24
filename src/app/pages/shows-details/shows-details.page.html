@@ -42,7 +42,13 @@
           *ngFor="let showDetail of audioService.shows; let i=index"
         >
           <ion-card>
-            <img [src]="showDetail.image" alt="Show image" height="150px" width="100%">
+            <picture>
+              <source [srcset]="showDetail.image" height="150px" width="100%">
+              <source srcset="assets/images/showdetails.jpg" height="150px" width="100%">
+              <img src="assets/images/showdetails.jpg" alt="Show image" height="150px" width="100%">
+            </picture>
+            <!-- <img [srcset]="showDetail.image + ', assets/images/showdetails.jpg'" alt="Show image" height="150px" width="100%"> -->
+            <!-- <img [src]="showDetail.image" src="assets/images/showdetails.jpg" alt="Show image" height="150px" width="100%"> -->
             <ion-card-header>
               <ion-card-subtitle style="color: black;">
                 {{ showDetail.title }}
@@ -70,7 +76,7 @@
                     (ionChange)="audioService.seekAudioRangeChange($event, showDetail.id, 'shows')"
                   >
                     <div slot="start" style="margin: 0 10px 0 0;"> {{ showDetail.currentTime }} </div>
-                    <div slot="end" style="margin: 0 0 0 10px;"> {{ showDetail.duration }} </div>
+                    <div slot="end" style="margin: 0 0 0 10px;" *ngIf="showDetail.isPlaying"> {{ showDetail.duration }} </div>
                   </ion-range>
                 </ion-label>
               </ion-item>
