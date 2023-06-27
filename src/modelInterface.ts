@@ -59,7 +59,7 @@ export interface appUpdate {
 
 export  interface audiosInterface {
     id: string,
-    arrayID: number,
+    arrayID?: number,
     type: string,
     src: string,
     audio: any,

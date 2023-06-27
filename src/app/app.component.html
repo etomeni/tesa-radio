@@ -52,16 +52,13 @@
         </ion-menu-toggle>
 
         <ion-menu-toggle *ngIf="tesaTV.display">
-          <!-- <ion-item routerLink="/browser-view" (click)="openWebView(tesaTV.url)" [queryParams]="{ url: tesaTV.url, pageTitle: tesaTV.pageTitle, display: tesaTV.display }" [routerLinkActive]="['active']">  -->
           <ion-item (click)="openWebView(tesaTV.url)"> 
             <ion-icon slot="start" name="tv-sharp"></ion-icon>
-            <!-- <ion-icon name="desktop-sharp"></ion-icon> -->
             <ion-label>Tesa TV</ion-label>
           </ion-item>
         </ion-menu-toggle>
 
         <ion-menu-toggle *ngIf="tesaChat.display">
-          <!-- <ion-item routerLink="/browser-view" (click)="openWebView(tesaChat.url)" [queryParams]="{ url: tesaChat.url, pageTitle: tesaChat.pageTitle, display: tesaChat.display }" [routerLinkActive]="['active']">  -->
           <ion-item (click)="openWebView(tesaChat.url)"> 
             <ion-icon slot="start" name="chatbox-ellipses"></ion-icon>
             <ion-label>Chat</ion-label>
@@ -69,7 +66,6 @@
         </ion-menu-toggle>
 
         <ion-menu-toggle *ngIf="marketPlace.display">
-          <!-- <ion-item [queryParams]="{ url: marketPlace.url, pageTitle: marketPlace.pageTitle, display: marketPlace.display }" [routerLinkActive]="['active']"> -->
           <ion-item (click)="openWebView(marketPlace.url)"> 
             <ion-icon slot="start" name="cart"></ion-icon>
             <ion-label>Market Place</ion-label>
@@ -77,10 +73,8 @@
         </ion-menu-toggle>
 
         <ion-menu-toggle *ngIf="secretCommunity.display">
-          <!-- <ion-item routerLink="/browser-view" (click)="openWebView(secretCommunity.url)" [queryParams]="{ url: secretCommunity.url, pageTitle: secretCommunity.pageTitle, display: secretCommunity.display }" [routerLinkActive]="['active']">  -->
           <ion-item (click)="openWebView(secretCommunity.url)"> 
             <ion-icon slot="start" name="chatbubbles-sharp"></ion-icon>
-            <ion-icon name=""></ion-icon>
             <ion-label>Secret Community</ion-label>
           </ion-item>
         </ion-menu-toggle>

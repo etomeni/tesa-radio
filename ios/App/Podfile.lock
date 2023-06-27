@@ -8,6 +8,8 @@ PODS:
   - CapacitorCommunityNativeMarket (5.0.0):
     - Capacitor
   - CapacitorCordova (5.0.4)
+  - CapacitorDevice (5.0.4):
+    - Capacitor
   - CapacitorHaptics (5.0.2):
     - Capacitor
   - CapacitorKeyboard (5.0.2):
@@ -79,6 +81,7 @@ DEPENDENCIES:
   - "CapacitorBrowser (from `../../node_modules/@capacitor/browser`)"
   - "CapacitorCommunityNativeMarket (from `../../node_modules/@capacitor-community/native-market`)"
   - "CapacitorCordova (from `../../node_modules/@capacitor/ios`)"
+  - "CapacitorDevice (from `../../node_modules/@capacitor/device`)"
   - "CapacitorHaptics (from `../../node_modules/@capacitor/haptics`)"
   - "CapacitorKeyboard (from `../../node_modules/@capacitor/keyboard`)"
   - "CapacitorPushNotifications (from `../../node_modules/@capacitor/push-notifications`)"
@@ -110,6 +113,8 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/@capacitor-community/native-market"
   CapacitorCordova:
     :path: "../../node_modules/@capacitor/ios"
+  CapacitorDevice:
+    :path: "../../node_modules/@capacitor/device"
   CapacitorHaptics:
     :path: "../../node_modules/@capacitor/haptics"
   CapacitorKeyboard:
@@ -129,6 +134,7 @@ SPEC CHECKSUMS:
   CapacitorBrowser: 2688852d02f1e89560a31b70521c71a5e7348860
   CapacitorCommunityNativeMarket: 70b329cac2db3aee51430c83cdbe63cfc7c250bd
   CapacitorCordova: b1fe6bf1f36974a8e4a9044b342d22d49c0996d6
+  CapacitorDevice: eb4b5e3b42ac35d2527f20aad296b59e0785dc8d
   CapacitorHaptics: 864585542a435bd41eaabf7f30d9ff5ec03024d3
   CapacitorKeyboard: e628d4e66d621c69e449945ebabded17c5b9c2e8
   CapacitorPushNotifications: 3704ac3dac68a9bfc669fb384cbc7beec9b1f100
@@ -145,6 +151,6 @@ SPEC CHECKSUMS:
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
   PromisesObjC: ab77feca74fa2823e7af4249b8326368e61014cb
 
-PODFILE CHECKSUM: c28f07cf6f04e1d3d350ecb5a716bc13691ac2d6
+PODFILE CHECKSUM: 46383af252d54510f63300c5a3bbc1d1204d5267
 
 COCOAPODS: 1.11.2

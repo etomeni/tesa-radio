@@ -66,7 +66,7 @@
                   </ion-label>
                 </ion-button>
   
-                <ion-label>
+                <ion-label *ngIf="showDetail.isPlaying">
                   
                   <ion-range
                     min="0" max="100"
@@ -76,7 +76,7 @@
                     (ionChange)="audioService.seekAudioRangeChange($event, showDetail.id, 'shows')"
                   >
                     <div slot="start" style="margin: 0 10px 0 0;"> {{ showDetail.currentTime }} </div>
-                    <div slot="end" style="margin: 0 0 0 10px;" *ngIf="showDetail.isPlaying"> {{ showDetail.duration }} </div>
+                    <div slot="end" style="margin: 0 0 0 10px;"> {{ showDetail.duration }} </div>
                   </ion-range>
                 </ion-label>
               </ion-item>
@@ -110,6 +110,7 @@
                     [value]="showDetail.seekAudioRangeValue"
                     color="danger"
                     (ionChange)="audioService.seekAudioRangeChange($event, showDetail.id, 'shows')"
+                    *ngIf="showDetail.isPlaying"
                   >
                     <div slot="start" style="margin: 0 10px 0 0;"> {{ showDetail.currentTime }} </div>
                     <div slot="end" style="margin: 0 0 0 10px;"> {{ showDetail.duration }} </div>

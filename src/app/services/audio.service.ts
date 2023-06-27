@@ -496,16 +496,29 @@ export class AudioService {
     }
   }
 
-  async setLastPlayed(newLastPlayed: any) {
-    let last_playedz: any[] = [];
+  async setLastPlayed(_lastPlayed: any) {
+    // console.log(_lastPlayed);
+    // THIS LINE OF CODE DELETES THE LIST properties OF THE OBJECT AND
+    // CREATES A NEW OBJECT CALLED newLastPlayed;
+    _lastPlayed.isPlaying = false;
+    const { playStat, audio, loadingState, timingInterval, seekAudioRangeValue, lastVisible, ...newLastPlayed } = _lastPlayed;
+    // console.log(newLastPlayed);
 
-    let localStoredLastPlayed: any = await this.resourcesService.getLocalStorage("lastPlayed");
+    let last_playedz: any[] = [];
+    const localStoredLastPlayed: any = await this.resourcesService.getLocalStorage("lastPlayed");
+
     if (localStoredLastPlayed) {
-      last_playedz = [ newLastPlayed, ...localStoredLastPlayed ];
+      const isDuplicate = localStoredLastPlayed.some((item: any) => item.id === newLastPlayed.id && item.ref_id === newLastPlayed.ref_id);
+      
+      if (isDuplicate) {
+        return;
+      } else {
+        last_playedz.unshift(newLastPlayed);
+        last_playedz = [ ...last_playedz, ...localStoredLastPlayed ];
+      }
     } else {
       last_playedz.unshift(newLastPlayed);
     }
-    // console.log(last_playedz);
 
     this.resourcesService.setLocalStorage("lastPlayed", last_playedz.slice(0, 9));
   }
@@ -520,49 +533,35 @@ export class AudioService {
   }
 
   updateShowPodcastPlayStat_n_interations(id: string, type: "podcast" | "shows") {
+    let path = '';
     if (type == "podcast") {
-      this.firebaseService.getFirestoreDocumentData("podcasts", id).then(
-        (res: any) => {
-          // console.log(res);
-
-          this.firebaseService.countFirestoreDocs("audios", { property: "ref_id", condition: '==', value: res.id}).then(
-            (res: any) => {
-              // console.log(res);
-    
-              let data2update = {
-                episodes: res,
-                lastInteraction: Date.now(),
-                viewStat: res.viewStat + 1
-              }
-              this.firebaseService.updateFirestoreData("podcasts", res.id, data2update);
-            }
-          );
-
-        }
-      )
+      path = "podcasts";
     }
-
     if (type == "shows") {
-      this.firebaseService.getFirestoreDocumentData("shows", id).then(
-        (res: any) => {
-          // console.log(res);
-
-          this.firebaseService.countFirestoreDocs("audios", { property: "ref_id", condition: '==', value: res.id}).then(
-            (res: any) => {
-              // console.log(res);
-    
-              let data2update = {
-                episodes: res,
-                lastInteraction: Date.now(),
-                viewStat: res.viewStat + 1
-              }
-              this.firebaseService.updateFirestoreData("shows", res.id, data2update);
-            }
-          )
-        }
-      )
-      
+      path = "shows";
     }
+
+    if (path === '') return;
+
+    this.firebaseService.getFirestoreDocumentData(path, id).then(
+      (mainRes: any) => {
+        // console.log(mainRes);
+
+        this.firebaseService.countFirestoreDocs("audios", { property: "ref_id", condition: '==', value: mainRes.id}).then(
+          (countRes: any) => {
+            // console.log(countRes);
+  
+            let data2update = {
+              episodes: countRes,
+              lastInteraction: Date.now(),
+              viewStat: Number(mainRes.viewStat) + 1
+            }
+            this.firebaseService.updateFirestoreData(path, mainRes.id, data2update);
+          }
+        );
+
+      }
+    );
   }
 
 }

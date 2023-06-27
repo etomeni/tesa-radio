@@ -44,10 +44,6 @@ export class PodcastDetailsPage implements OnInit {
     this.getPodcastDetails();
   }
 
-
-
-
-
   getPodcastDetails() {
     const getStoredShows = () => {
       this.resourcesService.getLocalStorage("podcastDetails").then(
@@ -146,7 +142,6 @@ export class PodcastDetailsPage implements OnInit {
       console.log(err);
     });
   }
-
 
   loadMoreData(ev: any) {
     this.getMorePodcastDetails();

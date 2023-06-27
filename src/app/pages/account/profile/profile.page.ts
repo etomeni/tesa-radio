@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { IonicSlides } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { AudioService } from 'src/app/services/audio.service';
@@ -6,12 +7,34 @@ import { FirebaseService } from 'src/app/services/firebase.service';
 import { ResourcesService } from 'src/app/services/resources.service';
 import { CreatePodcastComponent } from 'src/app/components/create-podcast/create-podcast.component';
 
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
+
+
+interface lastPlayedz_ {
+  id: string,
+  ref_id: string,
+  audio?: any,
+  currentTime?: any,
+  duration?: any,
+  timingInterval?: any,
+  seekAudioRangeValue?: any,
+  title: string,
+  description: string,
+  image: string,
+  type: string,
+  src: string,
+  isPlaying: boolean,
+  loadingState: boolean,
+  index: number
+}
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage implements OnInit, OnDestroy {
   loadingStatus: boolean = true;
   swiperModules = [IonicSlides];
   swiperBreakPoints = {
@@ -40,12 +63,15 @@ export class ProfilePage implements OnInit {
 
   user: any;
   authUser: any;
-  lastPlayed: any[] = [];
+  lastPlayed: lastPlayedz_[] = [];
+  currentlyLastPlayed: lastPlayedz_ | undefined;
+  private routerSubscription!: Subscription;
 
   constructor(
     private resourcesService: ResourcesService,
     public firebaseService: FirebaseService,
     public audioService: AudioService,
+    private router: Router,
 
     private modalCtrl: ModalController,
   ) { }
@@ -53,6 +79,19 @@ export class ProfilePage implements OnInit {
   async ngOnInit() {
     this.checkUserLoggedin();
     this.getPreviousListenAudio();
+
+    this.routerSubscription = this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd)
+    ).subscribe(
+      () => {
+        this.stopCurrentlyPlayingAudio();
+      }
+    );
+  }
+
+  ngOnDestroy() {
+    this.stopCurrentlyPlayingAudio();
+    this.routerSubscription.unsubscribe();
   }
 
   async checkUserLoggedin() {
@@ -121,10 +160,89 @@ export class ProfilePage implements OnInit {
     )
   }
 
-  async getPreviousListenAudio() {
-    let localStoredLastPlayed: any = await this.resourcesService.getLocalStorage("lastPlayed");
-    if (localStoredLastPlayed) {
-      this.lastPlayed = localStoredLastPlayed;
+  getPreviousListenAudio() {
+    this.resourcesService.getLocalStorage("lastPlayed").then(
+      (res: any) => {
+        if (res) {
+          this.lastPlayed = res;
+
+          for (let i = 0; i < this.lastPlayed.length; i++) {
+            this.lastPlayed[i].audio = new Audio(this.lastPlayed[i].src);
+            this.lastPlayed[i].index = i;
+          }
+        }
+      }
+    );
+  }
+
+
+  playPause(playingState: "play" | "pause", i: number) {
+    
+    this.lastPlayed[i].timingInterval = setInterval(()=> {
+      this.lastPlayed[i].currentTime = this.audioService.audioTiming(this.lastPlayed[i].audio.currentTime);
+      this.lastPlayed[i].duration = this.audioService.audioTiming(this.lastPlayed[i].audio.duration);
+
+      this.lastPlayed[i].seekAudioRangeValue = this.lastPlayed[i].audio.currentTime * (100 / this.lastPlayed[i].audio.duration);
+    }, 500);
+
+    if(playingState == "play") {
+      this.stopCurrentlyPlayingAudio();
+
+      this.lastPlayed[i].audio.play();
+      this.lastPlayed[i].isPlaying = true;
+      this.lastPlayed[i].loadingState = false;
+
+      if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: this.lastPlayed[i].title || "Tesa Radio",
+          artist: 'Tesa Radio',
+          album: this.lastPlayed[i].type,
+          artwork: [
+            { src: this.lastPlayed[i].image || '/assets/images/radiomic.png', sizes: '512x512', type: 'image/png' },
+          ]
+        });
+      
+        // TODO: Update playback state.
+        navigator.mediaSession.playbackState = 'playing';
+      };
+
+      this.currentlyLastPlayed = this.lastPlayed[i];
+    }
+
+    if(playingState == "pause") {
+      this.lastPlayed[i].audio.pause();
+      this.lastPlayed[i].isPlaying = false;
+
+      if ("mediaSession" in navigator) {
+        navigator.mediaSession.playbackState = 'playing';
+      }
+
+      clearInterval(this.lastPlayed[i].timingInterval);
+      this.currentlyLastPlayed = undefined;
+    }
+
+    this.lastPlayed[i].audio.addEventListener("ended", () => {
+      this.lastPlayed[i].isPlaying = false;
+      this.lastPlayed[i].loadingState = false;
+      this.lastPlayed[i].audio.currentTime = 0;
+      clearInterval(this.lastPlayed[i].timingInterval);
+    });
+
+    this.lastPlayed[i].audio.addEventListener("pause", () => {
+      this.lastPlayed[i].isPlaying = false;
+      this.lastPlayed[i].loadingState = false;
+      clearInterval(this.lastPlayed[i].timingInterval);
+    });
+
+  }
+
+
+  stopCurrentlyPlayingAudio() {
+    if (this.currentlyLastPlayed) {
+      if (this.currentlyLastPlayed.isPlaying) {
+        this.lastPlayed[this.currentlyLastPlayed.index].audio.pause();
+        this.lastPlayed[this.currentlyLastPlayed.index].audio.currentTime = 0;
+      }
     }
   }
 

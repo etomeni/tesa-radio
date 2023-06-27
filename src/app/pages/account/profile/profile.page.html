@@ -40,36 +40,31 @@
         </p> -->
       </ion-label>
     </ion-item>
-  
+
     <div class="lastPlayedShow-Podcast" *ngIf="lastPlayed.length">
       <h3>Previously Listen Audio</h3>
       
       <swiper-container [modules]="swiperModules"  [breakpoints]="swiperBreakPoints" [loop]="true">
-        <swiper-slide *ngFor="let last_Played of lastPlayed; let i=index">
+        <swiper-slide *ngFor="let preAudio of lastPlayed; let i=index">
           <ion-card>
-            <img alt="Image of previously listen audio" [src]="last_Played.image || '/assets/images/imgPlaceholder.png'">
+            <img alt="Image of previously listen audio" [src]="preAudio.image || '/assets/images/imgPlaceholder.png'">
             <ion-card-header>
-              <ion-card-subtitle> {{ last_Played.title }} </ion-card-subtitle>
+              <ion-card-subtitle>
+                <div style="max-height: 75px; overflow: hidden; text-overflow: ellipsis !important; width: inherit;">
+                  <p style="margin: 0; padding: 0;">
+                    {{ preAudio.title }}
+                  </p>
+                </div>
+              </ion-card-subtitle>
             </ion-card-header>
           
             <ion-card-content>
               <div class="playPauseBtnWave">
-                <span>
-                  <ion-icon [name]="last_Played.isPlaying ? 'pause' : 'play'"></ion-icon>
+                <span (click)="playPause(preAudio.isPlaying ? 'pause' : 'play', i)">
+                  <ion-icon [name]="preAudio.isPlaying ? 'pause' : 'play'"></ion-icon>
                 </span>
 
-                <div style="margin-left: 10px;" *ngIf="last_Played.isPlaying"> {{ last_Played.currentTime }} </div>
-
-                <!-- <ion-range
-                  min="0" max="100"
-                  aria-label="seek"
-                  [value]="last_Played.seekAudioRangeValue"
-                  color="danger"
-                  (ionChange)="audioService.seekAudioRangeChange($event, last_Played.id, last_Played.type)"
-                >
-                  <div slot="start" style="margin: 0 10px 0 0;"> {{ last_Played.currentTime }} </div>
-                  <div slot="end" style="margin: 0 0 0 10px;"> {{ last_Played.duration }} </div>
-                </ion-range> -->
+                <div style="margin-left: 10px;" *ngIf="preAudio.isPlaying"> {{ preAudio.currentTime }} </div>
               </div>
             </ion-card-content>
           </ion-card>

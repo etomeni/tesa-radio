@@ -24,11 +24,11 @@ export class ShowsPage implements OnInit {
 
   getShowws() {
     this.firebaseService.getLimitedFirestoreDocumentData("shows", 20).then(
-      (res: any) => {
+      (res: any[]) => {
         // console.log(res);
         
         if(res.length) {
-          this.shows = res;
+          this.shows = res.reverse();
           this.lastShow = res[0].lastVisible;
           this.resourcesService.setLocalStorage("shows", res);
         }
@@ -55,7 +55,7 @@ export class ShowsPage implements OnInit {
         // console.log(res);
 
         this.lastShow = res.length ? res[0].lastVisible : undefined;
-        this.shows = [...this.shows, ...res];
+        this.shows = [...this.shows, ...res.reverse()];
         
         this.resourcesService.setLocalStorage("shows", this.shows);
       }
