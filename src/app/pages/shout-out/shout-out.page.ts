@@ -30,29 +30,26 @@ export class ShoutOutPage implements OnInit {
   }
 
   getShoutOuts() {
+    this.resourcesService.getLocalStorage("shoutOuts").then((res: any) => {
+      if (res) {
+        this.shoutOuts = res;
+        this.lastShoutOut = res[0].lastVisible;
+        this.loadingStatus = false;
+      }
+    });
+    
     this.firebaseService.getLimitedFirestoreDocumentData("shoutOuts", 15).then(
       (res: any) => {
         // console.log(res);
-
         if(res.length) {
           this.shoutOuts = res;
           this.lastShoutOut = res[0].lastVisible;
           this.resourcesService.setLocalStorage("shoutOuts", res);
         }
-
         this.loadingStatus = false;
       },
       (err: any) => {
         console.log(err);
-        
-        this.resourcesService.getLocalStorage("shoutOuts").then((res: any) => {
-          if (res) {
-            this.shoutOuts = res;
-            this.lastShoutOut = res[0].lastVisible;
-          }
-        }).finally(() => {
-          this.loadingStatus = false;
-        });
       }
     );
   }

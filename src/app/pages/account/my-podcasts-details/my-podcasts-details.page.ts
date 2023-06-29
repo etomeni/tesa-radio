@@ -45,30 +45,40 @@ export class MyPodcastsDetailsPage implements OnInit {
       }
     });
 
-    this.getMyPodcastDetails();
-  }
-
-
-
-
-  getMyPodcastDetails() {
-    const getStoredMyPodcasts = () => {
+    if (this.audioService.podcasts.length  && this.audioService.podcasts[1].ref_id == this.podcast_id) {
       this.resourcesService.getLocalStorage("myPodcastDetails").then(
         (res: any) => {
           if (res) {
+            this.lastPodcastDetail = res.length ? res[0].lastVisible : undefined;
+            this.loadingStatus = false;
+          } else {
+            this.getMyPodcastDetails();
+          }
+        },
+        (err: any) => {
+          this.getMyPodcastDetails();
+        }
+      );
+    } else {
+      this.getMyPodcastDetails();
+    }
+
+    // this.getMyPodcastDetails();
+  }
+
+  getMyPodcastDetails() {
+    this.resourcesService.getLocalStorage("myPodcastDetails").then(
+      (res: any) => {
+        if (res) {
+          if (res[1].ref_id == this.podcast_id) {
             this.audioService.podcasts = res;
             // this.lastPodcastDetail = res[0].lastVisible;
             this.lastPodcastDetail = res.length ? res[0].lastVisible : undefined;
             this.loadingStatus = false;
-          } else {
-            this.loadingStatus = true;
           }
-        },
-        (err: any) => {
-          this.loadingStatus = true;
         }
-      )
-    }
+      }
+    );
 
     this.firebaseService.countFirestoreDocs("audios", { property: "ref_id", condition: '==', value: this.podcast_id }).then((res: any) => {
       // console.log(res);
@@ -115,13 +125,9 @@ export class MyPodcastsDetailsPage implements OnInit {
       (err: any) => {
         console.log(err);
 
-        getStoredMyPodcasts();
+        // getStoredMyPodcasts();
       }
-    ).catch((err: any) => {
-      console.log(err);
-
-      getStoredMyPodcasts();
-    });
+    );
   }
 
   getMorePodcastDetails() {
@@ -207,9 +213,6 @@ export class MyPodcastsDetailsPage implements OnInit {
       event.target.complete();
     }, 500);
   }
-
-
-
 
   async handleRefresh(event: any) {
     window.location.reload();

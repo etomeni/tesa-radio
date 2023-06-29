@@ -42,33 +42,42 @@ export class ShowsDetailsPage implements OnInit {
       }
     });
 
-    this.getShowDetails();
-  }
-
-  getShowDetails() {
-    const getStoredShows = () => {
+    if (this.audioService.shows.length && this.audioService.shows[1].ref_id == this.show_id) {
       this.resourcesService.getLocalStorage("showDetails").then(
         (res: any) => {
           if (res) {
-            // this.showDetails = res;
-            this.audioService.shows = res;
-            // this.lastShowDetail = res[0].lastVisible;
             this.lastShowDetail = res.length ? res[0].lastVisible : undefined;
             this.loadingStatus = false;
           } else {
-            this.loadingStatus = true;
+            this.getShowDetails();
           }
         },
         (err: any) => {
-          this.loadingStatus = true;
+          this.getShowDetails();
         }
-      )
+      );
+    } else {
+      this.getShowDetails();
     }
+  }
 
+  getShowDetails() {
+    this.resourcesService.getLocalStorage("showDetails").then(
+      (res: any) => {
+        if (res.length) {
+          if (res[1].ref_id == this.show_id) {
+            this.audioService.shows = res;
+            this.lastShowDetail = res.length ? res[0].lastVisible : undefined;
+            this.loadingStatus = false;
+          }
+        }
+      }
+    );
+    
     this.audioService.updateShowPodcastPlayStat_n_interations(this.show_id, "shows");
 
     this.firebaseService.getLimitedFirestoreDocumentData(
-      "audios", 15, 
+      "audios", 10, 
       {property: "type", condition: '==', value: audioType.shows}, 
       {property: "ref_id", condition: '==', value: this.show_id}
     ).then(
@@ -78,7 +87,7 @@ export class ShowsDetailsPage implements OnInit {
         for (let i = 0; i < res.length; i++) {
           res[i].audio = new Audio(res[i].src);
 
-          res[i].audio.load();
+          // res[i].audio.load();
           res[i].currentTime = this.audioService.audioTiming(res[i].audio.currentTime);
           res[i].duration = this.audioService.audioTiming(res[i].audio.duration);
         }
@@ -94,7 +103,7 @@ export class ShowsDetailsPage implements OnInit {
           for (let i = 0; i < this.audioService.shows.length; i++) {
             const element = this.audioService.shows[i];
   
-            this.audioService.shows[i].audio.load();
+            // this.audioService.shows[i].audio.load();
             this.audioService.shows[i].currentTime = this.audioService.audioTiming(element.audio.currentTime);
             this.audioService.shows[i].duration = this.audioService.audioTiming(element.audio.duration);
           }
@@ -102,19 +111,15 @@ export class ShowsDetailsPage implements OnInit {
       },
       (err: any) => {
         console.log(err);
-
-        getStoredShows();
       }
     ).catch((err: any) => {
       console.log(err);
-
-      getStoredShows();
     });
   }
 
   getMoreShowDetails() {
     this.firebaseService.getNextLimitedFirestoreDocumentData(
-      "audios", this.lastShowDetail, 10, 
+      "audios", this.lastShowDetail, 7, 
       {property: "type", condition: '==', value: audioType.shows}, 
       {property: "ref_id", condition: '==', value: this.show_id}
     ).then(

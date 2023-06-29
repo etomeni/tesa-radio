@@ -41,28 +41,40 @@ export class PodcastDetailsPage implements OnInit {
       }
     });
 
-    this.getPodcastDetails();
-  }
-
-  getPodcastDetails() {
-    const getStoredShows = () => {
+    if (this.audioService.podcasts.length  && this.audioService.podcasts[1].ref_id == this.podcast_id) {
       this.resourcesService.getLocalStorage("podcastDetails").then(
         (res: any) => {
           if (res) {
+            this.lastPodcastDetail = res.length ? res[0].lastVisible : undefined;
+            this.loadingStatus = false;
+          } else {
+            this.getPodcastDetails();
+          }
+        },
+        (err: any) => {
+          this.getPodcastDetails();
+        }
+      );
+    } else {
+      this.getPodcastDetails();
+    }
+
+  }
+
+  getPodcastDetails() {
+    this.resourcesService.getLocalStorage("podcastDetails").then(
+      (res: any) => {
+        if (res) {
+          if (res[1].ref_id == this.podcast_id) {
             this.audioService.podcasts = res;
             // this.lastPodcastDetail = res[0].lastVisible;
             this.lastPodcastDetail = res.length ? res[0].lastVisible : undefined;
             this.loadingStatus = false;
-          } else {
-            this.loadingStatus = true;
           }
-        },
-        (err: any) => {
-          this.loadingStatus = true;
         }
-      )
-    }
-
+      }
+    );
+    
     this.audioService.updateShowPodcastPlayStat_n_interations(this.podcast_id, "podcast");
 
     this.firebaseService.countFirestoreDocs("audios", { property: "ref_id", condition: '==', value: this.podcast_id }).then((res: any) => {
@@ -82,7 +94,7 @@ export class PodcastDetailsPage implements OnInit {
         for (let i = 0; i < res.length; i++) {
           res[i].audio = new Audio(res[i].src);
 
-          res[i].audio.load();
+          // res[i].audio.load();
           res[i].currentTime = this.audioService.audioTiming(res[i].audio.currentTime);
           res[i].duration = this.audioService.audioTiming(res[i].audio.duration);
         }
@@ -98,7 +110,7 @@ export class PodcastDetailsPage implements OnInit {
           for (let i = 0; i < this.audioService.podcasts.length; i++) {
             const element = this.audioService.podcasts[i];
   
-            this.audioService.podcasts[i].audio.load();
+            // this.audioService.podcasts[i].audio.load();
             this.audioService.podcasts[i].currentTime = this.audioService.audioTiming(element.audio.currentTime);
             this.audioService.podcasts[i].duration = this.audioService.audioTiming(element.audio.duration);
           }
@@ -106,18 +118,12 @@ export class PodcastDetailsPage implements OnInit {
       },
       (err: any) => {
         console.log(err);
-
-        getStoredShows();
       }
-    ).catch((err: any) => {
-      console.log(err);
-
-      getStoredShows();
-    });
+    );
   }
 
   getMorePodcastDetails() {
-    this.firebaseService.getNextLimitedFirestoreDocumentData("audios", this.lastPodcastDetail, 10, {property: "type", condition: '==', value: audioType.podcast}, {property: "ref_id", condition: '==', value: this.podcast_id}).then(
+    this.firebaseService.getNextLimitedFirestoreDocumentData("audios", this.lastPodcastDetail, 7, {property: "type", condition: '==', value: audioType.podcast}, {property: "ref_id", condition: '==', value: this.podcast_id}).then(
       (res: any[]) => {
         // console.log(res);
 

@@ -41,11 +41,11 @@
       </ion-label>
     </ion-item>
 
-    <div class="lastPlayedShow-Podcast" *ngIf="lastPlayed.length">
+    <div class="lastPlayedShow-Podcast" *ngIf="audioService.lastPlayed.length">
       <h3>Previously Listen Audio</h3>
       
       <swiper-container [modules]="swiperModules"  [breakpoints]="swiperBreakPoints" [loop]="true">
-        <swiper-slide *ngFor="let preAudio of lastPlayed; let i=index">
+        <swiper-slide *ngFor="let preAudio of audioService.lastPlayed; let i=index">
           <ion-card>
             <img alt="Image of previously listen audio" [src]="preAudio.image || '/assets/images/imgPlaceholder.png'">
             <ion-card-header>
@@ -60,8 +60,14 @@
           
             <ion-card-content>
               <div class="playPauseBtnWave">
-                <span (click)="playPause(preAudio.isPlaying ? 'pause' : 'play', i)">
+                <!-- <span *ngIf="!preAudio.loadingState" (click)="playPause(preAudio.isPlaying ? 'pause' : 'play', preAudio, i)"> -->
+                <span *ngIf="preAudio.audio.readyState >= 1" (click)="playPause(preAudio.isPlaying ? 'pause' : 'play', preAudio, i)">
                   <ion-icon [name]="preAudio.isPlaying ? 'pause' : 'play'"></ion-icon>
+                </span>
+                
+                <!-- <span *ngIf="preAudio.loadingState" (click)="playPause('pause', preAudio, i)"> -->
+                <span *ngIf="preAudio.audio.readyState < 1">
+                  <ion-icon slot="start" name="reload" class="rotateLoadingIcon"></ion-icon>
                 </span>
 
                 <div style="margin-left: 10px;" *ngIf="preAudio.isPlaying"> {{ preAudio.currentTime }} </div>

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { RangeCustomEvent } from '@ionic/angular';
-import { audiosInterface, audioType } from 'src/modelInterface';
+import { audiosInterface, audioType, lastPlayedz_ } from 'src/modelInterface';
 import { FirebaseService } from './firebase.service';
 import { ResourcesService } from './resources.service';
 
@@ -14,11 +14,20 @@ export class AudioService {
     playingAudio: <any> null,
     id: <any> null,
 
-    // currentTime: null,
-    // duration: null,
-    // playbackRate: null,
-    // loadingState: <boolean> true, 
-    // isPlaying: <boolean> false,
+    _id: <string> '',
+    ref_id: <string> '',
+    // audio: <any> null,
+    currentTime: <any> null,
+    duration: <any> null,
+    timingInterval: <any> null,
+    seekAudioRangeValue: <any> null,
+    title: <string> '',
+    description: <string> '',
+    image: <string> '',
+    src: <string> '',
+    isPlaying: <boolean> false,
+    loadingState: <boolean> false,
+    index: <number> 0.1,
   }
 
   radio = {
@@ -34,6 +43,7 @@ export class AudioService {
   };
   podcasts: audiosInterface[] = [];
   shows: audiosInterface[] = [];
+  lastPlayed: lastPlayedz_[] = [];
 
   constructor(
     private firebaseService: FirebaseService,
@@ -56,23 +66,17 @@ export class AudioService {
             this.play(audioType.radio, '');
           }
         }
-
       }, 500);
 
-      
-
       this.radio.audio.addEventListener("playing", () => {
-        this.radio.isPlaying = true;
-        this.radio.loadingState = false;
+        this.radio.loadingState = this.currentlyPlayingAudio.loadingState = false;
+        this.radio.isPlaying = this.currentlyPlayingAudio.isPlaying = true;
 
         clearInterval(setRadioPlayInterval);
 
         this.currentlyPlayingAudio.playingAudio = this.radio.audio;
         this.currentlyPlayingAudio.type = audioType.radio;
       });
-
-      // this.radio.currentTime = this.audioTiming(this.radio.audio.currentTime);
-      // this.radio.duration = this.audioTiming(this.radio.audio.duration);
     };
 
     this.firebaseService.getFirestoreDocumentData("appData", "radio").then(
@@ -111,28 +115,45 @@ export class AudioService {
     if (this.currentlyPlayingAudio.playingAudio) {
       if (this.currentlyPlayingAudio.type == audioType.radio) {
         this.radio.audio.pause();
+        this.currentlyPlayingAudio.playingAudio.pause();
 
         if (this.currentlyPlayingAudio.type != audio_Type) {
           this.radio.audio.currentTime = 0;
+          this.currentlyPlayingAudio.playingAudio.currentTime = 0;
           this.radio.audio.removeAllListeners;
         }
       } 
 
       if (this.currentlyPlayingAudio.type == audioType.podcast) {
         this.podcasts[this.currentlyPlayingAudio.id].audio.pause();
+        this.currentlyPlayingAudio.playingAudio.pause();
 
         if (this.currentlyPlayingAudio.type != audio_Type) {
           this.podcasts[this.currentlyPlayingAudio.id].audio.currentTime = 0;
+          this.currentlyPlayingAudio.playingAudio.currentTime = 0;
           this.podcasts[this.currentlyPlayingAudio.id].audio.removeAllListeners();
         }
       } 
 
       if (this.currentlyPlayingAudio.type == audioType.shows) {
         this.shows[this.currentlyPlayingAudio.id].audio.pause();
+        this.currentlyPlayingAudio.playingAudio.pause();
         
         if (this.currentlyPlayingAudio.type != audio_Type) {
           this.shows[this.currentlyPlayingAudio.id].audio.currentTime = 0;
+          this.currentlyPlayingAudio.playingAudio.currentTime = 0;
           this.shows[this.currentlyPlayingAudio.id].audio.removeAllListeners();
+        }
+      } 
+
+      if (this.currentlyPlayingAudio.type == audioType.lastPlayed) {
+        this.lastPlayed[this.currentlyPlayingAudio.id].audio.pause();
+        this.currentlyPlayingAudio.playingAudio.pause();
+        
+        if (this.currentlyPlayingAudio.type != audio_Type) {
+          this.lastPlayed[this.currentlyPlayingAudio.id].audio.currentTime = 0;
+          this.currentlyPlayingAudio.playingAudio.currentTime = 0;
+          this.lastPlayed[this.currentlyPlayingAudio.id].audio.removeAllListeners();
         }
       } 
     }
@@ -141,21 +162,23 @@ export class AudioService {
     return new Promise<any> ((resolve, reject) => {
       switch (audio_Type) {
         case audioType.radio:
-          this.radio.loadingState = true;
-          this.radio.isPlaying = false;
+          this.radio.loadingState = this.currentlyPlayingAudio.loadingState = true;
+          this.radio.isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+          this.currentlyPlayingAudio.src = this.radio.src;
+          this.currentlyPlayingAudio._id = 'Tesa Radio';
 
-          this.radio.timingInterval = setInterval(()=> {
-            this.radio.currentTime = this.audioTiming(this.radio.audio.currentTime);
-            this.radio.duration = this.audioTiming(this.radio.audio.duration);
-          }, 500);
+          // this.radio.timingInterval = setInterval(()=> {
+          //   this.radio.currentTime = this.audioTiming(this.radio.audio.currentTime);
+          //   this.radio.duration = this.audioTiming(this.radio.audio.duration);
+          // }, 500);
+
+          this.currentlyPlayingAudio.playingAudio = this.radio.audio;
+          this.currentlyPlayingAudio.type = audio_Type;
         
           this.radio.audio.play().then(
             (res: any) => {
-              this.currentlyPlayingAudio.playingAudio = this.radio.audio;
-              this.currentlyPlayingAudio.type = audio_Type;
-
-              this.radio.isPlaying = true;
-              this.radio.loadingState = false;
+              this.radio.loadingState = this.currentlyPlayingAudio.loadingState = false;
+              this.radio.isPlaying = this.currentlyPlayingAudio.isPlaying = true;
               if ("mediaSession" in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                   title: "Tesa Radio",
@@ -175,17 +198,16 @@ export class AudioService {
               // });
               
               this.radio.audio.addEventListener("ended", () => {
-                // navigator.mediaSession.playbackState = 'paused';
-                this.radio.isPlaying = false;
-                this.radio.loadingState = false;
+                this.radio.loadingState = this.currentlyPlayingAudio.loadingState = false;
+                this.radio.isPlaying = this.currentlyPlayingAudio.isPlaying = false;
                 this.radio.audio.currentTime = 0;
                 this.radio.audio.removeAllListeners;
                 clearInterval(this.radio.timingInterval);
               });
 
               this.radio.audio.addEventListener("pause", () => {
-                this.radio.isPlaying = false;
-                this.radio.loadingState = false;
+                this.radio.loadingState = this.currentlyPlayingAudio.loadingState = false;
+                this.radio.isPlaying = this.currentlyPlayingAudio.isPlaying = false;
                 clearInterval(this.radio.timingInterval);
                 // navigator.mediaSession.playbackState = 'paused';
               });
@@ -200,25 +222,32 @@ export class AudioService {
 
           break;
         case audioType.podcast:
-          this.podcasts[audio_array_id].isPlaying = false;
-          this.podcasts[audio_array_id].loadingState = true;
+          this.podcasts[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+          this.podcasts[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = true;
           this.setLastPlayed(this.podcasts[audio_array_id]);
 
-          this.podcasts[audio_array_id].timingInterval = setInterval(()=> {
-            this.podcasts[audio_array_id].currentTime = this.audioTiming(this.podcasts[audio_array_id].audio.currentTime);
-            this.podcasts[audio_array_id].duration = this.audioTiming(this.podcasts[audio_array_id].audio.duration);
+          this.podcasts[audio_array_id].timingInterval = this.currentlyPlayingAudio.timingInterval = setInterval(()=> {
+            this.podcasts[audio_array_id].currentTime = this.currentlyPlayingAudio.currentTime = this.audioTiming(this.podcasts[audio_array_id].audio.currentTime);
+            this.podcasts[audio_array_id].duration = this.currentlyPlayingAudio.duration = this.audioTiming(this.podcasts[audio_array_id].audio.duration);
 
-            this.podcasts[audio_array_id].seekAudioRangeValue = this.podcasts[audio_array_id].audio.currentTime * (100 / this.podcasts[audio_array_id].audio.duration);
+            this.podcasts[audio_array_id].seekAudioRangeValue = this.currentlyPlayingAudio.seekAudioRangeValue = this.podcasts[audio_array_id].audio.currentTime * (100 / this.podcasts[audio_array_id].audio.duration);
           }, 500);
+
+          this.currentlyPlayingAudio.type = audio_Type;
+          this.currentlyPlayingAudio.playingAudio = this.podcasts[audio_array_id].audio;
+          this.currentlyPlayingAudio.id = audio_array_id;
+          this.currentlyPlayingAudio._id = this.podcasts[audio_array_id].id;
+          this.currentlyPlayingAudio.ref_id = this.podcasts[audio_array_id].ref_id;
+          this.currentlyPlayingAudio.image = this.podcasts[audio_array_id].image;
+          this.currentlyPlayingAudio.src = this.podcasts[audio_array_id].src;
+          this.currentlyPlayingAudio.title = this.podcasts[audio_array_id].title;
+          this.currentlyPlayingAudio.description = this.podcasts[audio_array_id].description;
 
           this.podcasts[audio_array_id].audio.play().then(
             (res: any) => {
-              this.currentlyPlayingAudio.type = audio_Type;
-              this.currentlyPlayingAudio.playingAudio = this.podcasts[audio_array_id].audio;
-              this.currentlyPlayingAudio.id = audio_array_id;
+              this.podcasts[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = true;
+              this.podcasts[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
 
-              this.podcasts[audio_array_id].isPlaying = true;
-              this.podcasts[audio_array_id].loadingState = false;
               if ("mediaSession" in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                   title: this.podcasts[audio_array_id].title || "Tesa Radio",
@@ -234,16 +263,18 @@ export class AudioService {
               };
 
               this.podcasts[audio_array_id].audio.addEventListener("ended", () => {
-                this.podcasts[audio_array_id].isPlaying = false;
-                this.podcasts[audio_array_id].loadingState = false;
-                this.podcasts[audio_array_id].audio.currentTime = 0;
+                this.podcasts[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+                this.podcasts[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
+                this.podcasts[audio_array_id].audio.currentTime = this.currentlyPlayingAudio.currentTime = 0;
                 clearInterval(this.podcasts[audio_array_id].timingInterval);
+                clearInterval(this.currentlyPlayingAudio.timingInterval);
               });
 
               this.podcasts[audio_array_id].audio.addEventListener("pause", () => {
-                this.podcasts[audio_array_id].isPlaying = false;
-                this.podcasts[audio_array_id].loadingState = false;
+                this.podcasts[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+                this.podcasts[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
                 clearInterval(this.podcasts[audio_array_id].timingInterval);
+                clearInterval(this.currentlyPlayingAudio.timingInterval);
               });
 
               // update the play stats
@@ -259,25 +290,32 @@ export class AudioService {
       
           break;
         case audioType.shows:
-          this.shows[audio_array_id].isPlaying = false;
-          this.shows[audio_array_id].loadingState = true;
+          this.shows[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+          this.shows[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = true;
           this.setLastPlayed(this.shows[audio_array_id]);
 
-          this.shows[audio_array_id].timingInterval = setInterval(()=> {
-            this.shows[audio_array_id].currentTime = this.audioTiming(this.shows[audio_array_id].audio.currentTime);
-            this.shows[audio_array_id].duration = this.audioTiming(this.shows[audio_array_id].audio.duration);
+          this.shows[audio_array_id].timingInterval = this.currentlyPlayingAudio.timingInterval = setInterval(()=> {
+            this.shows[audio_array_id].currentTime = this.currentlyPlayingAudio.currentTime = this.audioTiming(this.shows[audio_array_id].audio.currentTime);
+            this.shows[audio_array_id].duration = this.currentlyPlayingAudio.duration = this.audioTiming(this.shows[audio_array_id].audio.duration);
 
-            this.shows[audio_array_id].seekAudioRangeValue = this.shows[audio_array_id].audio.currentTime * (100 / this.shows[audio_array_id].audio.duration);
+            this.shows[audio_array_id].seekAudioRangeValue = this.currentlyPlayingAudio.seekAudioRangeValue = this.shows[audio_array_id].audio.currentTime * (100 / this.shows[audio_array_id].audio.duration);
           }, 500);
+
+          this.currentlyPlayingAudio.type = audio_Type;
+          this.currentlyPlayingAudio.playingAudio = this.shows[audio_array_id].audio;
+          this.currentlyPlayingAudio.id = audio_array_id;
+          this.currentlyPlayingAudio._id = this.shows[audio_array_id].id;
+          this.currentlyPlayingAudio.ref_id = this.shows[audio_array_id].ref_id;
+          this.currentlyPlayingAudio.image = this.shows[audio_array_id].image;
+          this.currentlyPlayingAudio.src = this.shows[audio_array_id].src;
+          this.currentlyPlayingAudio.title = this.shows[audio_array_id].title;
+          this.currentlyPlayingAudio.description = this.shows[audio_array_id].description;
 
           this.shows[audio_array_id].audio.play().then(
             (res: any) => {
-              this.currentlyPlayingAudio.type = audio_Type;
-              this.currentlyPlayingAudio.playingAudio = this.shows[audio_array_id].audio;
-              this.currentlyPlayingAudio.id = audio_array_id;
+              this.shows[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = true;
+              this.shows[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
 
-              this.shows[audio_array_id].isPlaying = true;
-              this.shows[audio_array_id].loadingState = false;
               if ("mediaSession" in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                   title: this.shows[audio_array_id].title || "Tesa Radio",
@@ -292,16 +330,18 @@ export class AudioService {
               };
               
               this.shows[audio_array_id].audio.addEventListener("ended", () => {
-                this.shows[audio_array_id].isPlaying = false;
-                this.shows[audio_array_id].loadingState = false;
-                this.shows[audio_array_id].audio.currentTime = 0;
-                clearInterval(this.shows[audio_array_id].timingInterval);
+                this.podcasts[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+                this.podcasts[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
+                this.podcasts[audio_array_id].audio.currentTime = this.currentlyPlayingAudio.currentTime = 0;
+                clearInterval(this.podcasts[audio_array_id].timingInterval);
+                clearInterval(this.currentlyPlayingAudio.timingInterval);
               });
 
               this.shows[audio_array_id].audio.addEventListener("pause", () => {
-                this.shows[audio_array_id].isPlaying = false;
-                this.shows[audio_array_id].loadingState = false;
+                this.shows[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+                this.shows[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
                 clearInterval(this.shows[audio_array_id].timingInterval);
+                clearInterval(this.currentlyPlayingAudio.timingInterval);
               });
               
               // update the play stats
@@ -311,6 +351,73 @@ export class AudioService {
             },
             (err: any) => {
               this.shows[audio_array_id].audio.load();
+              reject(err);
+            }
+          );
+
+          break;
+        case audioType.lastPlayed:
+          this.lastPlayed[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+          this.lastPlayed[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = true;
+          this.setLastPlayed(this.lastPlayed[audio_array_id]);
+
+          this.lastPlayed[audio_array_id].timingInterval = this.currentlyPlayingAudio.timingInterval = setInterval(()=> {
+            this.lastPlayed[audio_array_id].currentTime = this.currentlyPlayingAudio.currentTime = this.audioTiming(this.lastPlayed[audio_array_id].audio.currentTime);
+            this.lastPlayed[audio_array_id].duration = this.currentlyPlayingAudio.duration = this.audioTiming(this.lastPlayed[audio_array_id].audio.duration);
+
+            this.lastPlayed[audio_array_id].seekAudioRangeValue = this.currentlyPlayingAudio.seekAudioRangeValue = this.lastPlayed[audio_array_id].audio.currentTime * (100 / this.lastPlayed[audio_array_id].audio.duration);
+          }, 500);
+
+          this.currentlyPlayingAudio.type = audio_Type;
+          this.currentlyPlayingAudio.playingAudio = this.lastPlayed[audio_array_id].audio;
+          this.currentlyPlayingAudio.id = audio_array_id;
+          this.currentlyPlayingAudio._id = this.lastPlayed[audio_array_id].id;
+          // this.currentlyPlayingAudio.ref_id = this.lastPlayed[audio_array_id].ref_id;
+          // this.currentlyPlayingAudio.image = this.lastPlayed[audio_array_id].image;
+          this.currentlyPlayingAudio.src = this.lastPlayed[audio_array_id].src;
+          this.currentlyPlayingAudio.title = this.lastPlayed[audio_array_id].title;
+          this.currentlyPlayingAudio.description = this.lastPlayed[audio_array_id].description;
+
+          this.lastPlayed[audio_array_id].audio.play().then(
+            (res: any) => {
+              this.lastPlayed[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = true;
+              this.lastPlayed[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
+
+              if ("mediaSession" in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                  title: this.lastPlayed[audio_array_id].title || "Tesa Radio",
+                  artist: 'Tesa Radio',
+                  album: this.lastPlayed[audio_array_id].type,
+                  artwork: [
+                    { src: this.lastPlayed[audio_array_id].image || '/assets/images/shows.jpg', sizes: '512x512', type: 'image/png' },
+                  ]
+                });
+              
+                navigator.mediaSession.playbackState = 'playing';
+              };
+              
+              this.lastPlayed[audio_array_id].audio.addEventListener("ended", () => {
+                this.podcasts[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+                this.podcasts[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
+                this.podcasts[audio_array_id].audio.currentTime = this.currentlyPlayingAudio.currentTime = 0;
+                clearInterval(this.podcasts[audio_array_id].timingInterval);
+                clearInterval(this.currentlyPlayingAudio.timingInterval);
+              });
+
+              this.lastPlayed[audio_array_id].audio.addEventListener("pause", () => {
+                this.lastPlayed[audio_array_id].isPlaying = this.currentlyPlayingAudio.isPlaying = false;
+                this.lastPlayed[audio_array_id].loadingState = this.currentlyPlayingAudio.loadingState = false;
+                clearInterval(this.lastPlayed[audio_array_id].timingInterval);
+                clearInterval(this.currentlyPlayingAudio.timingInterval);
+              });
+              
+              // update the play stats
+              this.updateAudioPlayStat_n_interations(this.lastPlayed[audio_array_id].id);
+
+              resolve(this.lastPlayed[audio_array_id]);
+            },
+            (err: any) => {
+              this.lastPlayed[audio_array_id].audio.load();
               reject(err);
             }
           );
@@ -374,7 +481,6 @@ export class AudioService {
           }
 
           break;
-      
         case audioType.podcast:
           if ("mediaSession" in navigator) {
             navigator.mediaSession.playbackState = 'playing';
@@ -392,7 +498,6 @@ export class AudioService {
           };
 
           break;
-      
         case audioType.shows:
           if ("mediaSession" in navigator) {
             navigator.mediaSession.playbackState = 'playing';
@@ -410,7 +515,23 @@ export class AudioService {
           };
 
           break;
-      
+        case audioType.lastPlayed:
+          if ("mediaSession" in navigator) {
+            navigator.mediaSession.playbackState = 'playing';
+          }
+
+          clearInterval(this.lastPlayed[audio_array_id].timingInterval);
+          this.lastPlayed[audio_array_id].audio.pause();
+          if (this.lastPlayed[audio_array_id].audio.paused) {
+            this.currentlyPlayingAudio.playingAudio = this.lastPlayed[audio_array_id].audio;
+            this.lastPlayed[audio_array_id].isPlaying = false;
+
+            resolve(this.lastPlayed[audio_array_id]);
+          } else {
+            reject(this.lastPlayed[audio_array_id]);
+          };
+
+          break;
         default:
           if ("mediaSession" in navigator) {
             navigator.mediaSession.playbackState = 'paused';

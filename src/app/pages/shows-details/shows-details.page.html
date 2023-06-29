@@ -30,7 +30,13 @@
 
   <!-- Do ReFresh -->
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
-    <ion-refresher-content></ion-refresher-content>
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
   </ion-refresher>
 
   <section class="main"  *ngIf="!loadingStatus">
@@ -60,14 +66,21 @@
   
               <ion-item lines="none" class="ion-no-padding">
                 <ion-button fill="outline" mode="md" slot="start">
-                  <ion-label id="sPlayBTN" (click)="playPause(i, showDetail.id, showDetail.isPlaying ? 'pause' : 'play')">
+                  <!-- <ion-label id="sPlayBTN"  *ngIf="!showDetail.loadingState" (click)="playPause(i, showDetail.id, showDetail.isPlaying ? 'pause' : 'play')"> -->
+                  <ion-label id="sPlayBTN"  *ngIf="showDetail.audio.readyState >= 1" (click)="playPause(i, showDetail.id, showDetail.isPlaying ? 'pause' : 'play')">
                     <ion-icon slot="start" [name]="showDetail.isPlaying ? 'pause' : 'play'"></ion-icon>
                     {{ showDetail.isPlaying ? 'pause' : 'play' }}
                   </ion-label>
+
+                  <!-- <ion-label id="sPlayBTN" *ngIf="showDetail.loadingState"> -->
+                  <ion-label id="sPlayBTN" *ngIf="showDetail.audio.readyState < 1">
+                    <ion-icon slot="start" name="reload" class="rotateLoadingIcon"></ion-icon>
+                    loading...
+                  </ion-label>
                 </ion-button>
   
-                <ion-label *ngIf="showDetail.isPlaying">
-                  
+                <!-- <ion-label *ngIf="showDetail.isPlaying"> -->
+                <ion-label>
                   <ion-range
                     min="0" max="100"
                     aria-label="seek"
@@ -76,7 +89,7 @@
                     (ionChange)="audioService.seekAudioRangeChange($event, showDetail.id, 'shows')"
                   >
                     <div slot="start" style="margin: 0 10px 0 0;"> {{ showDetail.currentTime }} </div>
-                    <div slot="end" style="margin: 0 0 0 10px;"> {{ showDetail.duration }} </div>
+                    <div slot="end" style="margin: 0 0 0 10px;"> {{ audioService.audioTiming(showDetail.audio.duration) || showDetail.duration }} </div>
                   </ion-range>
                 </ion-label>
               </ion-item>
@@ -100,8 +113,14 @@
                 <p style="margin: 0 0 7px;">{{ showDetail.description }}</p>
   
                 <div class="playPauseBtnWave">
-                  <span (click)="playPause(i, showDetail.id, showDetail.isPlaying ? 'pause' : 'play')">
+                  <!-- <span *ngIf="!showDetail.loadingState" (click)="playPause(i, showDetail.id, showDetail.isPlaying ? 'pause' : 'play')"> -->
+                  <span *ngIf="showDetail.audio.readyState >= 1" (click)="playPause(i, showDetail.id, showDetail.isPlaying ? 'pause' : 'play')">
                     <ion-icon [name]="showDetail.isPlaying ? 'pause' : 'play'"></ion-icon>
+                  </span>
+
+                  <!-- <span *ngIf="showDetail.loadingState"> -->
+                  <span *ngIf="showDetail.audio.readyState < 1">
+                    <ion-icon slot="start" name="reload" class="rotateLoadingIcon"></ion-icon>
                   </span>
 
                   <ion-range
@@ -110,10 +129,10 @@
                     [value]="showDetail.seekAudioRangeValue"
                     color="danger"
                     (ionChange)="audioService.seekAudioRangeChange($event, showDetail.id, 'shows')"
-                    *ngIf="showDetail.isPlaying"
                   >
+                    <!-- *ngIf="showDetail.isPlaying" -->
                     <div slot="start" style="margin: 0 10px 0 0;"> {{ showDetail.currentTime }} </div>
-                    <div slot="end" style="margin: 0 0 0 10px;"> {{ showDetail.duration }} </div>
+                    <div slot="end" style="margin: 0 0 0 10px;"> {{ audioService.audioTiming(showDetail.audio.duration) || showDetail.duration }} </div>
                   </ion-range>
                 </div>
               </ion-label>
@@ -131,7 +150,6 @@
           </ion-infinite-scroll>
         </ion-col>
       </ion-row>
-
     </ion-grid>
 
     <section class="emptyContentContainer" *ngIf="!audioService.shows.length">
@@ -141,7 +159,6 @@
       </div>
     </section>
   </section>
-
 
   <!-- Loading Sections -->
   <div *ngIf="loadingStatus">

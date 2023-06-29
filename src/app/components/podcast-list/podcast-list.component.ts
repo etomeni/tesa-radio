@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { AudioService } from 'src/app/services/audio.service';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { audioType } from 'src/modelInterface';
-// import { ResourcesService } from 'src/app/services/resources.service';
 
 
 @Component({
@@ -11,8 +10,6 @@ import { audioType } from 'src/modelInterface';
   styleUrls: ['./podcast-list.component.scss'],
 })
 export class PodcastListComponent  implements OnInit {
-  podcasts: any[] = [];
-  audioTimingInterval: any;
 
   constructor(
     private firebaseService: FirebaseService,

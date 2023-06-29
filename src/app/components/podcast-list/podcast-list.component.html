@@ -11,9 +11,16 @@
 
         <section>
           <div class="playPause">
-            <div class="iconText" (click)="playPause(i, podcast.id, podcast.isPlaying ? 'pause' : 'play')">
+            <!-- <div class="iconText"  *ngIf="!podcast.loadingState" (click)="playPause(i, podcast.id, podcast.isPlaying ? 'pause' : 'play')"> -->
+            <div class="iconText" *ngIf="podcast.audio.readyState >= 1" (click)="playPause(i, podcast.id, podcast.isPlaying ? 'pause' : 'play')">
               <ion-icon [name]="podcast.isPlaying ? 'pause' : 'play'"></ion-icon>
               {{ podcast.isPlaying ? "pause" : "play" }}
+            </div>
+
+            <!-- <div class="iconText" *ngIf="podcast.loadingState" > -->
+            <div class="iconText" *ngIf="podcast.audio.readyState < 1">
+              <ion-icon slot="start" name="reload" class="rotateLoadingIcon"></ion-icon>
+              loading...
             </div>
 
             <div class="totalDuration" *ngIf="!podcast.isPlaying">

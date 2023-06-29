@@ -37,16 +37,13 @@ export class MyPodcastsPage implements OnInit {
       this.currentUser = user.userDBinfo;
     }
 
-    const getLocalStorage = () => {
-      this.resourcesService.getLocalStorage("myPodcasts").then((res: any) => {
-        if (res) {
-          this.myPodcasts = res;
-          this.lastPodcast = res[0].lastVisible;
-        }
-      }).finally(() => {
+    this.resourcesService.getLocalStorage("myPodcasts").then((res: any) => {
+      if (res) {
+        this.myPodcasts = res;
+        this.lastPodcast = res[0].lastVisible;
         this.loadingStatus = false;
-      });
-    }
+      }
+    });
 
     this.firebaseService.getLimitedFirestoreDocumentData(
       "podcasts", 15, 
@@ -63,12 +60,8 @@ export class MyPodcastsPage implements OnInit {
       },
       (err: any) => {
         console.log(err);
-        getLocalStorage();
       }
-    ).catch((err: any) => {
-      console.log(err);
-      getLocalStorage();
-    });
+    );
   }
 
   getMorePodcasts() {

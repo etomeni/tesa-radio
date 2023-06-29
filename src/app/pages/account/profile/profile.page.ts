@@ -9,25 +9,7 @@ import { CreatePodcastComponent } from 'src/app/components/create-podcast/create
 
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-
-
-interface lastPlayedz_ {
-  id: string,
-  ref_id: string,
-  audio?: any,
-  currentTime?: any,
-  duration?: any,
-  timingInterval?: any,
-  seekAudioRangeValue?: any,
-  title: string,
-  description: string,
-  image: string,
-  type: string,
-  src: string,
-  isPlaying: boolean,
-  loadingState: boolean,
-  index: number
-}
+import { audioType, lastPlayedz_ } from 'src/modelInterface';
 
 @Component({
   selector: 'app-profile',
@@ -63,35 +45,38 @@ export class ProfilePage implements OnInit, OnDestroy {
 
   user: any;
   authUser: any;
-  lastPlayed: lastPlayedz_[] = [];
-  currentlyLastPlayed: lastPlayedz_ | undefined;
-  private routerSubscription!: Subscription;
+  // lastPlayed: lastPlayedz_[] = [];
+  // currentlyLastPlayed: lastPlayedz_ | undefined;
+  // private routerSubscription!: Subscription;
 
   constructor(
     private resourcesService: ResourcesService,
     public firebaseService: FirebaseService,
     public audioService: AudioService,
-    private router: Router,
+    // private router: Router,
 
     private modalCtrl: ModalController,
   ) { }
 
   async ngOnInit() {
     this.checkUserLoggedin();
-    this.getPreviousListenAudio();
 
-    this.routerSubscription = this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd)
-    ).subscribe(
-      () => {
-        this.stopCurrentlyPlayingAudio();
-      }
-    );
+    if (!this.audioService.lastPlayed.length) {
+      this.getPreviousListenAudio();
+    }
+
+    // this.routerSubscription = this.router.events.pipe(
+    //   filter((event) => event instanceof NavigationEnd)
+    // ).subscribe(
+    //   () => {
+    //     this.stopCurrentlyPlayingAudio();
+    //   }
+    // );
   }
 
   ngOnDestroy() {
-    this.stopCurrentlyPlayingAudio();
-    this.routerSubscription.unsubscribe();
+    // this.stopCurrentlyPlayingAudio();
+    // this.routerSubscription.unsubscribe();
   }
 
   async checkUserLoggedin() {
@@ -164,11 +149,13 @@ export class ProfilePage implements OnInit, OnDestroy {
     this.resourcesService.getLocalStorage("lastPlayed").then(
       (res: any) => {
         if (res) {
-          this.lastPlayed = res;
+          this.audioService.lastPlayed = res;
 
-          for (let i = 0; i < this.lastPlayed.length; i++) {
-            this.lastPlayed[i].audio = new Audio(this.lastPlayed[i].src);
-            this.lastPlayed[i].index = i;
+          for (let i = 0; i < this.audioService.lastPlayed.length; i++) {
+            this.audioService.lastPlayed[i].audio = new Audio(this.audioService.lastPlayed[i].src);
+            this.audioService.lastPlayed[i].index = i;
+            this.audioService.lastPlayed[i].isPlaying = false;
+            this.audioService.lastPlayed[i].loadingState = false;
           }
         }
       }
@@ -176,75 +163,85 @@ export class ProfilePage implements OnInit, OnDestroy {
   }
 
 
-  playPause(playingState: "play" | "pause", i: number) {
+  playPause(playingState: "play" | "pause", preAudio: lastPlayedz_, i: number) {
+    const index = this.audioService.lastPlayed.findIndex(e => e.id == preAudio.id);
+
+    if (playingState == 'play') {
+      this.audioService.play(audioType.lastPlayed, index);
+    }
+
+    if (playingState == 'pause') {
+      this.audioService.pause(audioType.lastPlayed, index);
+    }
+
     
-    this.lastPlayed[i].timingInterval = setInterval(()=> {
-      this.lastPlayed[i].currentTime = this.audioService.audioTiming(this.lastPlayed[i].audio.currentTime);
-      this.lastPlayed[i].duration = this.audioService.audioTiming(this.lastPlayed[i].audio.duration);
+    // this.lastPlayed[i].timingInterval = setInterval(()=> {
+    //   this.lastPlayed[i].currentTime = this.audioService.audioTiming(this.lastPlayed[i].audio.currentTime);
+    //   this.lastPlayed[i].duration = this.audioService.audioTiming(this.lastPlayed[i].audio.duration);
 
-      this.lastPlayed[i].seekAudioRangeValue = this.lastPlayed[i].audio.currentTime * (100 / this.lastPlayed[i].audio.duration);
-    }, 500);
+    //   this.lastPlayed[i].seekAudioRangeValue = this.lastPlayed[i].audio.currentTime * (100 / this.lastPlayed[i].audio.duration);
+    // }, 500);
 
-    if(playingState == "play") {
-      this.stopCurrentlyPlayingAudio();
+    // if(playingState == "play") {
+    //   this.stopCurrentlyPlayingAudio();
 
-      this.lastPlayed[i].audio.play();
-      this.lastPlayed[i].isPlaying = true;
-      this.lastPlayed[i].loadingState = false;
+    //   this.lastPlayed[i].audio.play();
+    //   this.lastPlayed[i].isPlaying = true;
+    //   this.lastPlayed[i].loadingState = false;
 
-      if ("mediaSession" in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: this.lastPlayed[i].title || "Tesa Radio",
-          artist: 'Tesa Radio',
-          album: this.lastPlayed[i].type,
-          artwork: [
-            { src: this.lastPlayed[i].image || '/assets/images/radiomic.png', sizes: '512x512', type: 'image/png' },
-          ]
-        });
+    //   if ("mediaSession" in navigator) {
+    //     navigator.mediaSession.metadata = new MediaMetadata({
+    //       title: this.lastPlayed[i].title || "Tesa Radio",
+    //       artist: 'Tesa Radio',
+    //       album: this.lastPlayed[i].type,
+    //       artwork: [
+    //         { src: this.lastPlayed[i].image || '/assets/images/radiomic.png', sizes: '512x512', type: 'image/png' },
+    //       ]
+    //     });
       
-        // TODO: Update playback state.
-        navigator.mediaSession.playbackState = 'playing';
-      };
+    //     // TODO: Update playback state.
+    //     navigator.mediaSession.playbackState = 'playing';
+    //   };
 
-      this.currentlyLastPlayed = this.lastPlayed[i];
-    }
+    //   this.currentlyLastPlayed = this.lastPlayed[i];
+    // }
 
-    if(playingState == "pause") {
-      this.lastPlayed[i].audio.pause();
-      this.lastPlayed[i].isPlaying = false;
+    // if(playingState == "pause") {
+    //   this.lastPlayed[i].audio.pause();
+    //   this.lastPlayed[i].isPlaying = false;
 
-      if ("mediaSession" in navigator) {
-        navigator.mediaSession.playbackState = 'playing';
-      }
+    //   if ("mediaSession" in navigator) {
+    //     navigator.mediaSession.playbackState = 'playing';
+    //   }
 
-      clearInterval(this.lastPlayed[i].timingInterval);
-      this.currentlyLastPlayed = undefined;
-    }
+    //   clearInterval(this.lastPlayed[i].timingInterval);
+    //   this.currentlyLastPlayed = undefined;
+    // }
 
-    this.lastPlayed[i].audio.addEventListener("ended", () => {
-      this.lastPlayed[i].isPlaying = false;
-      this.lastPlayed[i].loadingState = false;
-      this.lastPlayed[i].audio.currentTime = 0;
-      clearInterval(this.lastPlayed[i].timingInterval);
-    });
+    // this.lastPlayed[i].audio.addEventListener("ended", () => {
+    //   this.lastPlayed[i].isPlaying = false;
+    //   this.lastPlayed[i].loadingState = false;
+    //   this.lastPlayed[i].audio.currentTime = 0;
+    //   clearInterval(this.lastPlayed[i].timingInterval);
+    // });
 
-    this.lastPlayed[i].audio.addEventListener("pause", () => {
-      this.lastPlayed[i].isPlaying = false;
-      this.lastPlayed[i].loadingState = false;
-      clearInterval(this.lastPlayed[i].timingInterval);
-    });
+    // this.lastPlayed[i].audio.addEventListener("pause", () => {
+    //   this.lastPlayed[i].isPlaying = false;
+    //   this.lastPlayed[i].loadingState = false;
+    //   clearInterval(this.lastPlayed[i].timingInterval);
+    // });
 
   }
 
 
-  stopCurrentlyPlayingAudio() {
-    if (this.currentlyLastPlayed) {
-      if (this.currentlyLastPlayed.isPlaying) {
-        this.lastPlayed[this.currentlyLastPlayed.index].audio.pause();
-        this.lastPlayed[this.currentlyLastPlayed.index].audio.currentTime = 0;
-      }
-    }
-  }
+  // stopCurrentlyPlayingAudio() {
+  //   if (this.currentlyLastPlayed) {
+  //     if (this.currentlyLastPlayed.isPlaying) {
+  //       this.lastPlayed[this.currentlyLastPlayed.index].audio.pause();
+  //       this.lastPlayed[this.currentlyLastPlayed.index].audio.currentTime = 0;
+  //     }
+  //   }
+  // }
 
   async openCreatePodcastModal() {
     const modal = await this.modalCtrl.create({

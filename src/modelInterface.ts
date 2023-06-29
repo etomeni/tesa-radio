@@ -9,6 +9,7 @@ export enum audioType {
     radio = "radio",
     podcast = "podcast",
     shows = "shows",
+    lastPlayed = "lastPlayed",
 };
   
 export enum conditionType {
@@ -147,6 +148,24 @@ export interface showInterface {
     _id: string,
     lastVisible: any
 };
+
+export interface lastPlayedz_ {
+    id: string,
+    ref_id?: string,
+    audio?: any,
+    currentTime?: any,
+    duration?: any,
+    timingInterval?: any,
+    seekAudioRangeValue?: any,
+    title: string,
+    description: string,
+    image?: string,
+    type: string,
+    src: string,
+    isPlaying: boolean,
+    loadingState: boolean,
+    index?: number
+}
   
 export interface BrowserView {
     display: boolean,

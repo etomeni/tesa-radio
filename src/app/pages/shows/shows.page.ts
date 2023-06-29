@@ -10,7 +10,7 @@ import { ResourcesService } from 'src/app/services/resources.service';
 })
 export class ShowsPage implements OnInit {
   loadingStatus: boolean = false;
-  shows: any = [];
+  shows: any[] = [];
   lastShow: any = undefined;
 
   constructor(
@@ -19,11 +19,19 @@ export class ShowsPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getShowws();
+    this.getShows();
   }
 
-  getShowws() {
-    this.firebaseService.getLimitedFirestoreDocumentData("shows", 20).then(
+  getShows() {
+    this.resourcesService.getLocalStorage("shows").then((res: any) => {
+      if (res) {
+        this.shows = res;
+        this.lastShow = res[0].lastVisible;
+        this.loadingStatus = true;
+      }
+    });
+
+    this.firebaseService.getLimitedFirestoreDocumentData("shows", 15).then(
       (res: any[]) => {
         // console.log(res);
         
@@ -34,19 +42,11 @@ export class ShowsPage implements OnInit {
         }
 
         this.loadingStatus = true;
+      },
+      (err: any) => {
+        console.log(err);
       }
-    ).catch((err: any) => {
-      console.log(err);
-
-      this.resourcesService.getLocalStorage("shows").then((res: any) => {
-        if (res) {
-          this.shows = res;
-          this.lastShow = res[0].lastVisible;
-        }
-      }).finally(() => {
-        this.loadingStatus = true;
-      });
-    });
+    );
   }
 
   getMoreShows() {
@@ -76,7 +76,6 @@ export class ShowsPage implements OnInit {
       }
     }, 500);
   }
-
 
 
   doRefresh(event: any) {

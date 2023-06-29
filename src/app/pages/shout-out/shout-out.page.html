@@ -19,13 +19,24 @@
     </ion-toolbar>
   </ion-header>
 
+  <!-- Do ReFresh -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing..."
+    >
+    </ion-refresher-content>
+  </ion-refresher>
+
   <section class="main">
     <div class="listContainer" *ngIf="!loadingStatus">
       <ion-list lines="full" *ngIf="shoutOuts.length">
         <ion-item button detail="false" *ngFor="let shoutOut of shoutOuts; let i=index;">
-          <ion-thumbnail slot="start">
+          <!-- <ion-thumbnail slot="start">
             <img alt="shout-out sender image" [src]="shoutOut.sender_image" />
-          </ion-thumbnail>
+          </ion-thumbnail> -->
           
           <ion-label class="ion-text-wrap">
             <h3>

@@ -53,24 +53,18 @@ export class PodcastsPage implements OnInit {
     this.getTop9Podcats();
   }
 
-
   getPodcasts() {
-    const getLocalStorage = () => {
-      this.resourcesService.getLocalStorage("podcasts").then((res: any) => {
-        if (res) {
-          // this.podcasts = res;
-          this._podcasts = res;
-          this.lastPodcast = res[0].lastVisible;
-        }
-      }).finally(() => {
+    this.resourcesService.getLocalStorage("podcasts").then((res: any) => {
+      if (res) {
+        this._podcasts = res;
+        this.lastPodcast = res[0].lastVisible;
         this.loadingStatus = false;
-      });
-    }
+      }
+    });
 
-    this.firebaseService.getLimitedFirestoreDocumentData("podcasts", 20).then(
+    this.firebaseService.getLimitedFirestoreDocumentData("podcasts", 15).then(
       (res: any) => {
         // console.log(res);
-        
         this._podcasts = res;
         this.lastPodcast = res[0].lastVisible;
         this.resourcesService.setLocalStorage("podcasts", res);
@@ -79,12 +73,8 @@ export class PodcastsPage implements OnInit {
       },
       (err: any) => {
         console.log(err);
-        getLocalStorage();
       }
-    ).catch((err: any) => {
-      console.log(err);
-      getLocalStorage();
-    });
+    );
   }
 
   getMorePodcasts() {
